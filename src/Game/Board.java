@@ -19,6 +19,8 @@ public class Board extends JPanel implements ActionListener, KeyListener,MouseLi
 
     private boolean shiftKey = false;
     int gitTest;
+    int b;
+    int v;
 
     private HashMap<Integer,Boolean> keyPresses;
     private boolean playerTurn;
