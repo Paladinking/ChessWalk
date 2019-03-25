@@ -1,7 +1,9 @@
-package Game.entities;
+package Game.entities.pathfinding;
 
+import Game.entities.Entity;
+import Game.entities.Player;
 import Game.entities.actions.Movement;
-import Game.entities.pathfinding.Node;
+import Game.levels.Tilemap;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -27,28 +29,40 @@ public class Pathfinder {
         foundPath = false;
         pathfind(xs,ys,xw,yw,path);
     }
-    public static ArrayList<Movement> getMovement(int xs,int ys,int xw,int yw){
+    /*public static ArrayList<Movement> getMovement(int xs,int ys,int xw,int yw){
         Pathfinder p  = new Pathfinder(xs,ys,xw,yw,new ArrayList<>());
         p.trimPath(p.points);
 
         return p.makeMoves(p.trimmedPath);
-    }
+    }*/
     public static ArrayList<Movement> makeToMoves(List<Node> nodeList){
         Collections.reverse(nodeList);
         ArrayList<Movement> m = new ArrayList<>();
         for(int i = 0;i<nodeList.size()-1;i++){
             if(nodeList.get(i).getRow()>nodeList.get(i+1).getRow()){
-                m.add(new Movement(-50,0));
+                m.add(new Movement(-1,0,Player.player));
             } else if(nodeList.get(i).getRow()<nodeList.get(i+1).getRow()){
-                m.add(new Movement(50,0));
+                m.add(new Movement(1,0,Player.player));
             } else if(nodeList.get(i).getCol()>nodeList.get(i+1).getCol()){
-                m.add(new Movement(0,-50));
+                m.add(new Movement(0,-1,Player.player));
             } else if(nodeList.get(i).getCol()<nodeList.get(i+1).getCol()){
-                m.add(new Movement(0,50));
+                m.add(new Movement(0,1,Player.player));
             }
         }
         return m;
     }
+    public static ArrayList<Movement> getMovement(int x1, int y1, int x2, int y2, Entity e){
+        ArrayList<Movement> movement;
+        Node finalNode = new Node(x1, y1);
+        Node initialNode = new Node(x2, y2);
+        AStar aStar = new AStar(16, 16, initialNode, finalNode);
+        aStar.setBlocks(Tilemap.getTiles(),e);
+        List<Node> path = aStar.findPath();
+        movement = Pathfinder.makeToMoves(path);
+        Player.destination = new Point(x2,y2);
+        return movement;
+    }
+
     private ArrayList<Point> getNextTo(Point p){
         ArrayList<Point> ps = new ArrayList<Point>();
         ps.add(new Point(p.x-1,p.y));
@@ -57,7 +71,7 @@ public class Pathfinder {
         ps.add(new Point(p.x,p.y-1));
         return ps;
     }
-    public ArrayList<Movement> makeMoves(ArrayList<Point> p){
+    /*private ArrayList<Movement> makeMoves(ArrayList<Point> p){
         ArrayList<Movement> m = new ArrayList<>();
         for(int i = 0;i<p.size()-1;i++){
             if(p.get(i).x>p.get(i+1).x){
@@ -71,18 +85,16 @@ public class Pathfinder {
             }
         }
         return m;
-    }
+    }*/
     private void trimPath(ArrayList<Point> path){
         for(int i=0;i<path.size();i++){
             ArrayList<Point> path21 = getNextTo(path.get(i));
-            for(int k = 0;k<path21.size();k++){
-                if(path.contains(path21.get(k))&&path.indexOf(path21.get(k))-i>1){
-                    int aj = path.indexOf(path21.get(k));
-                    for (int j = i+1;j<aj;){
+            for (Point aPath21 : path21) {
+                if (path.contains(aPath21) && path.indexOf(aPath21) - i > 1) {
+                    int aj = path.indexOf(aPath21);
+                    for (int j = i + 1; j < aj; ) {
                         path.remove(j);
-                          aj = path.indexOf(path21.get(k));
-
-
+                        aj = path.indexOf(aPath21);
                     }
                     trimPath(path);
                     return;

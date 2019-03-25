@@ -5,6 +5,7 @@ import Game.assets.ImageID;
 import Game.entities.Enemy;
 import Game.entities.actions.Movement;
 import Game.entities.Player;
+import Game.entities.pathfinding.Pathfinder;
 import Game.levels.Level;
 import Game.levels.Tilemap;
 
@@ -84,10 +85,10 @@ public class Board extends JPanel implements ActionListener, KeyListener,MouseLi
                 loadLevel(World.getCurrentLevel()+1);
             }
             t++;
-            if(t==10){
+            if(t==11){
                 playerTurn = true;
                 t=0;
-                Player.done = false;
+                Player.newTurn();
             }
         }
     }
@@ -139,7 +140,7 @@ public class Board extends JPanel implements ActionListener, KeyListener,MouseLi
                 if (!keyPresses.get(KeyEvent.VK_SHIFT)) {
                     Player.clearMovements();
                 }
-                ArrayList<Movement> m = Movement.getMovement(Player.destination.x, Player.destination.y, mouseX, mouseY,Player.player);
+                ArrayList<Movement> m = Pathfinder.getMovement(Player.destination.x, Player.destination.y, mouseX, mouseY,Player.player);
                 Player.addMovements(m);
                 Image.put(ImageID.SELECTED_SQUARE_ID, new Image(Player.destination.x * 50, Player.destination.y * 50, Image.SELECTED_TILE));
             }
