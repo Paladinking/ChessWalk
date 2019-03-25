@@ -17,7 +17,6 @@ public class Player {
     public static Point destination;
     public static Entity player;
     public static boolean done;
-    private static int testGit;
 
     public static void load(){
         movementQue = new ArrayList<>();
