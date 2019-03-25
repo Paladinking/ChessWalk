@@ -18,6 +18,7 @@ import java.util.HashMap;
 public class Board extends JPanel implements ActionListener, KeyListener,MouseListener{
 
     private boolean shiftKey = false;
+    int gitTest;
 
     private HashMap<Integer,Boolean> keyPresses;
     private boolean playerTurn;
