@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movement extends Action{
+public class Movement  {
      public static final int UP = 0, DOWN = 1,LEFT = 2,RIGHT = 3, STILL = 4;
 
     public int deltaX,deltaY;
@@ -42,11 +42,5 @@ public class Movement extends Action{
         movement = Pathfinder.makeToMoves(path);
         Player.destination = new Point(x2,y2);
         return movement;
-    }
-
-
-    @Override
-    public void preformAction() {
-
     }
 }
