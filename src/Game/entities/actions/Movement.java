@@ -11,7 +11,7 @@ import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Movement{
+public class Movement extends Action{
      public static final int UP = 0, DOWN = 1,LEFT = 2,RIGHT = 3, STILL = 4;
 
     public int deltaX,deltaY;
@@ -45,4 +45,8 @@ public class Movement{
     }
 
 
+    @Override
+    public void preformAction() {
+
+    }
 }
