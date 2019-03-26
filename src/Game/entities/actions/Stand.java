@@ -1,6 +1,5 @@
 package Game.entities.actions;
 
-import Game.entities.Entity;
 
 public class Stand extends Action {
     @Override

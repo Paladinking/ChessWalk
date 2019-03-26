@@ -5,11 +5,13 @@ import Game.entities.actions.Action;
 public abstract class Entity {
     protected int x, y;
     int imgId;
-    protected Action currentAction;
+     Action currentAction;
 
     public abstract void tick();
 
     public abstract void selected();
+
+    public abstract void damage(int dmg);
 
     public int getX() {
         return x;
@@ -26,6 +28,7 @@ public abstract class Entity {
     public void setY(int y) {
         this.y = y;
     }
+
     public int getId(){
         return imgId;
     }

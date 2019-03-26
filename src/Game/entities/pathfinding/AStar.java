@@ -8,7 +8,6 @@ import java.util.*;
 import java.util.List;
 
 public class AStar {
-    private static Node[][] levelSearchArea;
 
     private static int DEFAULT_HV_COST = 10; // Horizontal - Vertical Cost
     private static int DEFAULT_DIAGONAL_COST = 14;
@@ -21,24 +20,14 @@ public class AStar {
     private Node finalNode;
 
 
-    public void setLevelSearchArea(Tile[][] t){
 
-
-
-    }
-
-    public AStar(int rows, int cols, Node initialNode, Node finalNode, int hvCost, int diagonalCost) {
+    private AStar(int rows, int cols, Node initialNode, Node finalNode, int hvCost, int diagonalCost) {
         this.hvCost = hvCost;
         this.diagonalCost = diagonalCost;
         setInitialNode(initialNode);
         setFinalNode(finalNode);
         this.searchArea = new Node[rows][cols];
-        this.openList = new PriorityQueue<Node>(new Comparator<Node>() {
-            @Override
-            public int compare(Node node0, Node node1) {
-                return Integer.compare(node0.getF(), node1.getF());
-            }
-        });
+        this.openList = new PriorityQueue<Node>(Comparator.comparingInt(Node::getF));
         setNodes();
         this.closedSet = new HashSet<>();
     }

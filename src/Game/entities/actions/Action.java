@@ -12,5 +12,8 @@ public abstract class Action {
 
     public abstract void afterAction();
 
-
+    public void addEntity(Entity entity){
+        this.entity = entity;
+        beforeAction();
+    }
 }

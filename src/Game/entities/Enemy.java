@@ -17,7 +17,6 @@ public class Enemy extends MovingEntity {
 
     int hp;
 
-
     Enemy(Image i){
         int id = ImageID.getEnemyId();
         this.imgId = id;
@@ -30,7 +29,7 @@ public class Enemy extends MovingEntity {
 
     }
 
-     @Override
+    @Override
      public void tick() {
         move();
      }
@@ -39,7 +38,15 @@ public class Enemy extends MovingEntity {
     public void selected() {
 
     }
-
+    @Override
+    public void damage(int dmg){
+        this.hp-=dmg;
+        if(hp<0) die();
+    }
+    private void die(){
+        Image.remove(imgId);
+        Enemy.enemies.remove(this);
+    }
     protected void move() {
         if(currentAction == null) {
             List<Movement> m = new ArrayList<>();
