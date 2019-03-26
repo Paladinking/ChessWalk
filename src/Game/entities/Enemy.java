@@ -2,7 +2,6 @@ package Game.entities;
 
 import Game.assets.Image;
 import Game.assets.ImageID;
-import Game.entities.actions.Action;
 import Game.entities.actions.Movement;
 import Game.levels.Tilemap;
 
@@ -46,6 +45,7 @@ public class Enemy extends MovingEntity {
     private void die(){
         Image.remove(imgId);
         Enemy.enemies.remove(this);
+        Tilemap.getTile(x,y).removeEntity();
     }
     protected void move() {
         if(currentAction == null) {

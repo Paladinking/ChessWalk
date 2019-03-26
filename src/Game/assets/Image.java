@@ -1,7 +1,5 @@
 package Game.assets;
 
-import Game.entities.Knight;
-
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
@@ -29,12 +27,25 @@ public class Image {
     public static BufferedImage WALL_FRONT;
 
     public static BufferedImage[] PLAYER_STILL;
+    public static BufferedImage[][] PLAYER_ATTACK;
 
     static HashMap<Integer,Image> imageQue;
 
+    public static final int UP = 0, DOWN = 1,LEFT = 2,RIGHT = 3, STILL = 4;
 
     private BufferedImage img;
     private int xCoor, yCoor;
+    private int adjX;
+
+    public void setAdjX(int adjX) {
+        this.adjX = adjX;
+    }
+
+    public void setAdjY(int adjY) {
+        this.adjY = adjY;
+    }
+
+    private int adjY;
 
     public Image(int xCoor, int yCoor,BufferedImage i){
         this.xCoor = xCoor;
@@ -52,10 +63,14 @@ public class Image {
             PLAYER_RIGHT = ImageIO.read(new File(playerPath+"PlayerRight.png"));
             SELECTED_TILE = ImageIO.read(new File(path+"SelectedTile.png"));
             WALL_FRONT = ImageIO.read(new File(path+"Walls/WallFront.png"));
-            SLIME = ImageIO.read(new File(path+"Slime.png"));
-            KNIGHT = ImageIO.read(new File(path+"Knight.png"));
+            SLIME = ImageIO.read(new File(path+"Enemies/Slime.png"));
+            KNIGHT = ImageIO.read(new File(path+"Enemies/Knight.png"));
 
-
+            PLAYER_ATTACK = new BufferedImage[4][5];
+            for (int i=0;i<5;i++){
+                PLAYER_ATTACK[RIGHT][i] = ImageIO.read(new File(playerPath+"AttackAnimationRight.png")).getSubimage(0,70*i,80,70);
+                PLAYER_ATTACK[LEFT][i] = ImageIO.read(new File(playerPath+"AttackAnimationLeft.png")).getSubimage(0,70*i,80,70);
+            }
             PLAYER_STILL = new BufferedImage[]{PLAYER_BACK,PLAYER_FRONT,PLAYER_LEFT,PLAYER_RIGHT};
         } catch (IOException e) {
             e.printStackTrace();
@@ -81,13 +96,9 @@ public class Image {
         imageOrder.sort(new Compare());
         for (ImagePosition i:imageOrder) {
             Image img = imageQue.get(i.id);
-            g.drawImage(img.img,img.xCoor,img.yCoor,null);
+            g.drawImage(img.img,img.xCoor+img.adjX,img.yCoor+img.adjY,null);
         }
 
-    }
-
-    public BufferedImage getImg() {
-        return img;
     }
 
     public void setImg(BufferedImage img) {

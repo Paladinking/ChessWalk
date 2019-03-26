@@ -155,7 +155,7 @@ public class Board extends JPanel implements ActionListener, KeyListener,MouseLi
                 }
                 ArrayList<Movement> m = Pathfinder.getMovement(Player.player.getX(), Player.player.getY(), mouseX, mouseY,Player.player);
                 Player.addMovements(m);
-                Image.put(ImageID.SELECTED_SQUARE_ID, new Image(Player.destination.x * 50, Player.destination.y * 50, Image.SELECTED_TILE));
+                //Image.put(ImageID.SELECTED_SQUARE_ID, new Image(Player.destination.x * 50, Player.destination.y * 50, Image.SELECTED_TILE));
             }
         }
     }
