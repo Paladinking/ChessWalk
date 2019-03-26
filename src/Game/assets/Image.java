@@ -70,6 +70,7 @@ public class Image {
             for (int i=0;i<5;i++){
                 PLAYER_ATTACK[RIGHT][i] = ImageIO.read(new File(playerPath+"AttackAnimationRight.png")).getSubimage(0,70*i,80,70);
                 PLAYER_ATTACK[LEFT][i] = ImageIO.read(new File(playerPath+"AttackAnimationLeft.png")).getSubimage(0,70*i,80,70);
+                PLAYER_ATTACK[DOWN][i] = ImageIO.read(new File(playerPath+"AttackAnimationFront.png")).getSubimage(0,70*i,50,70);
             }
             PLAYER_STILL = new BufferedImage[]{PLAYER_BACK,PLAYER_FRONT,PLAYER_LEFT,PLAYER_RIGHT};
         } catch (IOException e) {

@@ -3,6 +3,7 @@ package Game.entities;
 import Game.assets.Image;
 import Game.assets.ImageID;
 import Game.entities.actions.Movement;
+import Game.entities.actions.Stand;
 import Game.levels.Tilemap;
 
 import java.util.ArrayList;
@@ -48,13 +49,17 @@ public class Enemy extends MovingEntity {
         Tilemap.getTile(x,y).removeEntity();
     }
     protected void move() {
-        if(currentAction == null) {
+        if(currentAction == null||currentAction instanceof Stand) {
             List<Movement> m = new ArrayList<>();
             if (Tilemap.getTile(x + 1, y).selected(this)) m.add(new Movement(1, 0));
             if (Tilemap.getTile(x - 1, y).selected(this)) m.add(new Movement(-1, 0));
             if (Tilemap.getTile(x, y + 1).selected(this)) m.add(new Movement(0, 1));
             if (Tilemap.getTile(x, y - 1).selected(this)) m.add(new Movement(0, -1));
-            currentAction = new Movement( m.get((int) (Math.random() * m.size())),this);
+            if(m.size()>0) {
+                currentAction = new Movement(m.get((int) (Math.random() * m.size())), this);
+            } else {
+                currentAction = new Stand(this);
+            }
         }
         currentAction.preformAction();
      }
