@@ -2,6 +2,7 @@ package Game.entities;
 
 import Game.assets.Image;
 import Game.assets.ImageID;
+import Game.entities.actions.Action;
 import Game.entities.actions.Movement;
 import Game.levels.Tilemap;
 
@@ -15,14 +16,12 @@ public class Enemy extends MovingEntity {
     private static List<Enemy> enemies;
 
     int hp;
-    Movement currentMovement;
-
 
     Enemy(Image i){
         int id = ImageID.getEnemyId();
         this.imgId = id;
         Image.put(id,i);
-        currentMovement = new Movement(0,0);
+        currentAction = null;
     }
     public Enemy() {
     }
@@ -30,7 +29,7 @@ public class Enemy extends MovingEntity {
 
     }
 
-     @Override
+    @Override
      public void tick() {
         move();
      }
@@ -39,17 +38,25 @@ public class Enemy extends MovingEntity {
     public void selected() {
 
     }
-
+    @Override
+    public void damage(int dmg){
+        this.hp-=dmg;
+        if(hp<0) die();
+    }
+    private void die(){
+        Image.remove(imgId);
+        Enemy.enemies.remove(this);
+    }
     protected void move() {
-        if(currentMovement.getDirection()==Movement.STILL) {
+        if(currentAction == null) {
             List<Movement> m = new ArrayList<>();
-            if (Tilemap.getTile(x + 1, y).selected(this)) m.add(new Movement(50, 0));
-            if (Tilemap.getTile(x - 1, y).selected(this)) m.add(new Movement(-50, 0));
-            if (Tilemap.getTile(x, y + 1).selected(this)) m.add(new Movement(0, 50));
-            if (Tilemap.getTile(x, y - 1).selected(this)) m.add(new Movement(0, -50));
-            currentMovement = m.get((int) (Math.random() * m.size()));
+            if (Tilemap.getTile(x + 1, y).selected(this)) m.add(new Movement(1, 0));
+            if (Tilemap.getTile(x - 1, y).selected(this)) m.add(new Movement(-1, 0));
+            if (Tilemap.getTile(x, y + 1).selected(this)) m.add(new Movement(0, 1));
+            if (Tilemap.getTile(x, y - 1).selected(this)) m.add(new Movement(0, -1));
+            currentAction = new Movement( m.get((int) (Math.random() * m.size())),this);
         }
-        currentMovement = super.move(currentMovement);
+        currentAction.preformAction();
      }
      public static void load(){
          enemies = new ArrayList<>();
@@ -66,4 +73,6 @@ public class Enemy extends MovingEntity {
      public static void add(Enemy e){
          enemies.add(e);
      }
+
+
 }

@@ -2,7 +2,9 @@ package Game.entities;
 
 import Game.assets.Image;
 import Game.assets.ImageID;
+import Game.entities.actions.Action;
 import Game.entities.actions.Movement;
+import Game.entities.actions.Stand;
 import Game.levels.Tilemap;
 
 import java.awt.*;
@@ -10,110 +12,75 @@ import java.util.ArrayList;
 
 
 public class Player {
-    private static int  xCoor, yCoor,xMoved, yMoved;
 
-    private static ArrayList<Movement> movementQue;
-    private static Movement currentMovement;
+    private static ArrayList<Action> actionQue;
     public static Point destination;
     public static Entity player;
     public static boolean done;
 
     public static void load(){
-        movementQue = new ArrayList<>();
-        currentMovement = new Movement(0,0);
-        xCoor = 8;
-        yCoor = 8;
-        destination = new Point(xCoor,yCoor);
-        int imageX = 400,imageY= 375;
+        actionQue = new ArrayList<>();
+        destination = new Point(1,8);
+        int imageX = 50,imageY= 375;
         Image.put(ImageID.PLAYER_ID,new Image(imageX,imageY,Image.PLAYER_FRONT));
+        Player.player = new MovingEntity();
+        player.currentAction = new Stand();
+        Player.player.imgId = ImageID.PLAYER_ID;
+        player.x = 1;
+        player.y = 8;
     }
     public static void tick(){
-
-        if (currentMovement.getDirection() == Movement.STILL){
-            if (movementQue.size() == 0) {
-                //Image.remove(ImageID.SELECTED_SQUARE_ID);
+        if(player.currentAction instanceof Stand){
+            if (actionQue.size() == 0) {
                 return;
             }
-            currentMovement = movementQue.get(0);
-            movementQue.remove(0);
+            player.currentAction = actionQue.get(0);
+            actionQue.remove(0);
+            if(player.currentAction instanceof Movement) {
+                Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[((Movement) player.currentAction).getDirection()]);
+                if(Tilemap.getTile(((Movement)player.currentAction).getDeltaX()+player.x,((Movement)player.currentAction).getDeltaY()+player.y).getEntity()instanceof Enemy){
+                    player.currentAction = new Stand();
+                }
+                player.currentAction.addEntity(player);
 
-        }
-        Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[currentMovement.getDirection()]);
-        int dX = 0,dY = 0;
-        switch (currentMovement.getDirection()){
-            case Movement.UP:
-                dY = -5;
-                currentMovement.deltaY+=5;
-                break;
-            case Movement.DOWN:
-                dY = 5;
-                currentMovement.deltaY-=5;
-                break;
-            case Movement.LEFT:
-                dX = -5;
-                currentMovement.deltaX+=5;
-                break;
-            case Movement.RIGHT:
-                dX = 5;
-                currentMovement.deltaX-=5;
-                break;
-        }
-        yMoved += dY;
-        xMoved += dX;
-        if(yMoved==-50){
-            yCoor--;
-            yMoved = 0;
-            Tilemap.getTile(xCoor,yCoor).pressed(player);
-            done = true;
-        } else if(yMoved == 50){
-            yCoor ++;
-            yMoved = 0;
-            Tilemap.getTile(xCoor,yCoor).pressed(player);
-            done = true;
-        } else if(xMoved ==-50){
-            xCoor --;
-            xMoved =0;
-            Tilemap.getTile(xCoor,yCoor).pressed(player);
-            done = true;
-        } else if(xMoved == 50){
-            xCoor++;
-            xMoved =0;
-            Tilemap.getTile(xCoor,yCoor).pressed(player);
-            done = true;
-        }
-
-        Image.getImage(ImageID.PLAYER_ID).moveImage(dX,dY);
-        if (currentMovement.getDirection() == Movement.STILL) {
-            if (movementQue.size() == 0) {
-                Image.remove(ImageID.SELECTED_SQUARE_ID);
             }
         }
+        if (player.currentAction == null){
+            done = true;
+            return;
+        }
+
+        player.currentAction.preformAction();
     }
-    private static void addMovement(Movement m){
-        movementQue.add(m);
+    public static void addAction(Action a){
+        actionQue.add(a);
     }
     public static void addMovements(ArrayList<Movement> m){
         for (Movement m1: m) {
-            addMovement(m1);
+            addAction(m1);
         }
 
     }
     public static void clearMovements(){
-        if (xMoved==0&&yMoved==0) {
-            currentMovement.clear();
-            Player.destination = new Point(xCoor,yCoor);
-        } else if(yMoved==0){
-            currentMovement.deltaX = (xMoved/Math.abs(xMoved))*(50-Math.abs(xMoved));
-            Player.destination= new Point(xCoor+(xMoved/Math.abs(xMoved)),yCoor);
-        } else if (xMoved == 0){
-            currentMovement.deltaY = (yMoved/Math.abs(yMoved))*(50-Math.abs(yMoved));
-            Player.destination= new Point(xCoor,yCoor+(yMoved/Math.abs(yMoved)));
-        }
-        movementQue.clear();
-
-
+        actionQue.clear();
     }
 
 
+    public static void newTurn() {
+        done =false;
+        if (actionQue.size()>0){
+            player.currentAction=actionQue.get(0);
+            actionQue.remove(0);
+            if(player.currentAction instanceof Movement) {
+                Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[((Movement) player.currentAction).getDirection()]);
+                if(Tilemap.getTile(((Movement)player.currentAction).getDeltaX()+player.x,((Movement)player.currentAction).getDeltaY()+player.y).getEntity()instanceof Enemy){
+                    player.currentAction = new Stand();
+                }
+                player.currentAction.addEntity(player);
+            }
+        }else {
+            player.currentAction = new Stand();
+        }
+    }
 }
 

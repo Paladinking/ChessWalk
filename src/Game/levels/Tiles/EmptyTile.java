@@ -14,7 +14,7 @@ public class EmptyTile extends Tile {
     public boolean selected(Entity e) {
         if(entity!=null){
             entity.selected();
-            return !(e instanceof Enemy);
+            return entity == e;
         }
         return true;
     }
