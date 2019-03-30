@@ -7,10 +7,10 @@ import Game.entities.Slime;
 public class Level {
     private static int[] LVL1_ENEMIES = {Enemy.SLIME,Enemy.SLIME,Enemy.SLIME,Enemy.SLIME,Enemy.KNIGHT};
 
-    private static final Level LEVEL_1 = new Level(".idea/assets/Levels/LevelImage/Level1-4.bmp",32,0, LVL1_ENEMIES);
-    private static final Level LEVEL_2 = new Level(".idea/assets/Levels/LevelImage/Level1-4.bmp",16,0,new int[5]);
-    private static final Level LEVEL_3 = new Level(".idea/assets/Levels/LevelImage/Level1-4.bmp",32,0, new int[5]);
-    private static final Level LEVEL_4 = new Level(".idea/assets/Levels/LevelImage/Level1-4.bmp",48,0, new int[5]);
+    private static final Level LEVEL_1 = new Level("assets/Levels/LevelImage/Level1-4.bmp",0,0, LVL1_ENEMIES);
+    private static final Level LEVEL_2 = new Level("assets/Levels/LevelImage/Level1-4.bmp",16,0,new int[5]);
+    private static final Level LEVEL_3 = new Level("assets/Levels/LevelImage/Level1-4.bmp",32,0, new int[5]);
+    private static final Level LEVEL_4 = new Level("assets/Levels/LevelImage/Level1-4.bmp",48,0, new int[5]);
 
     public static final Level[] LEVELS = {LEVEL_1,LEVEL_2,LEVEL_3,LEVEL_4};
     final String filePath;

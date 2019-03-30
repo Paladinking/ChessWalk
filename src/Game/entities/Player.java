@@ -1,7 +1,7 @@
 package Game.entities;
 
-import Game.assets.Image;
-import Game.assets.ImageID;
+import Game.imageclasses.Image;
+import Game.imageclasses.ImageID;
 import Game.entities.actions.Action;
 import Game.entities.actions.Movement;
 import Game.entities.actions.Stand;

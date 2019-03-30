@@ -2,6 +2,7 @@ package Game;
 
 import javax.swing.*;
 import java.awt.*;
+import java.net.URL;
 
 class Frame extends JFrame{
     private Frame(){
@@ -20,6 +21,7 @@ class Frame extends JFrame{
     public static void main(String[] args){
         EventQueue.invokeLater(()->{
              Frame f = new Frame();
+
             f.setVisible(true);
         });
 

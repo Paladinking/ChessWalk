@@ -2,8 +2,12 @@ package Game.entities;
 
 import Game.entities.actions.Action;
 
+import java.awt.image.BufferedImage;
+
 public abstract class Entity {
     protected int x, y;
+
+    private static final BufferedImage[][] attackImages = new BufferedImage[4][5];
     int imgId;
      Action currentAction;
 
@@ -34,6 +38,9 @@ public abstract class Entity {
     }
     public void clearAction(){
         currentAction = null;
+    }
+    public BufferedImage[][] getAttackImages(){
+        return attackImages;
     }
 }
 

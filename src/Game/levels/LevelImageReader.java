@@ -1,6 +1,7 @@
 package Game.levels;
 
-import Game.assets.Image;
+import Game.Board;
+import Game.imageclasses.Image;
 import Game.entities.Enemy;
 import Game.levels.Tiles.EmptyTile;
 import Game.levels.Tiles.Tile;
@@ -8,7 +9,6 @@ import Game.levels.Tiles.WallTile;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
-import java.io.File;
 import java.io.IOException;
 
 public class LevelImageReader {
@@ -18,7 +18,7 @@ public class LevelImageReader {
         Tile[][] tiles = new Tile[16][16];
         BufferedImage b;
         try {
-            b = ImageIO.read(new File(level.filePath)).getSubimage(level.imageX,level.imageY,16,16);
+            b = ImageIO.read(Board.class.getResource(level.filePath)).getSubimage(level.imageX,level.imageY,16,16);
         } catch (IOException e) {
             b = new BufferedImage(16,16,BufferedImage.TYPE_INT_RGB);
         }

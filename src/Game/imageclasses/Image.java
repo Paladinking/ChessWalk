@@ -1,16 +1,19 @@
-package Game.assets;
+package Game.imageclasses;
+
+import Game.Board;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.HashMap;
 
 public class Image {
-    private static final String path = ".idea/assets/images/";
+    private static final String path = "assets/images/";
     private static final String playerPath = path+"Player/";
 
     public static BufferedImage BOARD;
@@ -32,7 +35,7 @@ public class Image {
     static HashMap<Integer,Image> imageQue;
 
     public static final int UP = 0, DOWN = 1,LEFT = 2,RIGHT = 3, STILL = 4;
-
+    public static File f;
     private BufferedImage img;
     private int xCoor, yCoor;
     private int adjX;
@@ -51,26 +54,28 @@ public class Image {
         this.xCoor = xCoor;
         this.yCoor = yCoor;
         this.img = i;
+
     }
 
-    public static void loadImages(){
+    public static void loadImages(URL url){
+
         imageQue = new HashMap<>();
         try {
-            BOARD = ImageIO.read(new File(path+"Board1.png"));
-            PLAYER_FRONT = ImageIO.read(new File(playerPath+"PlayerFront.png"));
-            PLAYER_BACK = ImageIO.read(new File(playerPath+"PlayerBack.png"));
-            PLAYER_LEFT = ImageIO.read(new File(playerPath+"PlayerLeft.png"));
-            PLAYER_RIGHT = ImageIO.read(new File(playerPath+"PlayerRight.png"));
-            SELECTED_TILE = ImageIO.read(new File(path+"SelectedTile.png"));
-            WALL_FRONT = ImageIO.read(new File(path+"Walls/WallFront.png"));
-            SLIME = ImageIO.read(new File(path+"Enemies/Slime.png"));
-            KNIGHT = ImageIO.read(new File(path+"Enemies/Knight.png"));
+            BOARD = ImageIO.read((Board.class.getResource(path+"Board1.png")));
+            PLAYER_FRONT = ImageIO.read((Board.class.getResource(playerPath+"PlayerFront.png")));
+            PLAYER_BACK = ImageIO.read((Board.class.getResource(playerPath+"PlayerBack.png")));
+            PLAYER_LEFT = ImageIO.read((Board.class.getResource(playerPath+"PlayerLeft.png")));
+            PLAYER_RIGHT = ImageIO.read((Board.class.getResource(playerPath+"PlayerRight.png")));
+            SELECTED_TILE = ImageIO.read(Board.class.getResource(path+"SelectedTile.png"));
+            WALL_FRONT = ImageIO.read((Board.class.getResource(path+"Walls/WallFront.png")));
+            SLIME = ImageIO.read((Board.class.getResource(path+"Enemies/Slime.png")));
+            KNIGHT = ImageIO.read((Board.class.getResource(path+"Enemies/Knight.png")));
 
             PLAYER_ATTACK = new BufferedImage[4][5];
             for (int i=0;i<5;i++){
-                PLAYER_ATTACK[RIGHT][i] = ImageIO.read(new File(playerPath+"AttackAnimationRight.png")).getSubimage(0,70*i,80,70);
-                PLAYER_ATTACK[LEFT][i] = ImageIO.read(new File(playerPath+"AttackAnimationLeft.png")).getSubimage(0,70*i,80,70);
-                PLAYER_ATTACK[DOWN][i] = ImageIO.read(new File(playerPath+"AttackAnimationFront.png")).getSubimage(0,70*i,50,70);
+                PLAYER_ATTACK[RIGHT][i] = ImageIO.read((Board.class.getResource(playerPath+"AttackAnimationRight.png"))).getSubimage(0,70*i,80,70);
+                PLAYER_ATTACK[LEFT][i] = ImageIO.read(Board.class.getResource(playerPath +"AttackAnimationLeft.png")).getSubimage(0,70*i,80,70);
+                PLAYER_ATTACK[DOWN][i] = ImageIO.read(Board.class.getResource(playerPath+"AttackAnimationFront.png")).getSubimage(0,70*i,50,70);
             }
             PLAYER_STILL = new BufferedImage[]{PLAYER_BACK,PLAYER_FRONT,PLAYER_LEFT,PLAYER_RIGHT};
         } catch (IOException e) {

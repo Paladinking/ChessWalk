@@ -1,6 +1,6 @@
 package Game.entities.actions;
 
-import Game.assets.Image;
+import Game.imageclasses.Image;
 import Game.entities.Entity;
 import Game.levels.Tilemap;
 

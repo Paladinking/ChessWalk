@@ -1,7 +1,7 @@
 package Game.entities;
 
 import Game.World;
-import Game.assets.Image;
+import Game.imageclasses.Image;
 
 public class Knight extends Enemy{
     public Knight(int x,int y){

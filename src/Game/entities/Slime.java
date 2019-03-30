@@ -2,7 +2,7 @@ package Game.entities;
 
 
 import Game.World;
-import Game.assets.Image;
+import Game.imageclasses.Image;
 
 public class Slime extends Enemy {
     public Slime(int x,int y){

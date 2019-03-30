@@ -1,7 +1,6 @@
 package Game.entities.actions;
 
-import Game.assets.Image;
-import Game.assets.ImageID;
+import Game.imageclasses.Image;
 import Game.entities.Entity;
 import Game.levels.Tilemap;
 
@@ -50,7 +49,7 @@ public class Attack extends Action {
             afterAction();
             return;
         }
-        Image.getImage(entity.getId()).setImg(Image.PLAYER_ATTACK[getDirection()][(ticks-1)/4]);
+        Image.getImage(entity.getId()).setImg(entity.getAttackImages()[getDirection()][(ticks-1)/4]);
         ;
     }
 

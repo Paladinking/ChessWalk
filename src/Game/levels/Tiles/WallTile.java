@@ -1,7 +1,7 @@
 package Game.levels.Tiles;
 
-import Game.assets.Image;
-import Game.assets.ImageID;
+import Game.imageclasses.Image;
+import Game.imageclasses.ImageID;
 import Game.entities.Entity;
 
 import java.awt.image.BufferedImage;

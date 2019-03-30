@@ -1,9 +1,8 @@
 package Game;
 
-import Game.assets.Image;
-import Game.assets.ImageID;
+import Game.imageclasses.Image;
+import Game.imageclasses.ImageID;
 import Game.entities.Enemy;
-import Game.entities.Knight;
 import Game.entities.actions.Attack;
 import Game.entities.actions.Movement;
 import Game.entities.Player;
@@ -12,9 +11,11 @@ import Game.levels.Level;
 import Game.levels.Tilemap;
 import Game.levels.Tiles.Tile;
 
+import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -31,6 +32,9 @@ public class Board extends JPanel implements ActionListener, KeyListener,MouseLi
         loadImages();
         loadEntities();
         setupBoard();
+    }
+    public Board(int o){
+
     }
 
     private void loadEntities() {
@@ -65,7 +69,7 @@ public class Board extends JPanel implements ActionListener, KeyListener,MouseLi
         keyPresses.put(KeyEvent.VK_D,false);
     }
     private void loadImages(){
-        Image.loadImages();
+        Image.loadImages(this.getClass().getResource(""));
     }
     @Override
     public void actionPerformed(ActionEvent e){
@@ -97,6 +101,14 @@ public class Board extends JPanel implements ActionListener, KeyListener,MouseLi
 
 
     private void draw(Graphics g){
+
+        /*try {
+
+            g.drawImage(ImageIO.read(getClass().getResource("Knight.png")),10,10,null);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }*/
+
         Image.drawImages(g);
     }
 
