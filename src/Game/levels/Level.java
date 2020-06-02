@@ -5,7 +5,7 @@ import Game.entities.Knight;
 import Game.entities.Slime;
 
 public class Level {
-    private static int[] LVL1_ENEMIES = {Enemy.SLIME,Enemy.SLIME,Enemy.SLIME,Enemy.SLIME,Enemy.KNIGHT};
+    private static final int[] LVL1_ENEMIES = {Enemy.SLIME,Enemy.SLIME,Enemy.SLIME,Enemy.SLIME,Enemy.KNIGHT};
 
     private static final Level LEVEL_1 = new Level("assets/Levels/LevelImage/Level1-4.bmp",0,0, LVL1_ENEMIES);
     private static final Level LEVEL_2 = new Level("assets/Levels/LevelImage/Level1-4.bmp",16,0,new int[5]);
@@ -35,7 +35,7 @@ public class Level {
             case Enemy.KNIGHT:
                 return new Knight(x,y);
             default:
-                return new Enemy();
+                return new Slime(x,y);
         }
     }
 

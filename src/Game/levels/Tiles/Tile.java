@@ -17,4 +17,6 @@ public abstract class Tile {
 
     public abstract Entity getEntity();
 
+    public abstract void Attack(int dmg);
+
 }

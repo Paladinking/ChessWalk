@@ -1,15 +1,16 @@
 package Game.entities;
 
 import Game.entities.actions.Action;
+import Game.entities.actions.Stand;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
-    protected int x, y;
+    int x, y,hp;
 
-    private static final BufferedImage[][] attackImages = new BufferedImage[4][5];
     int imgId;
-     Action currentAction;
+    Action currentAction;
 
     public abstract void tick();
 
@@ -33,14 +34,19 @@ public abstract class Entity {
         this.y = y;
     }
 
+    public abstract Action assignAction();
+
     public int getId(){
         return imgId;
     }
     public void clearAction(){
         currentAction = null;
     }
-    public BufferedImage[][] getAttackImages(){
-        return attackImages;
-    }
+    public abstract BufferedImage[][] getAttackImages();
+    public abstract void attackAnimation(int t,int dx,int dy);
+
+    public abstract void afterAttack(int dx,int dy);
+
+    public abstract Image getBlood();
 }
 

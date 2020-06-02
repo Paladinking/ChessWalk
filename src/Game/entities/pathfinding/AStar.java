@@ -44,7 +44,6 @@ public class AStar {
                 this.searchArea[i][j] = node;
             }
         }
-        System.out.println();
     }
 
     public void setBlocks(int[][] blocksArray) {

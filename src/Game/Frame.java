@@ -2,7 +2,6 @@ package Game;
 
 import javax.swing.*;
 import java.awt.*;
-import java.net.URL;
 
 class Frame extends JFrame{
     private Frame(){
@@ -15,7 +14,8 @@ class Frame extends JFrame{
         add(new Board());
         pack();
         setResizable(false);
-        setLocation(560,40);
+        setLocationRelativeTo(null);
+
 
     }
     public static void main(String[] args){

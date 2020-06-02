@@ -8,12 +8,17 @@ public class Stand extends Action {
 
 
     public Stand(Entity e){
-        this.entity = e;
+        this.addEntity(e);
 
     }
     @Override
     public void preformAction() {
+        super.preformAction();
+    }
 
+    @Override
+    public int tickLength() {
+        return 2;
     }
 
     @Override
@@ -23,5 +28,6 @@ public class Stand extends Action {
 
     @Override
     public void afterAction() {
+        super.afterAction();
     }
 }

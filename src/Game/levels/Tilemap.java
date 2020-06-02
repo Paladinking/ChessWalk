@@ -1,13 +1,14 @@
 package Game.levels;
 
-import Game.imageclasses.Image;
-import Game.imageclasses.ImageID;
+import Game.assetClasses.BoardImage;
+import Game.assetClasses.Image;
+import Game.assetClasses.ImageID;
 import Game.entities.Entity;
 import Game.levels.Tiles.Tile;
 import Game.levels.Tiles.WallTile;
 
 
-public class Tilemap {
+public abstract class Tilemap {
 
     private static Tile[][] tiles;
 
@@ -17,7 +18,7 @@ public class Tilemap {
 
     }
     private static void update(){
-        Image.put(ImageID.BOARD_ID,new Image(0,-50,Image.BOARD));
+        Image.put(ImageID.BOARD_ID,new BoardImage(0,0,Image.BOARD));
     }
     public static Tile getTile(int x,int y){
         if(x>15||x<0||y>15||y<0) return new WallTile();

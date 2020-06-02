@@ -1,7 +1,8 @@
 package Game.levels.Tiles;
 
-import Game.imageclasses.Image;
-import Game.imageclasses.ImageID;
+import Game.GameState;
+import Game.assetClasses.Image;
+import Game.assetClasses.ImageID;
 import Game.entities.Entity;
 
 import java.awt.image.BufferedImage;
@@ -9,7 +10,7 @@ import java.awt.image.BufferedImage;
 public class WallTile extends Tile{
 
     public WallTile(int x, int y, BufferedImage b){
-        Image.put(ImageID.getWallId(),new Image(x*50,y*50-20,b));
+        Image.put(ImageID.getId(),new Image(x* GameState.tileSize,y*GameState.tileSize-20,b));
     }
 
     public WallTile(){
@@ -43,5 +44,10 @@ public class WallTile extends Tile{
     @Override
     public Entity getEntity() {
         return entity;
+    }
+
+    @Override
+    public void Attack(int dmg) {
+
     }
 }

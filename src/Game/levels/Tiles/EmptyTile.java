@@ -38,4 +38,10 @@ public class EmptyTile extends Tile {
     public Entity getEntity() {
         return entity;
     }
+
+    @Override
+    public void Attack(int dmg) {
+        if(entity==null)  return;
+        entity.damage(dmg);
+    }
 }

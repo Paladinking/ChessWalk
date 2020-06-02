@@ -1,41 +1,42 @@
 package Game.entities.actions;
 
-import Game.imageclasses.Image;
+import Game.GameState;
+import Game.assetClasses.Image;
+import Game.assetClasses.ImageID;
 import Game.entities.Entity;
 import Game.levels.Tilemap;
 
 public class Attack extends Action {
     private static final int UP = 0, DOWN = 1,LEFT = 2,RIGHT = 3, STILL = 4;
-
+    public static final int tickLength = 18;
     private int deltaX,deltaY;
-    private int damage;
+    private int damage,bloodId;
     public Attack(int deltaX, int deltaY,int damage, Entity e){
         this.deltaX =deltaX;
         this.deltaY = deltaY;
-        this.entity = e;
         this.damage = damage;
-        beforeAction();
+        this.addEntity(e);
     }
-    private int getDirection(){
-        if (deltaX>0){
-            Image.getImage(entity.getId()).setAdjX(0);
-            Image.getImage(entity.getId()).setAdjY(0);
+    public static int getDirection(int dx, int dy,Entity e){
+        if (dx>0){
+            Image.getImage(e.getId()).setAdjX(0);
+            Image.getImage(e.getId()).setAdjY(0);
             return RIGHT;
         }
-        if (deltaX<0) {
-            Image.getImage(entity.getId()).setAdjX(-30);
-            Image.getImage(entity.getId()).setAdjY(0);
+        if (dx<0) {
+            Image.getImage(e.getId()).setAdjX(-30);
+            Image.getImage(e.getId()).setAdjY(0);
             return LEFT;
         }
-        if (deltaY>0){
-            Image.getImage(entity.getId()).setAdjX(0);
-            Image.getImage(entity.getId()).setAdjY(0);
+        if (dy>0){
+            Image.getImage(e.getId()).setAdjX(0);
+            Image.getImage(e.getId()).setAdjY(0);
             return DOWN;
 
         }
-        if (deltaY<0){
-            Image.getImage(entity.getId()).setAdjX(0);
-            Image.getImage(entity.getId()).setAdjY(0);
+        if (dy<0){
+            Image.getImage(e.getId()).setAdjX(0);
+            Image.getImage(e.getId()).setAdjY(0);
             return UP;
 
         }
@@ -44,13 +45,18 @@ public class Attack extends Action {
 
     @Override
     public void preformAction() {
-        ticks++;
-        if(ticks == 21){
-            afterAction();
-            return;
-        }
-        Image.getImage(entity.getId()).setImg(entity.getAttackImages()[getDirection()][(ticks-1)/4]);
-        ;
+        entity.attackAnimation(ticks,deltaX,deltaY);
+        if(ticks==tickLength()/2){
+            bloodId = ImageID.getId();
+            Entity target = Tilemap.getTile(entity.getX()+deltaX,entity.getY()+deltaY).getEntity();
+            Image.put(bloodId,new Image(target.getX()* GameState.tileSize,target.getY()*GameState.tileSize+1,target.getBlood()));}
+
+        super.preformAction();
+    }
+
+    @Override
+    public int tickLength() {
+        return tickLength;
     }
 
     @Override
@@ -60,11 +66,11 @@ public class Attack extends Action {
 
     @Override
     public void afterAction() {
-        Tilemap.getTile(entity.getX()+deltaX,entity.getY()+deltaY).getEntity().damage(damage);
-        Image.getImage(entity.getId()).setImg(Image.PLAYER_STILL[getDirection()]);
+        Tilemap.getTile(entity.getX()+deltaX,entity.getY()+deltaY).Attack(damage);
+        entity.afterAttack(deltaX,deltaY);
         Image.getImage(entity.getId()).setAdjX(0);
         Image.getImage(entity.getId()).setAdjY(0);
-
-        entity.clearAction();
+        Image.remove(bloodId);
+        super.afterAction();
     }
 }

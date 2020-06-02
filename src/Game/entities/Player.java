@@ -1,85 +1,151 @@
 package Game.entities;
 
-import Game.imageclasses.Image;
-import Game.imageclasses.ImageID;
+import Game.GameState;
+import Game.Items.Boomerang;
+import Game.Items.Empty;
+import Game.Items.Item;
+import Game.Items.Sword;
+import Game.entities.actions.ItemUse;
+import Game.entities.pathfinding.Pathfinder;
+import Game.assetClasses.Image;
+import Game.assetClasses.ImageID;
 import Game.entities.actions.Action;
 import Game.entities.actions.Movement;
 import Game.entities.actions.Stand;
 import Game.levels.Tilemap;
 
 import java.awt.*;
+import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 
 
-public class Player {
+public class Player extends MovingEntity {
 
-    private static ArrayList<Action> actionQue;
-    public static Point destination;
-    public static Entity player;
-    public static boolean done;
+    private ArrayList<Action> actionQue;
+    public Point destination;
+    public boolean done;
+    public ArrayList<Item> items;
 
-    public static void load(){
+    public Player() {
         actionQue = new ArrayList<>();
-        destination = new Point(1,8);
-        int imageX = 50,imageY= 375;
-        Image.put(ImageID.PLAYER_ID,new Image(imageX,imageY,Image.PLAYER_FRONT));
-        Player.player = new MovingEntity();
-        player.currentAction = new Stand(player);
-        Player.player.imgId = ImageID.PLAYER_ID;
-        player.x = 1;
-        player.y = 8;
+        items = new ArrayList<>();
+        items.add(new Sword(6, this));
+        items.add(new Boomerang(10, 810, this));
+        for (int i = 0; i < 3; i++) items.add(new Empty());
+        destination = new Point(1, 8);
+        int imageX = 50, imageY = 375;
+        currentAction = new Stand(this);
+        imgId = ImageID.PLAYER_ID;
+        x = 1;
+        y = 8;
+        hp = 100;
+
+
     }
-    public static void tick(){
-        if(player.currentAction instanceof Stand){
+
+    public static void load() {
+
+
+    }
+
+    public void tick() {
+        if (GameState.clearMovement||GameState.mouseRelease) {
+            clearMovements();
+            GameState.clearMovement = false;
+        }
+        if (currentAction instanceof Stand) {
+            if (GameState.keyStates.get(KeyEvent.VK_SPACE)) {
+                done = true;
+            } else if (GameState.mouseRelease) {
+                Item i = GameState.selected>=0&&GameState.selected<5 ? items.get(GameState.selected) : new Empty();
+                if (ItemUse.readyItemUse(i, GameState.mouseX - x, GameState.mouseY - y, this))
+                    addAction(new ItemUse(i, GameState.mouseX - x, GameState.mouseY - y, this));
+
+                else if (Tilemap.getTile(GameState.mouseX, GameState.mouseY).selected(this)) {
+                    if (!GameState.keyStates.get(KeyEvent.VK_SHIFT)) {
+                        clearMovements();
+                    }
+                    ArrayList<Movement> m = Pathfinder.getMovement(x, y, GameState.mouseX, GameState.mouseY, this);
+
+                    addMovements(m);
+                }
+            }
             if (actionQue.size() == 0) {
                 return;
             }
-            player.currentAction = actionQue.get(0);
+            currentAction = actionQue.get(0);
             actionQue.remove(0);
-            if(player.currentAction instanceof Movement) {
-                Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[((Movement) player.currentAction).getDirection()]);
-                if(Tilemap.getTile(((Movement)player.currentAction).getDeltaX()+player.x,((Movement)player.currentAction).getDeltaY()+player.y).getEntity()instanceof Enemy){
-                    player.currentAction = new Stand(player);
+            if (currentAction instanceof Movement) {
+                Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[((Movement) currentAction).getDirection()]);
+                if (Tilemap.getTile(((Movement) currentAction).getDeltaX() + x, ((Movement) currentAction).getDeltaY() + y).getEntity() instanceof Enemy) {
+                    currentAction = new Stand(this);
                 }
-                player.currentAction.addEntity(player);
+                currentAction.addEntity(this);
 
             }
         }
-        if (player.currentAction == null){
+        if (currentAction == null) {
             done = true;
             return;
         }
 
-        player.currentAction.preformAction();
+        currentAction.preformAction();
     }
-    public static void addAction(Action a){
+
+    @Override
+    public void selected() {
+
+    }
+
+    @Override
+    public void damage(int dmg) {
+        super.damage(dmg);
+    }
+
+    @Override
+    public Action assignAction() {
+        return null;
+    }
+
+    @Override
+    public BufferedImage[][] getAttackImages() {
+        return Image.PLAYER_ATTACK;
+    }
+
+    public void addAction(Action a) {
         actionQue.add(a);
     }
-    public static void addMovements(ArrayList<Movement> m){
-        for (Movement m1: m) {
+
+    public void addMovements(ArrayList<Movement> m) {
+        for (Movement m1 : m) {
             addAction(m1);
         }
 
     }
-    public static void clearMovements(){
+
+    public void clearMovements() {
         actionQue.clear();
     }
 
+    public void replaceImage() {
+        Image.put(ImageID.PLAYER_ID, new Image(GameState.tileSize * x, GameState.tileSize * y - 25, Image.PLAYER_FRONT));
+    }
 
-    public static void newTurn() {
-        done =false;
-        if (actionQue.size()>0){
-            player.currentAction=actionQue.get(0);
+    public void newTurn() {
+        done = false;
+        if (actionQue.size() > 0) {
+            currentAction = actionQue.get(0);
             actionQue.remove(0);
-            if(player.currentAction instanceof Movement) {
-                Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[((Movement) player.currentAction).getDirection()]);
-                if(Tilemap.getTile(((Movement)player.currentAction).getDeltaX()+player.x,((Movement)player.currentAction).getDeltaY()+player.y).getEntity()instanceof Enemy){
-                    player.currentAction = new Stand(player);
+            if (currentAction instanceof Movement) {
+                Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[((Movement) currentAction).getDirection()]);
+                if (Tilemap.getTile(((Movement) currentAction).getDeltaX() + x, ((Movement) currentAction).getDeltaY() + y).getEntity() instanceof Enemy) {
+                    currentAction = new Stand(this);
                 }
-                player.currentAction.addEntity(player);
+                currentAction.addEntity(this);
             }
-        }else {
-            player.currentAction = new Stand(player);
+        } else {
+            currentAction = new Stand(this);
         }
     }
 }

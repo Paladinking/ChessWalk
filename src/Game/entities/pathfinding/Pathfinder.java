@@ -1,5 +1,6 @@
 package Game.entities.pathfinding;
 
+import Game.GameState;
 import Game.entities.Entity;
 import Game.entities.Player;
 import Game.entities.actions.Movement;
@@ -36,11 +37,11 @@ public class Pathfinder {
         ArrayList<Movement> movement;
         Node finalNode = new Node(x1, y1);
         Node initialNode = new Node(x2, y2);
-        AStar aStar = new AStar(16, 16, initialNode, finalNode);
+        AStar aStar = new AStar(GameState.boardWidth/GameState.tileSize, GameState.boardHeight/GameState.tileSize, initialNode, finalNode);
         aStar.setBlocks(Tilemap.getTiles(),e);
         List<Node> path = aStar.findPath();
         movement = Pathfinder.makeToMoves(path);
-        Player.destination = new Point(x2,y2);
+        if(e instanceof Player)((Player)e).destination = new Point(x2,y2);
         return movement;
     }
 

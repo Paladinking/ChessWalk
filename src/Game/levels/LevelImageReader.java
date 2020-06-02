@@ -1,7 +1,8 @@
 package Game.levels;
 
 import Game.Board;
-import Game.imageclasses.Image;
+import Game.GameState;
+import Game.assetClasses.Image;
 import Game.entities.Enemy;
 import Game.levels.Tiles.EmptyTile;
 import Game.levels.Tiles.Tile;
@@ -15,7 +16,7 @@ public class LevelImageReader {
 
 
     public static Tile[][] readLevelImage(Level level) {
-        Tile[][] tiles = new Tile[16][16];
+        Tile[][] tiles = new Tile[GameState.boardWidth/GameState.tileSize][GameState.boardHeight/GameState.tileSize];
         BufferedImage b;
         try {
             b = ImageIO.read(Board.class.getResource(level.filePath)).getSubimage(level.imageX,level.imageY,16,16);
@@ -29,7 +30,7 @@ public class LevelImageReader {
                     tiles[j][i] = new WallTile(i,j, Image.WALL_FRONT);
                 } else if(hex==0xffff0000){
                     tiles[j][i] = new EmptyTile();
-                    Enemy e = level.getEnemy(i*50,j*50);
+                    Enemy e = level.getEnemy(i* GameState.tileSize,j*GameState.tileSize);
                     tiles[j][i].setEntity(e);
                     Enemy.add(e);
                 } else {
