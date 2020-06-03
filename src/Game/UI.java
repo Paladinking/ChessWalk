@@ -9,9 +9,9 @@ abstract class UI {
     static void drawUI(Graphics g,Player player){
         int hp = player.getHp();
         g.setColor(Color.red);
-        g.fillRect(GameState.offsetX,2*GameState.offsetY+GameState.boardHeight,100,40);
+        g.fillRect(GameState.offsetX,2*GameState.offsetY+GameState.boardHeight,200,40);
         g.setColor(Color.green);
-        g.fillRect(GameState.offsetX,2*GameState.offsetY+GameState.boardHeight,hp,40);
+        g.fillRect(GameState.offsetX,2*GameState.offsetY+GameState.boardHeight,hp*4,40);
         for(int i=0;i<5;i++){
             g.setColor(Color.orange);
             if(i==GameState.selected) g.setColor(Color.yellow);

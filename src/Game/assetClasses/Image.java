@@ -26,8 +26,8 @@ public class Image {
     public static BufferedImage PLAYER_RIGHT;
 
     public static BufferedImage SLIME;
-    public static BufferedImage[][] SLIME_ATTACK;
     public static BufferedImage KNIGHT;
+    public static BufferedImage[] SKELETON;
 
     public static BufferedImage WALL_FRONT;
 
@@ -78,15 +78,14 @@ public class Image {
             SWORD = ImageIO.read(Board.class.getResource(path+"Items/Sword.png"));
             BLOOD = ImageIO.read(Board.class.getResource(path+"Blood.png"));
             SLIME_BLOOD = ImageIO.read(Board.class.getResource(path+"slimeBlood.png"));
+            SKELETON = new BufferedImage[4];
+            SKELETON[UP] = ImageIO.read(Board.class.getResource(path+"Enemies/skeletonBack.png"));
+            SKELETON[DOWN] = ImageIO.read(Board.class.getResource(path+"Enemies/skeletonFront.png"));
+            SKELETON[LEFT] = ImageIO.read(Board.class.getResource(path+"Enemies/skeletonLeft.png"));
+            SKELETON[RIGHT] = ImageIO.read(Board.class.getResource(path+"Enemies/skeletonRight.png"));
 
             PLAYER_ATTACK = new BufferedImage[4][5];
-            SLIME_ATTACK = new BufferedImage[4][5];
             for (int i=0;i<5;i++){
-                PLAYER_ATTACK[UP][i] = ImageIO.read(Board.class.getResource(playerPath+"AttackAnimationUp.png")).getSubimage(0,70*i,50,70);
-                PLAYER_ATTACK[RIGHT][i] = ImageIO.read((Board.class.getResource(playerPath+"AttackAnimationRight.png"))).getSubimage(0,70*i,80,70);
-                PLAYER_ATTACK[LEFT][i] = ImageIO.read(Board.class.getResource(playerPath +"AttackAnimationLeft.png")).getSubimage(0,70*i,80,70);
-                PLAYER_ATTACK[DOWN][i] = ImageIO.read(Board.class.getResource(playerPath+"AttackAnimationFront.png")).getSubimage(0,70*i,50,70);
-
                 PLAYER_ATTACK[UP][i] = ImageIO.read(Board.class.getResource(playerPath+"AttackAnimationUp.png")).getSubimage(0,70*i,50,70);
                 PLAYER_ATTACK[RIGHT][i] = ImageIO.read((Board.class.getResource(playerPath+"AttackAnimationRight.png"))).getSubimage(0,70*i,80,70);
                 PLAYER_ATTACK[LEFT][i] = ImageIO.read(Board.class.getResource(playerPath +"AttackAnimationLeft.png")).getSubimage(0,70*i,80,70);

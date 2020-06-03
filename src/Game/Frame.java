@@ -1,5 +1,7 @@
 package Game;
 
+import Game.assetClasses.SoundManager;
+
 import javax.swing.*;
 import java.awt.*;
 

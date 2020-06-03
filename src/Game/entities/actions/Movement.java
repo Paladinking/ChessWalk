@@ -2,7 +2,9 @@ package Game.entities.actions;
 
 import Game.GameState;
 import Game.assetClasses.Image;
+import Game.assetClasses.SoundManager;
 import Game.entities.Entity;
+import Game.entities.Player;
 import Game.levels.Tilemap;
 
 public class Movement extends Action {
@@ -25,7 +27,7 @@ public class Movement extends Action {
         return STILL;
     }
 
-    private Movement(int deltaX, int deltaY, Entity e) {
+    public Movement(int deltaX, int deltaY, Entity e) {
         this(deltaX,deltaY);
         this.addEntity(e);
     }
@@ -57,6 +59,7 @@ public class Movement extends Action {
         entity.setX(entity.getX() + deltaX);
         entity.setY(entity.getY() + deltaY);
         Tilemap.addEntity(entity.getX(), entity.getY(), entity);
+        entity.playSound(SoundManager.MOVE);
     }
 
     @Override

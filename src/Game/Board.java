@@ -26,10 +26,11 @@ public class Board extends JPanel implements ActionListener, KeyListener, MouseL
     }
 
     private void loadEntities() {
-        player = new Player();
+        player = new Player(1,8,50);
         Enemy.load();
         loadLevel(0);
     }
+
 
     private void loadLevel(int lvl) {
         Image.clear();
@@ -40,6 +41,7 @@ public class Board extends JPanel implements ActionListener, KeyListener, MouseL
         if (lvl < Level.LEVELS.length) {
             Tilemap.loadTiles(Level.LEVELS[lvl]);
         }
+        Tilemap.getTile(1,8).setEntity(player);
     }
 
     private void setupBoard() {
@@ -78,16 +80,17 @@ public class Board extends JPanel implements ActionListener, KeyListener, MouseL
     private void tick() {
         if (GameState.playerTurn) {
             player.tick();
-            if (player.done) GameState.playerTurn = !GameState.playerTurn;
+            GameState.playerX = player.getX();
+            GameState.playerY = player.getY();
+
         } else {
             if (!Enemy.tickAll()) {
                 loadLevel(GameState.currentLevel + 1);
             }
             if (GameState.t++ > Enemy.getTickLength()) {
                 GameState.playerTurn = true;
-                Tile[][] t2 = Tilemap.getTiles();
                 GameState.t = 0;
-                player.newTurn();
+                GameState.turns++;
             }
         }
         GameState.mouseRelease = false;
@@ -135,7 +138,6 @@ public class Board extends JPanel implements ActionListener, KeyListener, MouseL
         if (key == KeyEvent.VK_5) {
             GameState.selected = GameState.selected == 4 ? -1 : 4;
         }
-
     }
 
     @Override

@@ -2,13 +2,15 @@ package Game.levels;
 
 import Game.entities.Enemy;
 import Game.entities.Knight;
+import Game.entities.Skeleton;
 import Game.entities.Slime;
 
 public class Level {
     private static final int[] LVL1_ENEMIES = {Enemy.SLIME,Enemy.SLIME,Enemy.SLIME,Enemy.SLIME,Enemy.KNIGHT};
+    private static final int[] LVL2_ENEMIES = {Enemy.SKELETON,Enemy.SKELETON,Enemy.SKELETON,Enemy.SKELETON,Enemy.KNIGHT};
 
     private static final Level LEVEL_1 = new Level("assets/Levels/LevelImage/Level1-4.bmp",0,0, LVL1_ENEMIES);
-    private static final Level LEVEL_2 = new Level("assets/Levels/LevelImage/Level1-4.bmp",16,0,new int[5]);
+    private static final Level LEVEL_2 = new Level("assets/Levels/LevelImage/Level1-4.bmp",16,0,LVL2_ENEMIES);
     private static final Level LEVEL_3 = new Level("assets/Levels/LevelImage/Level1-4.bmp",32,0, new int[5]);
     private static final Level LEVEL_4 = new Level("assets/Levels/LevelImage/Level1-4.bmp",48,0, new int[5]);
 
@@ -34,6 +36,8 @@ public class Level {
                 return new Slime(x,y);
             case Enemy.KNIGHT:
                 return new Knight(x,y);
+            case Enemy.SKELETON:
+                return new Skeleton(x,y);
             default:
                 return new Slime(x,y);
         }

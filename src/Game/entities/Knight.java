@@ -2,8 +2,10 @@ package Game.entities;
 
 import Game.GameState;
 import Game.entities.actions.Action;
+import Game.entities.actions.Attack;
 import Game.entities.actions.Stand;
 import Game.assetClasses.Image;
+import Game.levels.Tilemap;
 
 import java.awt.image.BufferedImage;
 
@@ -26,6 +28,12 @@ public class Knight extends Enemy{
     }
     @Override
     public Action assignAction(){
+        for(int i=x-1;i<=x+1;i++){
+            for(int j=y-1;j<=y+1;j++){
+                if(Tilemap.getTile(i,j).getEntity()instanceof Player) return new Attack(i-x,j-y,dmg,this);
+            }
+        }
+
          return new Stand(this);
     }
 

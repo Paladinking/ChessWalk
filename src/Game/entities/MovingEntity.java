@@ -1,6 +1,7 @@
 package Game.entities;
 
 
+import Game.assetClasses.SoundManager;
 import Game.entities.actions.Action;
 import Game.entities.actions.Attack;
 import Game.entities.actions.Stand;
@@ -9,7 +10,6 @@ import Game.assetClasses.Image;
 import java.awt.image.BufferedImage;
 
 public abstract class MovingEntity extends Entity {
-
 
 
     @Override
@@ -24,14 +24,16 @@ public abstract class MovingEntity extends Entity {
 
     @Override
     public void damage(int dmg) {
-        this.hp -=dmg;
+        playSound(SoundManager.HURT);
+        this.hp -= dmg;
     }
 
     @Override
     public Action assignAction() {
         return new Stand(this);
     }
-    public int getHp(){
+
+    public int getHp() {
         return hp;
     }
 
@@ -39,15 +41,22 @@ public abstract class MovingEntity extends Entity {
     public abstract BufferedImage[][] getAttackImages();
 
     @Override
-    public void attackAnimation(int ticks,int dx,int dy){
-        Image.getImage(getId()).setImg(getAttackImages()[Attack.getDirection(dx,dy,this)][(ticks-1)/4]);
+    public void attackAnimation(int ticks, int dx, int dy) {
+        Image.getImage(getId()).setImg(getAttackImages()[Attack.getDirection(dx, dy, this)][(ticks - 1) / 4]);
     }
+
     @Override
-    public void afterAttack(int dx, int dy){
-        Image.getImage(getId()).setImg(Image.PLAYER_STILL[Attack.getDirection(dx,dy,this)]);
+    public void afterAttack(int dx, int dy) {
+        Image.getImage(getId()).setImg(Image.PLAYER_STILL[Attack.getDirection(dx, dy, this)]);
     }
+
     @Override
-    public java.awt.Image getBlood(){
+    public java.awt.Image getBlood() {
         return Image.BLOOD;
+    }
+
+    @Override
+    public void playSound(int w) {
+
     }
 }

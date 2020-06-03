@@ -7,10 +7,13 @@ import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
+    public static final int SLEEPING= 0,WANDERING =1, HUNTING=2;
     int x, y,hp;
 
     int imgId;
     Action currentAction;
+
+    int mode;
 
     public abstract void tick();
 
@@ -35,6 +38,8 @@ public abstract class Entity {
     }
 
     public abstract Action assignAction();
+
+    public abstract void playSound(int w);
 
     public int getId(){
         return imgId;

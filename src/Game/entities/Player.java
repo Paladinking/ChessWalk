@@ -5,6 +5,7 @@ import Game.Items.Boomerang;
 import Game.Items.Empty;
 import Game.Items.Item;
 import Game.Items.Sword;
+import Game.assetClasses.SoundManager;
 import Game.entities.actions.ItemUse;
 import Game.entities.pathfinding.Pathfinder;
 import Game.assetClasses.Image;
@@ -24,10 +25,9 @@ public class Player extends MovingEntity {
 
     private ArrayList<Action> actionQue;
     public Point destination;
-    public boolean done;
     public ArrayList<Item> items;
 
-    public Player() {
+    public Player(int x,int y,int hp) {
         actionQue = new ArrayList<>();
         items = new ArrayList<>();
         items.add(new Sword(6, this));
@@ -37,18 +37,12 @@ public class Player extends MovingEntity {
         int imageX = 50, imageY = 375;
         currentAction = new Stand(this);
         imgId = ImageID.PLAYER_ID;
-        x = 1;
-        y = 8;
-        hp = 100;
+        this.x = x;
+        this.y = y;
+        this.hp = hp;
 
 
     }
-
-    public static void load() {
-
-
-    }
-
     public void tick() {
         if (GameState.clearMovement||GameState.mouseRelease) {
             clearMovements();
@@ -56,7 +50,7 @@ public class Player extends MovingEntity {
         }
         if (currentAction instanceof Stand) {
             if (GameState.keyStates.get(KeyEvent.VK_SPACE)) {
-                done = true;
+                GameState.playerTurn = false;
             } else if (GameState.mouseRelease) {
                 Item i = GameState.selected>=0&&GameState.selected<5 ? items.get(GameState.selected) : new Empty();
                 if (ItemUse.readyItemUse(i, GameState.mouseX - x, GameState.mouseY - y, this))
@@ -82,11 +76,11 @@ public class Player extends MovingEntity {
                     currentAction = new Stand(this);
                 }
                 currentAction.addEntity(this);
-
             }
         }
         if (currentAction == null) {
-            done = true;
+            GameState.playerTurn = false;
+            currentAction = new Stand(this);
             return;
         }
 
@@ -102,10 +96,22 @@ public class Player extends MovingEntity {
     public void damage(int dmg) {
         super.damage(dmg);
     }
-
     @Override
-    public Action assignAction() {
-        return null;
+    public void playSound(int w){
+        switch (w) {
+            case (SoundManager.MOVE):
+                SoundManager.playSound(new String[]{"step1.wav","step2.wav","step3.wav"});
+                return;
+            case SoundManager.ATTACK:
+                SoundManager.playSound(new String[]{""});
+                return;
+            case SoundManager.HURT:
+                SoundManager.playSound(new String[]{"playerHurt.wav","hurt1.wav"});
+                return;
+            case SoundManager.DIE:
+                SoundManager.playSound(new String[]{""});
+                return;
+        }
     }
 
     @Override
@@ -131,22 +137,18 @@ public class Player extends MovingEntity {
     public void replaceImage() {
         Image.put(ImageID.PLAYER_ID, new Image(GameState.tileSize * x, GameState.tileSize * y - 25, Image.PLAYER_FRONT));
     }
-
-    public void newTurn() {
-        done = false;
-        if (actionQue.size() > 0) {
-            currentAction = actionQue.get(0);
+    @Override
+    public Action assignAction(){
+        if (actionQue.size()>0) {
+            Action a = actionQue.get(0);
             actionQue.remove(0);
-            if (currentAction instanceof Movement) {
-                Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[((Movement) currentAction).getDirection()]);
-                if (Tilemap.getTile(((Movement) currentAction).getDeltaX() + x, ((Movement) currentAction).getDeltaY() + y).getEntity() instanceof Enemy) {
-                    currentAction = new Stand(this);
-                }
-                currentAction.addEntity(this);
-            }
-        } else {
-            currentAction = new Stand(this);
+            a.addEntity(this);
+            return a;
         }
+        return new Stand(this);
+    }
+    public void setAction(Action a){
+        currentAction = a;
     }
 }
 

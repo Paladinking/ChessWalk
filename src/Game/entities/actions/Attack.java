@@ -3,6 +3,7 @@ package Game.entities.actions;
 import Game.GameState;
 import Game.assetClasses.Image;
 import Game.assetClasses.ImageID;
+import Game.assetClasses.SoundManager;
 import Game.entities.Entity;
 import Game.levels.Tilemap;
 
@@ -45,12 +46,12 @@ public class Attack extends Action {
 
     @Override
     public void preformAction() {
+        entity.playSound(SoundManager.ATTACK);
         entity.attackAnimation(ticks,deltaX,deltaY);
         if(ticks==tickLength()/2){
             bloodId = ImageID.getId();
             Entity target = Tilemap.getTile(entity.getX()+deltaX,entity.getY()+deltaY).getEntity();
             Image.put(bloodId,new Image(target.getX()* GameState.tileSize,target.getY()*GameState.tileSize+1,target.getBlood()));}
-
         super.preformAction();
     }
 

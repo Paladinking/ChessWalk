@@ -14,7 +14,7 @@ import java.util.List;
 
 public abstract class Enemy extends MovingEntity {
     public static final int SLIME = 0;
-    public static final int KNIGHT = 1;
+    public static final int KNIGHT = 1,SKELETON=2;
     private static int tickLength;
     static final int dmg = 3;
 
@@ -30,7 +30,16 @@ public abstract class Enemy extends MovingEntity {
     public Enemy() {
     }
 
-
+    @Override
+    public void attackAnimation(int tick, int dx,int dy) {
+        int ft = Attack.tickLength;
+        if(tick<=ft/2) Image.getImage(imgId).moveImage(dx*GameState.tileSize/(ft/2f),dy*GameState.tileSize/(ft/2f));
+        else Image.getImage(imgId).moveImage(-dx*GameState.tileSize/(ft/2f),-dy*GameState.tileSize/(ft/2f));
+    }
+    @Override
+    public void afterAttack(int dx, int dy){
+        //Image.put(imgId,new Image(x*GameState.tileSize,y*GameState.tileSize,Image.SLIME));
+    }
 
     @Override
      public void tick() {
@@ -71,7 +80,7 @@ public abstract class Enemy extends MovingEntity {
     protected void move() {
         if(currentAction==null) return;
         currentAction.preformAction();
-        System.out.println();
+
      }
      public static void load(){
          enemies = new ArrayList<>();
