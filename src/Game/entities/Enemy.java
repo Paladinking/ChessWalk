@@ -1,6 +1,7 @@
 package Game.entities;
 
 import Game.GameState;
+import Game.assetClasses.SoundManager;
 import Game.entities.actions.Action;
 import Game.entities.actions.Attack;
 import Game.assetClasses.Image;
@@ -49,6 +50,23 @@ public abstract class Enemy extends MovingEntity {
     @Override
     public void selected() {
 
+    }
+    @Override
+    public void playSound(int w) {
+        switch (w) {
+            case (SoundManager.MOVE):
+                SoundManager.playSound("step3.wav");
+                break;
+            case (SoundManager.ATTACK):
+                SoundManager.playSound("punsh.wav");
+                break;
+            case(SoundManager.HURT):
+
+                break;
+            case (SoundManager.DIE):
+
+                break;
+        }
     }
     @Override
     public void damage(int dmg){

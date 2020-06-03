@@ -1,10 +1,7 @@
 package Game.entities;
 
 import Game.GameState;
-import Game.Items.Boomerang;
-import Game.Items.Empty;
-import Game.Items.Item;
-import Game.Items.Sword;
+import Game.Items.*;
 import Game.assetClasses.SoundManager;
 import Game.entities.actions.ItemUse;
 import Game.entities.pathfinding.Pathfinder;
@@ -32,6 +29,7 @@ public class Player extends MovingEntity {
         items = new ArrayList<>();
         items.add(new Sword(6, this));
         items.add(new Boomerang(10, 810, this));
+        items.add(new Zapper(Image.ZAP));
         for (int i = 0; i < 3; i++) items.add(new Empty());
         destination = new Point(1, 8);
         int imageX = 50, imageY = 375;
@@ -100,16 +98,16 @@ public class Player extends MovingEntity {
     public void playSound(int w){
         switch (w) {
             case (SoundManager.MOVE):
-                SoundManager.playSound(new String[]{"step1.wav","step2.wav","step3.wav"});
+                SoundManager.playSound(new String[]{"step1.wav","step2.wav"});
                 return;
             case SoundManager.ATTACK:
-                SoundManager.playSound(new String[]{""});
-                return;
+                SoundManager.playSound(new String[]{"swosh.wav"});
+            return;
             case SoundManager.HURT:
-                SoundManager.playSound(new String[]{"playerHurt.wav","hurt1.wav"});
+                SoundManager.playSound(new String[]{"MMM.wav","OWW.wav"});
                 return;
             case SoundManager.DIE:
-                SoundManager.playSound(new String[]{""});
+                SoundManager.playSound(new String[]{"hurt1.wav"});
                 return;
         }
     }

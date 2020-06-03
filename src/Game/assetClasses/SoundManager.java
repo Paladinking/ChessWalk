@@ -3,16 +3,13 @@ package Game.assetClasses;
 import Game.Board;
 
 import javax.sound.sampled.*;
+import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public abstract class SoundManager {
     public static final int MOVE=0,ATTACK=1,HURT=2,DIE=3;
-
-
-
-
 
 
     public static void playSound(String path){

@@ -24,6 +24,7 @@ public class Image {
     public static BufferedImage PLAYER_BACK;
     public static BufferedImage PLAYER_LEFT;
     public static BufferedImage PLAYER_RIGHT;
+    public static BufferedImage ZAP;
 
     public static BufferedImage SLIME;
     public static BufferedImage KNIGHT;
@@ -83,6 +84,7 @@ public class Image {
             SKELETON[DOWN] = ImageIO.read(Board.class.getResource(path+"Enemies/skeletonFront.png"));
             SKELETON[LEFT] = ImageIO.read(Board.class.getResource(path+"Enemies/skeletonLeft.png"));
             SKELETON[RIGHT] = ImageIO.read(Board.class.getResource(path+"Enemies/skeletonRight.png"));
+            ZAP = ImageIO.read(Board.class.getResource(path+"zap.png"));
 
             PLAYER_ATTACK = new BufferedImage[4][5];
             for (int i=0;i<5;i++){

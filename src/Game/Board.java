@@ -1,13 +1,11 @@
 package Game;
 
 import Game.assetClasses.Image;
-import Game.assetClasses.ImageID;
+import Game.assetClasses.SoundManager;
 import Game.entities.Enemy;
 import Game.entities.Player;
 import Game.levels.Level;
 import Game.levels.Tilemap;
-import Game.levels.Tiles.Tile;
-import Game.levels.Tiles.WallTile;
 
 import javax.swing.*;
 import java.awt.*;
@@ -16,7 +14,7 @@ import java.util.HashMap;
 
 
 public class Board extends JPanel implements ActionListener, KeyListener, MouseListener {
-    Player player;
+    private Player player;
 
     Board() {
         setPreferredSize(new Dimension(900, 920));
@@ -50,9 +48,9 @@ public class Board extends JPanel implements ActionListener, KeyListener, MouseL
         addMouseListener(this);
         addKeys();
         setFocusable(true);
-        Timer timer = new Timer(10, this);
+        Timer timer = new Timer(16, this);
         timer.start();
-
+        SoundManager.playSound("test.wav");
 
     }
 
@@ -94,9 +92,9 @@ public class Board extends JPanel implements ActionListener, KeyListener, MouseL
             }
         }
         GameState.mouseRelease = false;
-        if (Tilemap.getTile(GameState.mouseX, GameState.mouseY).getEntity() != player && !(Tilemap.getTile(GameState.mouseX, GameState.mouseY) instanceof WallTile))
+        /*if (Tilemap.getTile(GameState.mouseX, GameState.mouseY).getEntity() != player && !(Tilemap.getTile(GameState.mouseX, GameState.mouseY) instanceof WallTile))
             Image.put(ImageID.SELECTED_SQUARE_ID, new Image(GameState.mouseX * GameState.tileSize, GameState.mouseY * GameState.tileSize, Image.SELECTED_TILE));
-        else Image.remove(ImageID.SELECTED_SQUARE_ID);
+        else Image.remove(ImageID.SELECTED_SQUARE_ID);*/
     }
 
 
@@ -137,6 +135,9 @@ public class Board extends JPanel implements ActionListener, KeyListener, MouseL
         }
         if (key == KeyEvent.VK_5) {
             GameState.selected = GameState.selected == 4 ? -1 : 4;
+        }
+        if(key==KeyEvent.VK_M){
+            System.gc();
         }
     }
 

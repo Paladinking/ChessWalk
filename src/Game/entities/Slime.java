@@ -49,10 +49,10 @@ public class Slime extends Enemy {
     public void playSound(int w){
         switch (w) {
             case (SoundManager.MOVE):
-                SoundManager.playSound(new String[]{""});
+                SoundManager.playSound("Slime.wav");
                 return;
             case SoundManager.ATTACK:
-                SoundManager.playSound(new String[]{""});
+                SoundManager.playSound("slimeAtk.wav");
                 return;
             case SoundManager.HURT:
                 SoundManager.playSound("slimeDmg.wav");

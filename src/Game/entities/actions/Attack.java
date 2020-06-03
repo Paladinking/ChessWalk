@@ -46,7 +46,6 @@ public class Attack extends Action {
 
     @Override
     public void preformAction() {
-        entity.playSound(SoundManager.ATTACK);
         entity.attackAnimation(ticks,deltaX,deltaY);
         if(ticks==tickLength()/2){
             bloodId = ImageID.getId();
@@ -62,7 +61,7 @@ public class Attack extends Action {
 
     @Override
     public void beforeAction() {
-
+        entity.playSound(SoundManager.ATTACK);
     }
 
     @Override
