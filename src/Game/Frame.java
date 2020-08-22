@@ -21,12 +21,13 @@ class Frame extends JFrame{
 
     }
     public static void main(String[] args){
-        EventQueue.invokeLater(()->{
-             Frame f = new Frame();
+        try {
+            EventQueue.invokeLater(()->{
+                Frame f = new Frame();
 
-            f.setVisible(true);
-        });
-
+                f.setVisible(true);
+            });
+        } catch (Exception ignored){}
     }
 
 

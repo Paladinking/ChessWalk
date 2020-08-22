@@ -5,16 +5,13 @@ import Game.assetClasses.Image;
 import Game.assetClasses.ImageID;
 import Game.entities.Entity;
 
+import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public class WallTile extends Tile{
 
-    public WallTile(int x, int y, BufferedImage b){
-        Image.put(ImageID.getId(),new Image(x* GameState.tileSize,y*GameState.tileSize-20,b));
-    }
 
     public WallTile(){
-
     }
     @Override
     public void pressed(Entity e) {
@@ -48,6 +45,14 @@ public class WallTile extends Tile{
 
     @Override
     public void Attack(int dmg) {
+
+    }
+
+    @Override
+    public void draw(Graphics g,int x,int y) {
+        g.drawImage(Image.WALL_FRONT,x*GameState.tileSize+GameState.offsetX+GameState.globalAdjX,-20*GameState.tileSize/ GameState.initialSize+y*GameState.tileSize+GameState.offsetY+GameState.globalAdjY,
+                Image.WALL_FRONT.getWidth()*GameState.tileSize/ GameState.initialSize,Image.WALL_FRONT.getHeight()*GameState.tileSize/ GameState.initialSize,
+                null);
 
     }
 }

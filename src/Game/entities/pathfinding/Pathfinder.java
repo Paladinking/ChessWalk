@@ -37,7 +37,7 @@ public class Pathfinder {
         ArrayList<Movement> movement;
         Node finalNode = new Node(x1, y1);
         Node initialNode = new Node(x2, y2);
-        AStar aStar = new AStar(GameState.boardWidth/GameState.tileSize, GameState.boardHeight/GameState.tileSize, initialNode, finalNode);
+        AStar aStar = new AStar(GameState.mapWidth,GameState.mapHeight, initialNode, finalNode);
         aStar.setBlocks(Tilemap.getTiles(),e);
         List<Node> path = aStar.findPath();
         movement = Pathfinder.makeToMoves(path);

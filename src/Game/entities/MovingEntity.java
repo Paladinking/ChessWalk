@@ -42,12 +42,12 @@ public abstract class MovingEntity extends Entity {
 
     @Override
     public void attackAnimation(int ticks, int dx, int dy) {
-        Image.getImage(getId()).setImg(getAttackImages()[Attack.getDirection(dx, dy, this)][(ticks - 1) / 4]);
+        image.setImg(getAttackImages()[Attack.getDirection(dx, dy, this)][(ticks - 1) / 4]);
     }
 
     @Override
     public void afterAttack(int dx, int dy) {
-        Image.getImage(getId()).setImg(Image.PLAYER_STILL[Attack.getDirection(dx, dy, this)]);
+        image.setImg(Image.PLAYER_STILL[Attack.getDirection(dx, dy, this)]);
     }
 
     @Override

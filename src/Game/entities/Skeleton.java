@@ -23,13 +23,13 @@ public class Skeleton extends Enemy {
     @Override
     public void tick() {
         if(currentAction instanceof Movement){
-            Image.getImage(imgId).setImg(Image.SKELETON[((Movement) currentAction).getDirection()]);
+            image.setImg(Image.SKELETON[((Movement) currentAction).getDirection()]);
         }
         super.tick();
     }
     @Override
     public void attackAnimation(int tick, int dx,int dy) {
-        Image.getImage(imgId).setImg(Image.SKELETON[new Movement(dx,dy).getDirection()]);
+        image.setImg(Image.SKELETON[new Movement(dx,dy).getDirection()]);
        super.attackAnimation(tick,dx,dy);
     }
     @Override

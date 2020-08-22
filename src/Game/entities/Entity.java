@@ -1,19 +1,22 @@
 package Game.entities;
 
+import Game.GameState;
 import Game.entities.actions.Action;
-import Game.entities.actions.Stand;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
 public abstract class Entity {
     public static final int SLEEPING= 0,WANDERING =1, HUNTING=2;
-    int x, y,hp;
-
-    int imgId;
+    int x, y,hp,state;
+    Game.assetClasses.Image image;
     Action currentAction;
 
     int mode;
+
+    public Game.assetClasses.Image getImage(){
+        return image;
+    }
 
     public abstract void tick();
 
@@ -41,8 +44,8 @@ public abstract class Entity {
 
     public abstract void playSound(int w);
 
-    public int getId(){
-        return imgId;
+    public void draw(Graphics g, int x,int y){
+        image.draw(g,x,y);
     }
     public void clearAction(){
         currentAction = null;

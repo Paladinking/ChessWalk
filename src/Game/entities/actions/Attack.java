@@ -20,24 +20,16 @@ public class Attack extends Action {
     }
     public static int getDirection(int dx, int dy,Entity e){
         if (dx>0){
-            Image.getImage(e.getId()).setAdjX(0);
-            Image.getImage(e.getId()).setAdjY(0);
             return RIGHT;
         }
         if (dx<0) {
-            Image.getImage(e.getId()).setAdjX(-30);
-            Image.getImage(e.getId()).setAdjY(0);
             return LEFT;
         }
         if (dy>0){
-            Image.getImage(e.getId()).setAdjX(0);
-            Image.getImage(e.getId()).setAdjY(0);
             return DOWN;
 
         }
         if (dy<0){
-            Image.getImage(e.getId()).setAdjX(0);
-            Image.getImage(e.getId()).setAdjY(0);
             return UP;
 
         }
@@ -68,8 +60,6 @@ public class Attack extends Action {
     public void afterAction() {
         Tilemap.getTile(entity.getX()+deltaX,entity.getY()+deltaY).Attack(damage);
         entity.afterAttack(deltaX,deltaY);
-        Image.getImage(entity.getId()).setAdjX(0);
-        Image.getImage(entity.getId()).setAdjY(0);
         Image.remove(bloodId);
         super.afterAction();
     }

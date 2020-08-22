@@ -6,7 +6,6 @@ import Game.assetClasses.SoundManager;
 import Game.entities.actions.ItemUse;
 import Game.entities.pathfinding.Pathfinder;
 import Game.assetClasses.Image;
-import Game.assetClasses.ImageID;
 import Game.entities.actions.Action;
 import Game.entities.actions.Movement;
 import Game.entities.actions.Stand;
@@ -24,17 +23,17 @@ public class Player extends MovingEntity {
     public Point destination;
     public ArrayList<Item> items;
 
-    public Player(int x,int y,int hp) {
+    public Player(int x,int y,int hp, Image img) {
         actionQue = new ArrayList<>();
         items = new ArrayList<>();
         items.add(new Sword(6, this));
         items.add(new Boomerang(10, 810, this));
         items.add(new Zapper(Image.ZAP));
-        for (int i = 0; i < 3; i++) items.add(new Empty());
+        items.add(new Teleport(Image.TELEPORT));
+        items.add(new Empty());
+        this.image = img;
         destination = new Point(1, 8);
-        int imageX = 50, imageY = 375;
         currentAction = new Stand(this);
-        imgId = ImageID.PLAYER_ID;
         this.x = x;
         this.y = y;
         this.hp = hp;
@@ -69,7 +68,7 @@ public class Player extends MovingEntity {
             currentAction = actionQue.get(0);
             actionQue.remove(0);
             if (currentAction instanceof Movement) {
-                Image.getImage(ImageID.PLAYER_ID).setImg(Image.PLAYER_STILL[((Movement) currentAction).getDirection()]);
+                image.setImg(Image.PLAYER_STILL[((Movement) currentAction).getDirection()]);
                 if (Tilemap.getTile(((Movement) currentAction).getDeltaX() + x, ((Movement) currentAction).getDeltaY() + y).getEntity() instanceof Enemy) {
                     currentAction = new Stand(this);
                 }
@@ -89,7 +88,6 @@ public class Player extends MovingEntity {
     public void selected() {
 
     }
-
     @Override
     public void damage(int dmg) {
         super.damage(dmg);
@@ -132,9 +130,9 @@ public class Player extends MovingEntity {
         actionQue.clear();
     }
 
-    public void replaceImage() {
+    /*public void replaceImage() {
         Image.put(ImageID.PLAYER_ID, new Image(GameState.tileSize * x, GameState.tileSize * y - 25, Image.PLAYER_FRONT));
-    }
+    }*/
     @Override
     public Action assignAction(){
         if (actionQue.size()>0) {

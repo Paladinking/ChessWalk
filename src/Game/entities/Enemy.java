@@ -23,10 +23,9 @@ public abstract class Enemy extends MovingEntity {
 
 
     Enemy(Image i){
-        int id = ImageID.getId();
-        this.imgId = id;
-        Image.put(id,i);
+        image =i;
         currentAction = null;
+        this.state = SLEEPING;
     }
     public Enemy() {
     }
@@ -34,18 +33,20 @@ public abstract class Enemy extends MovingEntity {
     @Override
     public void attackAnimation(int tick, int dx,int dy) {
         int ft = Attack.tickLength;
-        if(tick<=ft/2) Image.getImage(imgId).moveImage(dx*GameState.tileSize/(ft/2f),dy*GameState.tileSize/(ft/2f));
-        else Image.getImage(imgId).moveImage(-dx*GameState.tileSize/(ft/2f),-dy*GameState.tileSize/(ft/2f));
+        if(tick<=ft/2) image.adjImage(dx* GameState.initialSize/(ft/2f),dy* GameState.initialSize/(ft/2f));
+        else image.adjImage(-dx* GameState.initialSize/(ft/2f),-dy* GameState.initialSize/(ft/2f));
     }
     @Override
     public void afterAttack(int dx, int dy){
-        //Image.put(imgId,new Image(x*GameState.tileSize,y*GameState.tileSize,Image.SLIME));
+        image.setAdjX(0);
+        image.setAdjY(0);
     }
 
     @Override
      public void tick() {
-        move();
+        if(this.state!=SLEEPING) move();
      }
+
 
     @Override
     public void selected() {
@@ -74,11 +75,14 @@ public abstract class Enemy extends MovingEntity {
         if(hp<0) die();
     }
     private void die(){
-        Image.remove(imgId);
         Enemy.enemies.remove(this);
         Tilemap.getTile(x,y).removeEntity();
     }
     public Action assignAction(){
+        if(state ==SLEEPING) {
+            if (Math.abs(this.x - GameState.playerX) < 8 || Math.abs(this.y - GameState.offsetY) < 8) state = WANDERING;
+            else return new Stand(this);
+        }
         List<Movement> m = new ArrayList<>();
         for(int i=x-1;i<=x+1;i++){
             for(int j=y-1;j<=y+1;j++){

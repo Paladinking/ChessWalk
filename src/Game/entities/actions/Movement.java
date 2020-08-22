@@ -1,10 +1,8 @@
 package Game.entities.actions;
 
 import Game.GameState;
-import Game.assetClasses.Image;
 import Game.assetClasses.SoundManager;
 import Game.entities.Entity;
-import Game.entities.Player;
 import Game.levels.Tilemap;
 
 public class Movement extends Action {
@@ -44,7 +42,7 @@ public class Movement extends Action {
 
     @Override
     public void preformAction() {
-        Image.getImage(entity.getId()).moveImage(deltaX * GameState.tileSize / 10f, deltaY * GameState.tileSize / 10f);
+        entity.getImage().adjImage(deltaX *  GameState.initialSize/ 10f, deltaY * GameState.initialSize / 10f);
         super.preformAction();
     }
 
@@ -58,6 +56,7 @@ public class Movement extends Action {
         Tilemap.removeEntity(entity.getX(), entity.getY());
         entity.setX(entity.getX() + deltaX);
         entity.setY(entity.getY() + deltaY);
+        entity.getImage().adjImage(- GameState.initialSize*deltaX,- GameState.initialSize*deltaY);
         Tilemap.addEntity(entity.getX(), entity.getY(), entity);
         entity.playSound(SoundManager.MOVE);
     }

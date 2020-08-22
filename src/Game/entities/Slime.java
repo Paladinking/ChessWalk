@@ -5,8 +5,6 @@ package Game.entities;
 import Game.GameState;
 import Game.assetClasses.Image;
 import Game.assetClasses.SoundManager;
-import Game.entities.actions.Attack;
-
 import java.awt.image.BufferedImage;
 
 public class Slime extends Enemy {

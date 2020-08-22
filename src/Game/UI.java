@@ -7,6 +7,8 @@ import java.awt.*;
 abstract class UI {
 
     static void drawUI(Graphics g,Player player){
+        g.setColor(Color.orange);
+        g.fillRect(0,GameState.boardHeight,800,120);
         int hp = player.getHp();
         g.setColor(Color.red);
         g.fillRect(GameState.offsetX,2*GameState.offsetY+GameState.boardHeight,200,40);

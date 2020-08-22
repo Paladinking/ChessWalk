@@ -18,10 +18,10 @@ public class Boomerang extends Item {
 
     @Override
     public void beforeUse() {
-        int x = entity.getX();
-        int y = entity.getY();
+        int x = entity.getX()*GameState.tileSize;
+        int y = entity.getY()*GameState.tileSize;
         imgId = ImageID.getId();
-        Image.put(imgId, new RotatingImage(x * GameState.tileSize, y * GameState.tileSize, image));
+        Image.put(imgId, new RotatingImage(x , y, image));
 
     }
 
