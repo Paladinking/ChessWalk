@@ -66,7 +66,6 @@ public class Image {
     }
 
     public static void loadImages() {
-
         imageQue = new HashMap<>();
         try {
             BOARD = ImageIO.read((Board.class.getResource(path + "Board1.png")));
@@ -80,7 +79,7 @@ public class Image {
             KNIGHT = ImageIO.read((Board.class.getResource(path + "Enemies/Knight.png")));
             BOOMERANG = ImageIO.read(Board.class.getResource(path + "Items/Boomerang.png"));
             SWORD = ImageIO.read(Board.class.getResource(path + "Items/Sword.png"));
-            BLOOD = ImageIO.read(Board.class.getResource(path + "Blood.png"));
+            BLOOD = ImageIO.read(Board.class.getResource(path + "blood.png"));
             SLIME_BLOOD = ImageIO.read(Board.class.getResource(path + "slimeBlood.png"));
             SKELETON = new BufferedImage[4];
             SKELETON[UP] = ImageIO.read(Board.class.getResource(path + "Enemies/skeletonBack.png"));
@@ -88,7 +87,7 @@ public class Image {
             SKELETON[LEFT] = ImageIO.read(Board.class.getResource(path + "Enemies/skeletonLeft.png"));
             SKELETON[RIGHT] = ImageIO.read(Board.class.getResource(path + "Enemies/skeletonRight.png"));
             ZAP = ImageIO.read(Board.class.getResource(path + "zap.png"));
-            TILE = ImageIO.read(Board.class.getResource(path + "tile.png"));
+            TILE = ImageIO.read(Board.class.getResource(path + "Tile.png"));
             TELEPORT = ImageIO.read(Board.class.getResource(path+"teleport.png"));
 
             PLAYER_ATTACK = new BufferedImage[4][5];
