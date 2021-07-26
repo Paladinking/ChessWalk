@@ -1,8 +1,7 @@
 package Game.levels;
 
 import Game.GameState;
-import Game.Items.Teleport;
-import Game.assetClasses.Image;
+import Game.assets.Image;
 import Game.entities.Entity;
 import Game.levels.Tiles.EmptyTile;
 import Game.levels.Tiles.Tile;

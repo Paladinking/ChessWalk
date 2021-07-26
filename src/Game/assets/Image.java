@@ -1,8 +1,7 @@
-package Game.assetClasses;
+package Game.assets;
 
 import Game.Board;
 import Game.GameState;
-import Game.levels.Tiles.Tile;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
@@ -13,7 +12,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 
 public class Image {
-    private static final String path = "assets/images/";
+    private static final String path = "images/";
     private static final String playerPath = path + "Player/";
 
     public static BufferedImage BOARD;
@@ -69,34 +68,34 @@ public class Image {
 
         imageQue = new HashMap<>();
         try {
-            BOARD = ImageIO.read((Board.class.getResource(path + "Board1.png")));
-            PLAYER_FRONT = ImageIO.read((Board.class.getResource(playerPath + "PlayerFront.png")));
-            PLAYER_BACK = ImageIO.read((Board.class.getResource(playerPath + "PlayerBack.png")));
-            PLAYER_LEFT = ImageIO.read((Board.class.getResource(playerPath + "PlayerLeft.png")));
-            PLAYER_RIGHT = ImageIO.read((Board.class.getResource(playerPath + "PlayerRight.png")));
-            SELECTED_TILE = ImageIO.read(Board.class.getResource(path + "SelectedTile.png"));
-            WALL_FRONT = ImageIO.read((Board.class.getResource(path + "Walls/WallFront.png")));
-            SLIME = ImageIO.read((Board.class.getResource(path + "Enemies/Slime.png")));
-            KNIGHT = ImageIO.read((Board.class.getResource(path + "Enemies/Knight.png")));
-            BOOMERANG = ImageIO.read(Board.class.getResource(path + "Items/Boomerang.png"));
-            SWORD = ImageIO.read(Board.class.getResource(path + "Items/Sword.png"));
-            BLOOD = ImageIO.read(Board.class.getResource(path + "blood.png"));
-            SLIME_BLOOD = ImageIO.read(Board.class.getResource(path + "slimeBlood.png"));
+            BOARD = ImageIO.read((ClassLoader.getSystemResource((path + "Board1.png"))));
+            PLAYER_FRONT = ImageIO.read((ClassLoader.getSystemResource(playerPath + "PlayerFront.png")));
+            PLAYER_BACK = ImageIO.read((ClassLoader.getSystemResource(playerPath + "PlayerBack.png")));
+            PLAYER_LEFT = ImageIO.read((ClassLoader.getSystemResource(playerPath + "PlayerLeft.png")));
+            PLAYER_RIGHT = ImageIO.read((ClassLoader.getSystemResource(playerPath + "PlayerRight.png")));
+            SELECTED_TILE = ImageIO.read(ClassLoader.getSystemResource(path + "SelectedTile.png"));
+            WALL_FRONT = ImageIO.read((ClassLoader.getSystemResource(path + "Walls/WallFront.png")));
+            SLIME = ImageIO.read((ClassLoader.getSystemResource(path + "Enemies/Slime.png")));
+            KNIGHT = ImageIO.read((ClassLoader.getSystemResource(path + "Enemies/Knight.png")));
+            BOOMERANG = ImageIO.read(ClassLoader.getSystemResource(path + "Items/Boomerang.png"));
+            SWORD = ImageIO.read(ClassLoader.getSystemResource(path + "Items/Sword.png"));
+            BLOOD = ImageIO.read(ClassLoader.getSystemResource(path + "blood.png"));
+            SLIME_BLOOD = ImageIO.read(ClassLoader.getSystemResource(path + "slimeBlood.png"));
             SKELETON = new BufferedImage[4];
-            SKELETON[UP] = ImageIO.read(Board.class.getResource(path + "Enemies/skeletonBack.png"));
-            SKELETON[DOWN] = ImageIO.read(Board.class.getResource(path + "Enemies/skeletonFront.png"));
-            SKELETON[LEFT] = ImageIO.read(Board.class.getResource(path + "Enemies/skeletonLeft.png"));
-            SKELETON[RIGHT] = ImageIO.read(Board.class.getResource(path + "Enemies/skeletonRight.png"));
-            ZAP = ImageIO.read(Board.class.getResource(path + "zap.png"));
-            TILE = ImageIO.read(Board.class.getResource(path + "Tile.png"));
-            TELEPORT = ImageIO.read(Board.class.getResource(path+"teleport.png"));
+            SKELETON[UP] = ImageIO.read(ClassLoader.getSystemResource(path + "Enemies/skeletonBack.png"));
+            SKELETON[DOWN] = ImageIO.read(ClassLoader.getSystemResource(path + "Enemies/skeletonFront.png"));
+            SKELETON[LEFT] = ImageIO.read(ClassLoader.getSystemResource(path + "Enemies/skeletonLeft.png"));
+            SKELETON[RIGHT] = ImageIO.read(ClassLoader.getSystemResource(path + "Enemies/skeletonRight.png"));
+            ZAP = ImageIO.read(ClassLoader.getSystemResource(path + "zap.png"));
+            TILE = ImageIO.read(ClassLoader.getSystemResource(path + "Tile.png"));
+            TELEPORT = ImageIO.read(ClassLoader.getSystemResource(path+"teleport.png"));
 
             PLAYER_ATTACK = new BufferedImage[4][5];
             for (int i = 0; i < 5; i++) {
-                PLAYER_ATTACK[UP][i] = ImageIO.read(Board.class.getResource(playerPath + "AttackAnimationUp.png")).getSubimage(0, 70 * i, 50, 70);
-                PLAYER_ATTACK[RIGHT][i] = ImageIO.read((Board.class.getResource(playerPath + "AttackAnimationRight.png"))).getSubimage(0, 70 * i, 80, 70);
-                PLAYER_ATTACK[LEFT][i] = ImageIO.read(Board.class.getResource(playerPath + "AttackAnimationLeft.png")).getSubimage(0, 70 * i, 80, 70);
-                PLAYER_ATTACK[DOWN][i] = ImageIO.read(Board.class.getResource(playerPath + "AttackAnimationFront.png")).getSubimage(0, 70 * i, 50, 70);
+                PLAYER_ATTACK[UP][i] = ImageIO.read(ClassLoader.getSystemResource(playerPath + "AttackAnimationUp.png")).getSubimage(0, 70 * i, 50, 70);
+                PLAYER_ATTACK[RIGHT][i] = ImageIO.read((ClassLoader.getSystemResource(playerPath + "AttackAnimationRight.png"))).getSubimage(0, 70 * i, 80, 70);
+                PLAYER_ATTACK[LEFT][i] = ImageIO.read(ClassLoader.getSystemResource(playerPath + "AttackAnimationLeft.png")).getSubimage(0, 70 * i, 80, 70);
+                PLAYER_ATTACK[DOWN][i] = ImageIO.read(ClassLoader.getSystemResource(playerPath + "AttackAnimationFront.png")).getSubimage(0, 70 * i, 50, 70);
             }
             PLAYER_STILL = new BufferedImage[]{PLAYER_BACK, PLAYER_FRONT, PLAYER_LEFT, PLAYER_RIGHT};
         } catch (IOException e) {

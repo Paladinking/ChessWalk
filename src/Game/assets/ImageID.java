@@ -1,4 +1,4 @@
-package Game.assetClasses;
+package Game.assets;
 
 public abstract class ImageID {
     public static final int BOARD_ID = 0,PLAYER_ID = 1;

@@ -2,7 +2,7 @@ package Game.Items;
 
 import Game.entities.Entity;
 import Game.entities.actions.Attack;
-import Game.assetClasses.Image;
+import Game.assets.Image;
 import Game.levels.Tilemap;
 
 public class Sword extends Item {

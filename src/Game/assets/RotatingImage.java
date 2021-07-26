@@ -1,4 +1,4 @@
-package Game.assetClasses;
+package Game.assets;
 
 import Game.GameState;
 

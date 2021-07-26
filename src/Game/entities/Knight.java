@@ -4,7 +4,7 @@ import Game.GameState;
 import Game.entities.actions.Action;
 import Game.entities.actions.Attack;
 import Game.entities.actions.Stand;
-import Game.assetClasses.Image;
+import Game.assets.Image;
 import Game.levels.Tilemap;
 
 import java.awt.image.BufferedImage;

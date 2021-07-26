@@ -2,10 +2,10 @@ package Game.entities;
 
 import Game.GameState;
 import Game.Items.*;
-import Game.assetClasses.SoundManager;
+import Game.assets.SoundManager;
 import Game.entities.actions.ItemUse;
 import Game.entities.pathfinding.Pathfinder;
-import Game.assetClasses.Image;
+import Game.assets.Image;
 import Game.entities.actions.Action;
 import Game.entities.actions.Movement;
 import Game.entities.actions.Stand;

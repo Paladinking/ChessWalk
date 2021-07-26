@@ -1,6 +1,5 @@
 package Game.entities;
 
-import Game.GameState;
 import Game.entities.actions.Action;
 
 import java.awt.*;
@@ -9,12 +8,12 @@ import java.awt.image.BufferedImage;
 public abstract class Entity {
     public static final int SLEEPING= 0,WANDERING =1, HUNTING=2;
     int x, y,hp,state;
-    Game.assetClasses.Image image;
+    Game.assets.Image image;
     Action currentAction;
 
     int mode;
 
-    public Game.assetClasses.Image getImage(){
+    public Game.assets.Image getImage(){
         return image;
     }
 

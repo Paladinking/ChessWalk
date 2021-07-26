@@ -1,7 +1,7 @@
 package Game.entities;
 
 import Game.GameState;
-import Game.assetClasses.Image;
+import Game.assets.Image;
 import Game.entities.actions.Action;
 import Game.entities.actions.Movement;
 

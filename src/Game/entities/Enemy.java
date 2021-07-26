@@ -1,11 +1,10 @@
 package Game.entities;
 
 import Game.GameState;
-import Game.assetClasses.SoundManager;
+import Game.assets.SoundManager;
 import Game.entities.actions.Action;
 import Game.entities.actions.Attack;
-import Game.assetClasses.Image;
-import Game.assetClasses.ImageID;
+import Game.assets.Image;
 import Game.entities.actions.Movement;
 import Game.entities.actions.Stand;
 import Game.levels.Tilemap;
@@ -17,17 +16,16 @@ public abstract class Enemy extends MovingEntity {
     public static final int SLIME = 0;
     public static final int KNIGHT = 1,SKELETON=2;
     private static int tickLength;
-    static final int dmg = 3;
+
+    public static final int dmg = 3;
 
     private static List<Enemy> enemies;
 
 
     Enemy(Image i){
-        image =i;
+        image = i;
         currentAction = null;
         this.state = SLEEPING;
-    }
-    public Enemy() {
     }
 
     @Override
@@ -112,11 +110,11 @@ public abstract class Enemy extends MovingEntity {
              return false;
          }
 
-         int t1 = GameState.t==0 ? 0:getTickLength();
+         int t1 = GameState.t==0 ? 0 : getTickLength();
          for (Enemy e:enemies) {
              if(GameState.t==0) {
                  e.currentAction = e.assignAction();
-                t1 = e.currentAction.tickLength()>t1? e.currentAction.tickLength():t1;
+                t1 = Math.max(e.currentAction.tickLength(), t1);
              }
              e.tick();
          }

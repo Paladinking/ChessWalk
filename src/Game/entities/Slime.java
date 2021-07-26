@@ -3,8 +3,8 @@ package Game.entities;
 
 
 import Game.GameState;
-import Game.assetClasses.Image;
-import Game.assetClasses.SoundManager;
+import Game.assets.Image;
+import Game.assets.SoundManager;
 import java.awt.image.BufferedImage;
 
 public class Slime extends Enemy {

@@ -1,9 +1,9 @@
 package Game.entities.actions;
 
 import Game.GameState;
-import Game.assetClasses.Image;
-import Game.assetClasses.ImageID;
-import Game.assetClasses.SoundManager;
+import Game.assets.Image;
+import Game.assets.ImageID;
+import Game.assets.SoundManager;
 import Game.entities.Entity;
 import Game.levels.Tilemap;
 

@@ -3,13 +3,11 @@ package Game.Items;
 import Game.GameState;
 import Game.entities.Entity;
 import Game.entities.Player;
-import Game.assetClasses.Image;
-import Game.assetClasses.ImageID;
-import Game.assetClasses.RotatingImage;
+import Game.assets.Image;
+import Game.assets.ImageID;
+import Game.assets.RotatingImage;
 import Game.levels.Tilemap;
 import Game.levels.Tiles.Tile;
-
-import java.lang.annotation.Target;
 
 public class Boomerang extends Item {
 

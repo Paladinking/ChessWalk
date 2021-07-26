@@ -2,7 +2,6 @@ package Game.levels;
 
 import Game.Board;
 import Game.GameState;
-import Game.assetClasses.Image;
 import Game.entities.Enemy;
 import Game.levels.Tiles.EmptyTile;
 import Game.levels.Tiles.Tile;
@@ -13,6 +12,8 @@ import java.awt.image.BufferedImage;
 import java.io.IOException;
 
 public class LevelImageReader {
+
+    private static final String LEVEL_PATH = "levels/LevelImage/";
 
 
     @Deprecated
@@ -45,7 +46,7 @@ public class LevelImageReader {
         Tile[][] tiles = new Tile[GameState.mapHeight][GameState.mapWidth];
         BufferedImage b;
         try {
-            b =ImageIO.read(Board.class.getResource("assets/Levels/LevelImage/Level1.bmp"));
+            b = ImageIO.read(ClassLoader.getSystemResource(LEVEL_PATH + "Level1.bmp"));
         } catch (IOException e){
             b = new BufferedImage(GameState.mapWidth,GameState.mapHeight,BufferedImage.TYPE_INT_RGB);
         }

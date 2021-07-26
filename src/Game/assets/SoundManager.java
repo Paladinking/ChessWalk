@@ -1,20 +1,19 @@
-package Game.assetClasses;
+package Game.assets;
 
 import Game.Board;
 
 import javax.sound.sampled.*;
-import java.awt.*;
 import java.io.BufferedInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
 public abstract class SoundManager {
-    public static final int MOVE=0,ATTACK=1,HURT=2,DIE=3;
+    public static final int MOVE = 0, ATTACK = 1, HURT = 2,DIE = 3;
 
 
     public static void playSound(String path){
         if(path.equals("")) return;
-        playSfx(Board.class.getResourceAsStream("assets/sound/"+path));
+        playSfx(ClassLoader.getSystemResourceAsStream("sound/" + path));
     }
     public static void playSound(String[] strings) {
         playSound(strings[(int)(Math.random()*strings.length)]);
@@ -63,7 +62,7 @@ public abstract class SoundManager {
 
             } catch (IOException | UnsupportedAudioFileException e) {
                 e.printStackTrace();
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
                 System.exit(1);
             }

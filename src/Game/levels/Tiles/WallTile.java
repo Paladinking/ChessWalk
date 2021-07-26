@@ -1,12 +1,10 @@
 package Game.levels.Tiles;
 
 import Game.GameState;
-import Game.assetClasses.Image;
-import Game.assetClasses.ImageID;
+import Game.assets.Image;
 import Game.entities.Entity;
 
 import java.awt.*;
-import java.awt.image.BufferedImage;
 
 public class WallTile extends Tile{
 

@@ -1,7 +1,7 @@
 package Game.entities.actions;
 
 import Game.GameState;
-import Game.assetClasses.SoundManager;
+import Game.assets.SoundManager;
 import Game.entities.Entity;
 import Game.levels.Tilemap;
 

@@ -1,7 +1,7 @@
 package Game;
 
-import Game.assetClasses.Image;
-import Game.assetClasses.SoundManager;
+import Game.assets.Image;
+import Game.assets.SoundManager;
 import Game.entities.Enemy;
 import Game.entities.Player;
 import Game.levels.Level;

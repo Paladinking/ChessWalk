@@ -1,12 +1,8 @@
 package Game.levels.Tiles;
 
-import Game.GameState;
-import Game.assetClasses.Image;
-import Game.entities.Enemy;
 import Game.entities.Entity;
 
 import java.awt.*;
-import java.lang.reflect.GenericArrayType;
 
 public class EmptyTile extends Tile {
 
