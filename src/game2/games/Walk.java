@@ -1,6 +1,7 @@
 package game2.games;
 
 import game2.entities.Entities;
+import game2.entities.Player;
 import game2.entities.enemies.Enemy;
 import game2.levels.Level;
 import game2.tiles.TileMap;
@@ -50,12 +51,17 @@ public class Walk extends Game {
         entities.clear();
         currentLevel = new Level(images.level1, new BufferedImage[]{images.tile1, images.wall1}, Level.LVL1_ENEMIES);
         tileMap.load(currentLevel);
+        Player player = new Player(10, 10);
+        player.createTexture(images, tileMap.getTileSize());
+        tileMap.place(player);
         generateEnemy();
     }
 
     public void generateEnemy(){
-        Enemy e = entities.generateEnemy(currentLevel, 4 * TILE_SIZE, 4 * TILE_SIZE);
-        e.createTexture(images);
+        int tileSize = tileMap.getTileSize();
+        Enemy e = entities.generateEnemy(currentLevel, 22, 22);
+        e.createTexture(images, tileSize);
+        tileMap.place(e);
     }
 
     @Override
@@ -77,6 +83,6 @@ public class Walk extends Game {
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        visuals.zoom(e.getPreciseWheelRotation(), tileMap);
+        visuals.zoom(e.getWheelRotation(), e.getPoint(), tileMap);
     }
 }

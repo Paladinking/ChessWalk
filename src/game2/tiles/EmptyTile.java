@@ -19,7 +19,11 @@ public class EmptyTile extends Tile {
         return new StaticTexture(level.getTileImage(), x * tileSize, y * tileSize, tileSize, tileSize);
     }
 
-    public void setEntity(Entity entity) {
-        this.entity = entity;
+    public boolean setEntity(Entity entity) {
+        if (this.entity == null) {
+            this.entity = entity;
+            return true;
+        }
+        return false;
     }
 }

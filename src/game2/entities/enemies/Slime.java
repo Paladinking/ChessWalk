@@ -3,7 +3,6 @@ package game2.entities.enemies;
 import game2.games.Walk;
 import game2.visuals.texture.EntityTexture;
 import game2.visuals.Images;
-import game2.visuals.texture.Texture;
 
 public class Slime extends Enemy {
 
@@ -19,7 +18,7 @@ public class Slime extends Enemy {
     }
 
     @Override
-    public Texture getTexture(Images images) {
-        return new EntityTexture(this, SLIME.width, SLIME.height, images.getImage(Slime.class));
+    protected EntityTexture getTexture(Images images, int tileSize) {
+        return new EntityTexture(gridPos.x * tileSize, gridPos.y * tileSize, SLIME.width, SLIME.height, images.getImage(Slime.class));
     }
 }

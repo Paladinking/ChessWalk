@@ -14,16 +14,18 @@ public class GameVisuals {
 
     private final int width, height;
 
-    private static final double MIN_ZOOM = 0.5, MAX_ZOOM = 2.0, DEFAULT_ZOOM = 1.0;
+    private static final double MIN_ZOOM = 0.5, MAX_ZOOM = 2.0, DEFAULT_ZOOM = 1.0, ZOOM_FACTOR = 1.1;
+    private static final int DEFAULT_CAMERA_X = 2000, DEFAULT_CAMERA_Y = 2000;
 
-    private double zoomLevel;
+    private double zoomLevel, prevZoomLevel;
 
     public GameVisuals(int width, int height) {
         this.width = width;
         this.height = height;
-        this.cameraX = 0;
-        this.cameraY = 0;
+        this.cameraX = DEFAULT_CAMERA_X;
+        this.cameraY = DEFAULT_CAMERA_Y;
         this.zoomLevel = DEFAULT_ZOOM;
+        this.prevZoomLevel = DEFAULT_ZOOM;
         this.bottomLayer = new Layer();
         this.topLayer = new Layer();
     }
@@ -47,9 +49,9 @@ public class GameVisuals {
         for (int x = firstX; x <= lastX; x++) {
             for (int y = firstY; y <= lastY; y++) {
                 Tile tile = tileMap.getTile(x, y);
+                tile.getTexture().draw(g);
                 Entity e = tile.getEntity();
                 if (e != null) e.getTexture().draw(g);
-                tile.getTexture().draw(g);
             }
         }
         topLayer.draw(g, cameraX, cameraY, width * zoomLevel, height * zoomLevel);
@@ -69,10 +71,18 @@ public class GameVisuals {
         fixCamera(tileMap);
     }
 
-    public void zoom(double preciseWheelRotation, TileMap tileMap) {
-        zoomLevel -= 0.05 * preciseWheelRotation;
+    public void zoom(int wheelRotation, Point mouseLocation, TileMap tileMap) {
+
+        if (wheelRotation < 0){
+            zoomLevel *= ZOOM_FACTOR;
+        } else {
+            zoomLevel /= ZOOM_FACTOR;
+        }
         zoomLevel = Math.max(MIN_ZOOM, Math.min(zoomLevel, MAX_ZOOM));
-        System.out.println(zoomLevel);
+        double zoomDiv = zoomLevel / prevZoomLevel;
+        cameraX = (int) ((zoomDiv) * (cameraX) - (1 - zoomDiv) * mouseLocation.x);
+        cameraY = (int) ((zoomDiv) * (cameraY) - (1 - zoomDiv) * mouseLocation.y);
+        prevZoomLevel = zoomLevel;
         fixCamera(tileMap);
     }
 

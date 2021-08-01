@@ -7,28 +7,20 @@ import java.awt.image.BufferedImage;
 
 public class EntityTexture extends ImageTexture {
 
-    private final Entity entity;
-
-    private int width, height;
-
     private final Rectangle bounds;
 
-    private final Point pos;
-
-    public EntityTexture(Entity entity, int width, int height, BufferedImage image){
+    public EntityTexture(int x, int y, int width, int height, BufferedImage image){
         super(image);
-        this.entity = entity;
-        this.width = width;
-        this.height = height;
-        this.pos = entity.getPos();
-        this.bounds = new Rectangle(pos.x, pos.y, width, height);
+        this.bounds = new Rectangle(x, y, width, height);
+    }
 
+    public void move(int dx, int dy){
+        bounds.x += dx;
+        bounds.y += dy;
     }
 
     @Override
     public Rectangle getBounds() {
-        bounds.x = pos.x;
-        bounds.y = pos.y;
         return bounds;
     }
 }

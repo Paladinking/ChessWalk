@@ -1,22 +1,23 @@
 package game2.entities;
 
 import game2.visuals.Images;
+import game2.visuals.texture.EntityTexture;
 import game2.visuals.texture.Texture;
 
 import java.awt.*;
 
 public abstract class Entity {
 
-    private Texture texture;
+    private EntityTexture texture;
 
-    protected final Point pos;
+    protected final Point gridPos;
 
     protected Entity(int x, int y) {
-        this.pos = new Point(x, y);
+        this.gridPos = new Point(x, y);
     }
 
     public Point getPos(){
-        return pos;
+        return gridPos;
     }
 
     public abstract void tick();
@@ -24,16 +25,18 @@ public abstract class Entity {
     /**
      * Creates and returns a new <code>Texture</code> object for this <code>Entity</code>.
      * @param images The <code>Images</code> object containing the texture image.
+     * @param tileSize The size of a tile in the <code>TileMap</code>.
      * @return The texture for this <code>Entity</code>.
      */
-    protected abstract Texture getTexture(Images images);
+    protected abstract EntityTexture getTexture(Images images, int tileSize);
 
     /**
      * Creates a texture for this <code>Entity</code>.
      * @param images The <code>Images</code> object containing the texture image.
+     * @param tileSize The size of a tile in the <code>TileMap</code>.
      */
-    public void createTexture(Images images){
-        this.texture = getTexture(images);
+    public void createTexture(Images images, int tileSize){
+        this.texture = getTexture(images, tileSize);
     }
 
     /**

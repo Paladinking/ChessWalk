@@ -1,11 +1,11 @@
-package game2.entities.enemies;
+package game2.entities;
 
 import game2.visuals.Images;
 import game2.visuals.texture.EntityTexture;
 
-public class Skeleton extends Enemy {
+public class Player extends Entity {
 
-    public Skeleton(int x, int y) {
+    public Player(int x, int y) {
         super(x, y);
     }
 
@@ -16,6 +16,6 @@ public class Skeleton extends Enemy {
 
     @Override
     protected EntityTexture getTexture(Images images, int tileSize) {
-        return new EntityTexture(gridPos.x * tileSize, gridPos.y * tileSize - 20, 50, 70, images.getImage(Skeleton.class));
+        return new EntityTexture(gridPos.x * tileSize, gridPos.y * tileSize - 20, 50, 70, images.getImage(Player.class));
     }
 }

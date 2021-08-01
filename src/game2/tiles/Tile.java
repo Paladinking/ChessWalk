@@ -20,4 +20,5 @@ public abstract class Tile {
         texture = getTexture(x, y, tileSize, level);
     }
 
+    public abstract boolean setEntity(Entity entity);
 }

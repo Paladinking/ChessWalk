@@ -16,4 +16,9 @@ public class WallTile extends Tile {
         int wallImageYOffset = 20;
         return new StaticTexture(level.getWallImage(), x * tileSize, (y * tileSize) - wallImageYOffset, tileSize, tileSize + wallImageYOffset);
     }
+
+    @Override
+    public boolean setEntity(Entity entity) {
+        return false;
+    }
 }

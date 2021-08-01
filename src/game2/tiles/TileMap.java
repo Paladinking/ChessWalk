@@ -1,8 +1,8 @@
 package game2.tiles;
 
 import game2.entities.Entity;
+import game2.entities.Player;
 import game2.levels.Level;
-import game2.visuals.texture.Texture;
 
 import java.awt.*;
 
@@ -56,5 +56,14 @@ public class TileMap {
 
     public int getHeight(){
         return height;
+    }
+
+    /**
+     * Places an <code>Entity</code> on the tile at the <code>Entity</code>:s position.
+     * @param entity The <code>Entity</code> to place.
+     */
+    public boolean place(Entity entity) {
+        Point pos = entity.getPos();
+        return getTile(pos.x, pos.y).setEntity(entity);
     }
 }
