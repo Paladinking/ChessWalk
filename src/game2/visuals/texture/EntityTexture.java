@@ -1,7 +1,5 @@
 package game2.visuals.texture;
 
-import game2.entities.Entity;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -22,5 +20,10 @@ public class EntityTexture extends ImageTexture {
     @Override
     public Rectangle getBounds() {
         return bounds;
+    }
+
+    @Override
+    public void setState(TextureState state) {
+
     }
 }

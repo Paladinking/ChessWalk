@@ -1,8 +1,12 @@
 package game2.entities.enemies;
 
+import game2.actions.Move;
+import game2.essentials.TileMap;
 import game2.games.Walk;
 import game2.visuals.texture.EntityTexture;
 import game2.visuals.Images;
+
+import java.awt.*;
 
 public class Slime extends Enemy {
 
@@ -13,8 +17,8 @@ public class Slime extends Enemy {
     }
 
     @Override
-    public void tick() {
-
+    protected void pickAction(TileMap tileMap) {
+        this.action = new Move(this, 2, tileMap.getTileSize(), new Point(-1, 0));
     }
 
     @Override

@@ -1,17 +1,37 @@
 package game2.entities;
 
+import game2.actions.EmptyAction;
+import game2.actions.EntityAction;
+import game2.essentials.TileMap;
 import game2.visuals.Images;
 import game2.visuals.texture.EntityTexture;
 
+import java.util.*;
+
 public class Player extends Entity {
+
+    private final EntityAction wait = new EmptyAction(this);
+
+    private final Queue<EntityAction> actionQue;
 
     public Player(int x, int y) {
         super(x, y);
+        this.actionQue = new LinkedList<>();
     }
 
     @Override
-    public void tick() {
+    protected void pickAction(TileMap tileMap) {
+        if (actionQue.isEmpty()) this.action = wait;
+        else {
+            action = actionQue.remove();
+        }
+    }
 
+    public void queAction(EntityAction action) {
+        if (this.action == wait) this.action = action;
+        else {
+            actionQue.add(action);
+        }
     }
 
     @Override

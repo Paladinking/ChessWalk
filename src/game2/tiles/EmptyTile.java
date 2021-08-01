@@ -26,4 +26,9 @@ public class EmptyTile extends Tile {
         }
         return false;
     }
+
+    @Override
+    public boolean isOpen() {
+        return entity == null;
+    }
 }

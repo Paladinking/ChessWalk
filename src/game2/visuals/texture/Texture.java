@@ -8,4 +8,6 @@ public interface Texture {
 
     Rectangle getBounds();
 
+    void setState(TextureState state);
+
 }

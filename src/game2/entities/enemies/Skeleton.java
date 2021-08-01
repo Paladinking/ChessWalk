@@ -1,5 +1,8 @@
 package game2.entities.enemies;
 
+import game2.actions.ActionStatus;
+import game2.actions.EmptyAction;
+import game2.essentials.TileMap;
 import game2.visuals.Images;
 import game2.visuals.texture.EntityTexture;
 
@@ -10,8 +13,12 @@ public class Skeleton extends Enemy {
     }
 
     @Override
-    public void tick() {
-
+    protected void pickAction(TileMap tileMap) {
+        this.action = new EmptyAction(this){
+            @Override public ActionStatus preform(){
+                return ActionStatus.FINISHED;
+            }
+        };
     }
 
     @Override

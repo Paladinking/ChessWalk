@@ -9,11 +9,6 @@ public abstract class Enemy extends Entity {
         super(x, y);
     }
 
-    @Override
-    public void tick() {
-
-    }
-
     protected static class EnemyData {
         final int width, height, hp, speed;
         protected EnemyData(int width, int height, int hp, int speed) {

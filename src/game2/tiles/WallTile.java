@@ -21,4 +21,9 @@ public class WallTile extends Tile {
     public boolean setEntity(Entity entity) {
         return false;
     }
+
+    @Override
+    public boolean isOpen() {
+        return false;
+    }
 }

@@ -16,4 +16,9 @@ public class StaticTexture extends ImageTexture {
     public Rectangle getBounds() {
         return bounds;
     }
+
+    @Override
+    public void setState(TextureState state) {
+        throw new UnsupportedOperationException("Static Textures do not have states.");
+    }
 }

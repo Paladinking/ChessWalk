@@ -1,8 +1,11 @@
-package game2.tiles;
+package game2.essentials;
 
 import game2.entities.Entity;
 import game2.entities.Player;
 import game2.levels.Level;
+import game2.tiles.EmptyTile;
+import game2.tiles.Tile;
+import game2.tiles.WallTile;
 
 import java.awt.*;
 
@@ -65,5 +68,12 @@ public class TileMap {
     public boolean place(Entity entity) {
         Point pos = entity.getPos();
         return getTile(pos.x, pos.y).setEntity(entity);
+    }
+
+    public void moveEntity(Point oldPos, Point newPos) {
+        Tile old = getTile(oldPos.x, oldPos.y);
+        Entity e = old.getEntity();
+        old.setEntity(null);
+        getTile(newPos.x, newPos.y).setEntity(e);
     }
 }

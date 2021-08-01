@@ -1,8 +1,9 @@
-package game2.visuals;
+package game2.essentials;
 
 import game2.entities.Entity;
 import game2.tiles.Tile;
-import game2.tiles.TileMap;
+import game2.essentials.TileMap;
+import game2.visuals.Layer;
 import game2.visuals.texture.Texture;
 
 import java.awt.*;
@@ -49,11 +50,12 @@ public class GameVisuals {
         bottomLayer.draw(g, cameraX, cameraY, width * zoomLevel, height * zoomLevel);
         int firstX = getFirstTile(cameraX, tileSize, zoomLevel), firstY = getFirstTile(cameraY, tileSize, zoomLevel);
         int lastX = getLastTile(firstX, tileSize, zoomLevel, width, tileMap.getWidth()), lastY = getLastTile(firstY, tileSize, zoomLevel, height, tileMap.getHeight());
-        for (int x = firstX; x <= lastX; x++) {
-            for (int y = firstY; y <= lastY; y++) {
-                Tile tile = tileMap.getTile(x, y);
-                tile.getTexture().draw(g);
-                Entity e = tile.getEntity();
+        for (int y = firstY; y <= lastY; y++) {
+            for (int x = firstX; x <= lastX; x++) {
+                tileMap.getTile(x, y).getTexture().draw(g);
+            }
+            for (int x = firstX; x <= lastX; x++) {
+                Entity e = tileMap.getTile(x, y).getEntity();
                 if (e != null) e.getTexture().draw(g);
             }
         }
@@ -76,11 +78,12 @@ public class GameVisuals {
 
     /**
      * Zooms in or out on the game, showing more or less of the tileMap. Only the sign of <code>direction</code> matters.
-     * @param direction The rotation of the mouseWheel.
+     *
+     * @param direction  The rotation of the mouseWheel.
      * @param zoomTarget The <code>Point</code> to zoom towards.
      */
     public void zoom(int direction, Point zoomTarget) {
-        if (direction < 0){
+        if (direction < 0) {
             zoomLevel *= ZOOM_FACTOR;
         } else {
             zoomLevel /= ZOOM_FACTOR;
@@ -93,7 +96,7 @@ public class GameVisuals {
         fixCamera();
     }
 
-    public void fixCamera(){
+    public void fixCamera() {
         int tileSize = tileMap.getTileSize();
         cameraX = (int) Math.max(0, Math.min(cameraX, zoomLevel * tileSize * tileMap.getWidth() - width - 1));
         cameraY = (int) Math.max(0, Math.min(cameraY, zoomLevel * tileSize * tileMap.getHeight() - height - 1));

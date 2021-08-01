@@ -21,4 +21,6 @@ public abstract class Tile {
     }
 
     public abstract boolean setEntity(Entity entity);
+
+    public abstract boolean isOpen();
 }
