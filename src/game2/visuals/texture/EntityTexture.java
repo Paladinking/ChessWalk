@@ -8,7 +8,7 @@ public class EntityTexture extends ImageTexture {
     private final Rectangle bounds;
 
     public EntityTexture(int x, int y, int width, int height, BufferedImage image){
-        super(image);
+        super(image, 1);
         this.bounds = new Rectangle(x, y, width, height);
     }
 

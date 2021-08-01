@@ -7,9 +7,13 @@ public class StaticTexture extends ImageTexture {
 
     private final Rectangle bounds;
 
-    public StaticTexture(BufferedImage image, int x, int y, int w, int h) {
-        super(image);
+    public StaticTexture(BufferedImage image, int z, int x, int y, int w, int h) {
+        super(image, z);
         bounds = new Rectangle(x, y, w, h);
+    }
+
+    public StaticTexture(BufferedImage image, int x, int y, int w, int h){
+        this(image, 1, x, y, w, h);
     }
 
     @Override

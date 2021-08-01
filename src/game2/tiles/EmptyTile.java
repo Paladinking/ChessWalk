@@ -16,15 +16,12 @@ public class EmptyTile extends Tile {
 
     @Override
     protected Texture getTexture(int x, int y, int tileSize, Level level) {
-        return new StaticTexture(level.getTileImage(), x * tileSize, y * tileSize, tileSize, tileSize);
+        return new StaticTexture(level.getTileImage(), 0,x * tileSize, y * tileSize, tileSize, tileSize);
     }
 
-    public boolean setEntity(Entity entity) {
-        if (this.entity == null) {
-            this.entity = entity;
-            return true;
-        }
-        return false;
+    @Override
+    public void setEntity(Entity entity) {
+        this.entity = entity;
     }
 
     @Override

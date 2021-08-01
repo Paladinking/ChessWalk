@@ -20,7 +20,12 @@ public abstract class Tile {
         texture = getTexture(x, y, tileSize, level);
     }
 
-    public abstract boolean setEntity(Entity entity);
+    public abstract void setEntity(Entity entity);
 
     public abstract boolean isOpen();
+
+    @Override
+    public String toString() {
+        return super.toString() + "Entity= " + getEntity();
+    }
 }

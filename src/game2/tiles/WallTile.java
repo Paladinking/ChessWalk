@@ -18,8 +18,8 @@ public class WallTile extends Tile {
     }
 
     @Override
-    public boolean setEntity(Entity entity) {
-        return false;
+    public void setEntity(Entity entity) {
+
     }
 
     @Override

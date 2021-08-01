@@ -51,4 +51,9 @@ public class Move extends EntityAction {
     public void finish() {
         entity.getTexture().setState(TextureState.IDLE);
     }
+
+    @Override
+    public void preformInstant() {
+        entity.getTexture().move(tileSize * target.x, tileSize * target.y);
+    }
 }

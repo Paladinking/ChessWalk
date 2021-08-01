@@ -23,4 +23,9 @@ public class EmptyAction extends EntityAction {
     public void finish() {
 
     }
+
+    @Override
+    public void preformInstant() {
+
+    }
 }

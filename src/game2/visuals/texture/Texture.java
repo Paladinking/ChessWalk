@@ -10,4 +10,5 @@ public interface Texture {
 
     void setState(TextureState state);
 
+    int getZ();
 }

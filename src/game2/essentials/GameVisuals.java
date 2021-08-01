@@ -2,20 +2,24 @@ package game2.essentials;
 
 import game2.entities.Entity;
 import game2.tiles.Tile;
-import game2.essentials.TileMap;
 import game2.visuals.Layer;
+import game2.visuals.SortedLayer;
 import game2.visuals.texture.Texture;
 
 import java.awt.*;
+import java.util.Comparator;
 
 public class GameVisuals {
-    private final Layer bottomLayer, topLayer;
+
+    private final Layer[] layers;
 
     private int cameraX, cameraY;
 
     private final int width, height;
 
     private final TileMap tileMap;
+
+    private boolean valid;
 
     private static final double MIN_ZOOM = 0.5, MAX_ZOOM = 2.0, DEFAULT_ZOOM = 1.0, ZOOM_FACTOR = 1.1;
     private static final int DEFAULT_CAMERA_X = 2000, DEFAULT_CAMERA_Y = 2000;
@@ -30,36 +34,43 @@ public class GameVisuals {
         this.cameraY = DEFAULT_CAMERA_Y;
         this.zoomLevel = DEFAULT_ZOOM;
         this.prevZoomLevel = DEFAULT_ZOOM;
-        this.bottomLayer = new Layer();
-        this.topLayer = new Layer();
+        Layer middleLayer = new SortedLayer(Comparator.comparing((texture) -> texture.getBounds().y + texture.getBounds().height));
+        this.layers = new Layer[]{new Layer(), middleLayer, new Layer()};
     }
 
-    public void addBackgroundTexture(Texture texture) {
-        bottomLayer.addTexture(texture);
+    private void addTexture(Texture texture) {
+        layers[texture.getZ()].addTexture(texture);
     }
 
-    public void addOverlayTexture(Texture texture) {
-        topLayer.addTexture(texture);
+    private void invalidate() {
+        this.valid = false;
+        for (Layer layer : layers) layer.clear();
     }
 
-
-    public void draw(Graphics2D g) {
-        g.translate(-cameraX, -cameraY);
-        g.scale(zoomLevel, zoomLevel);
+    private void validate() {
         int tileSize = tileMap.getTileSize();
-        bottomLayer.draw(g, cameraX, cameraY, width * zoomLevel, height * zoomLevel);
         int firstX = getFirstTile(cameraX, tileSize, zoomLevel), firstY = getFirstTile(cameraY, tileSize, zoomLevel);
         int lastX = getLastTile(firstX, tileSize, zoomLevel, width, tileMap.getWidth()), lastY = getLastTile(firstY, tileSize, zoomLevel, height, tileMap.getHeight());
         for (int y = firstY; y <= lastY; y++) {
             for (int x = firstX; x <= lastX; x++) {
-                tileMap.getTile(x, y).getTexture().draw(g);
-            }
-            for (int x = firstX; x <= lastX; x++) {
-                Entity e = tileMap.getTile(x, y).getEntity();
-                if (e != null) e.getTexture().draw(g);
+                Tile tile = tileMap.getTile(x, y);
+                Entity e = tile.getEntity();
+                addTexture(tile.getTexture());
+                if (e != null) addTexture(e.getTexture());
             }
         }
-        topLayer.draw(g, cameraX, cameraY, width * zoomLevel, height * zoomLevel);
+        this.valid = true;
+    }
+
+    public synchronized void draw(Graphics2D g) {
+        g.translate(-cameraX, -cameraY);
+        g.scale(zoomLevel, zoomLevel);
+        if (!valid) {
+            validate();
+        }
+        for (Layer layer : layers) {
+            layer.draw(g);
+        }
     }
 
     private static int getFirstTile(int camera, int tileSize, double zoomLevel) {
@@ -70,7 +81,7 @@ public class GameVisuals {
         return (int) Math.min(tmDimension - 1, ((screenDimension / (double) tileSize)) / zoomLevel + firstTile + 2);
     }
 
-    public void panCamera(int x, int y) {
+    public synchronized void panCamera(int x, int y) {
         cameraX += x;
         cameraY += y;
         fixCamera();
@@ -82,7 +93,7 @@ public class GameVisuals {
      * @param direction  The rotation of the mouseWheel.
      * @param zoomTarget The <code>Point</code> to zoom towards.
      */
-    public void zoom(int direction, Point zoomTarget) {
+    public synchronized void zoom(int direction, Point zoomTarget) {
         if (direction < 0) {
             zoomLevel *= ZOOM_FACTOR;
         } else {
@@ -96,9 +107,17 @@ public class GameVisuals {
         fixCamera();
     }
 
-    public void fixCamera() {
+    private void fixCamera() {
         int tileSize = tileMap.getTileSize();
         cameraX = (int) Math.max(0, Math.min(cameraX, zoomLevel * tileSize * tileMap.getWidth() - width - 1));
         cameraY = (int) Math.max(0, Math.min(cameraY, zoomLevel * tileSize * tileMap.getHeight() - height - 1));
+        invalidate();
+    }
+
+    public Point getTile(int x, int y) {
+        int tileSize = tileMap.getTileSize();
+        x = (int) ((x + cameraX) / (tileSize * zoomLevel));
+        y = (int) ((y + cameraY) / (tileSize * zoomLevel));
+        return new Point(x, y);
     }
 }

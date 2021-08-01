@@ -21,7 +21,7 @@ public class Layer {
         textures.remove(texture);
     }
 
-    public void draw(Graphics2D g, int cameraX, int cameraY, double v, double v1){
+    public void draw(Graphics2D g){
         for (Texture t: textures){
             t.draw(g);
         }
@@ -29,5 +29,10 @@ public class Layer {
 
     public void clear(){
         textures.clear();
+    }
+
+    @Override
+    public String toString() {
+        return "Layer: " + textures.size();
     }
 }

@@ -34,21 +34,12 @@ public class Entities {
 
     public Enemy generateEnemy(Level level, int x, int y) {
         int id = level.getEnemy();
-        Enemy enemy;
-        switch (id) {
-            case Enemy.SLIME:
-                enemy = new Slime(x, y);
-                break;
-            case Enemy.KNIGHT:
-                enemy = new Knight(x, y);
-                break;
-            case Enemy.SKELETON:
-                enemy = new Skeleton(x, y);
-                break;
-            default:
-                enemy = null;
-        }
-        return enemy;
+        return switch (id) {
+            case Enemy.SLIME -> new Slime(x, y);
+            case Enemy.KNIGHT -> new Knight(x, y);
+            case Enemy.SKELETON -> new Skeleton(x, y);
+            default -> null;
+        };
     }
 
     public void addEntity(Entity entity) {
@@ -61,12 +52,11 @@ public class Entities {
         player.setListener(new EntityAdapter(player));
     }
 
-    public void quePlayerAction(EntityAction action){
-        player.queAction(action);
+    public void quePlayerAction(EntityAction action, TileMap tileMap){
+        player.queAction(action, tileMap);
     }
 
     public void tickAll(TileMap tileMap) {
-        System.out.println(playerTurn);
         if (playerTurn){
             player.tick();
         } else {
