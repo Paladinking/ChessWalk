@@ -30,14 +30,14 @@ public class Walk extends Game {
     public Walk(int width, int height) {
         super();
         this.entities = new Entities();
-        this.visuals = new GameVisuals(width, height);
-        this.images = new Images();
         this.tileMap = new TileMap(TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_SIZE);
+        this.visuals = new GameVisuals(width, height, tileMap);
+        this.images = new Images();
     }
 
     @Override
     public void draw(Graphics2D g) {
-        visuals.draw(g, tileMap);
+        visuals.draw(g);
     }
 
     @Override
@@ -72,7 +72,7 @@ public class Walk extends Game {
 
     @Override
     public void mouseDragged(MouseEvent e) {
-        visuals.panCamera(draggingSource.x - e.getX(), draggingSource.y - e.getY(), tileMap);
+        visuals.panCamera(draggingSource.x - e.getX(), draggingSource.y - e.getY());
         mouseMoved(e);
     }
 
@@ -83,6 +83,6 @@ public class Walk extends Game {
 
     @Override
     public void mouseWheelMoved(MouseWheelEvent e) {
-        visuals.zoom(e.getWheelRotation(), e.getPoint(), tileMap);
+        visuals.zoom(e.getWheelRotation(), e.getPoint());
     }
 }
