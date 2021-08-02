@@ -1,10 +1,7 @@
 package game2.essentials;
 
 import game2.actions.EntityAction;
-import game2.entities.EntitiesListener;
-import game2.entities.Entity;
-import game2.entities.EntityListener;
-import game2.entities.Player;
+import game2.entities.*;
 import game2.entities.enemies.Enemy;
 import game2.entities.enemies.Knight;
 import game2.entities.enemies.Skeleton;
@@ -24,22 +21,13 @@ public class Entities {
     private int toPass;
 
     private final List<Entity> entities;
+
     private final EntitiesListener listener;
 
 
     public Entities(EntitiesListener listener) {
         this.entities = new ArrayList<>();
         this.listener = listener;
-    }
-
-    public Enemy generateEnemy(Level level, int x, int y) {
-        int id = level.getEnemy();
-        return switch (id) {
-            case Enemy.SLIME -> new Slime(x, y);
-            case Enemy.KNIGHT -> new Knight(x, y);
-            case Enemy.SKELETON -> new Skeleton(x, y);
-            default -> null;
-        };
     }
 
     public void addEntity(Entity entity) {
@@ -58,9 +46,9 @@ public class Entities {
 
     public void tickAll(TileMap tileMap) {
         if (playerTurn){
-            player.tick();
+            player.tick(tileMap);
         } else {
-            for (Entity e : entities) e.tick();
+            for (Entity e : entities) e.tick(tileMap);
         }
         if (toPass == 0) {
             if (playerTurn){

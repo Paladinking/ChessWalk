@@ -2,7 +2,7 @@ package game2.actions;
 
 import game2.entities.Entity;
 import game2.essentials.TileMap;
-import game2.visuals.texture.TextureState;
+import game2.enums.TextureState;
 
 import java.awt.*;
 
@@ -48,7 +48,7 @@ public class Move extends EntityAction {
     }
 
     @Override
-    public void finish() {
+    public void finish(TileMap tileMap) {
         entity.getTexture().setState(TextureState.IDLE);
     }
 

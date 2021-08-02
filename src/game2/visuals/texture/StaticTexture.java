@@ -1,5 +1,7 @@
 package game2.visuals.texture;
 
+import game2.enums.TextureState;
+
 import java.awt.*;
 import java.awt.image.BufferedImage;
 

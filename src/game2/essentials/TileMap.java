@@ -5,6 +5,9 @@ import game2.levels.Level;
 import game2.tiles.EmptyTile;
 import game2.tiles.Tile;
 import game2.tiles.WallTile;
+import game2.visuals.Images;
+import game2.visuals.texture.StaticTexture;
+import game2.visuals.texture.Texture;
 
 import java.awt.*;
 
@@ -29,7 +32,7 @@ public class TileMap {
         return tiles[x +width * y];
     }
 
-    public void load(Level level) {
+    public void load(Level level, Images images) {
         for (int x = 0; x < width; x++){
             for (int y = 0; y < height; y++){
                 Tile tile;
@@ -42,7 +45,7 @@ public class TileMap {
                 } else {
                     tile = new EmptyTile();
                 }
-                tile.createTexture(x, y, tileSize, level);
+                tile.createTexture(x, y, tileSize, level, images);
                 setTile(x, y, tile);
             }
         }
@@ -74,5 +77,9 @@ public class TileMap {
         Entity e = old.getEntity();
         old.setEntity(null);
         getTile(newPos.x, newPos.y).setEntity(e);
+    }
+
+    public Tile getTile(Point pos) {
+        return getTile(pos.x, pos.y);
     }
 }

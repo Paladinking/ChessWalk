@@ -15,7 +15,7 @@ public abstract class EntityAction {
 
     public abstract ActionStatus preform();
 
-    public abstract void finish();
+    public abstract void finish(TileMap tileMap);
 
     public abstract void preformInstant();
 

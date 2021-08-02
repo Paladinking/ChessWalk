@@ -1,7 +1,5 @@
 package game2.visuals.texture;
 
-import game2.visuals.texture.Texture;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -9,7 +7,7 @@ public abstract class ImageTexture implements Texture {
 
     private int zIndex;
 
-    private final BufferedImage image;
+    protected BufferedImage image;
 
     protected ImageTexture(BufferedImage image, int z){
         this.image = image;

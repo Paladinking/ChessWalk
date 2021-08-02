@@ -1,0 +1,25 @@
+{
+  "level1": {
+    "LevelImage": "levels/LevelImage/Level1.bmp",
+    "ImagePath": "images/Stages/",
+    "Images": {
+      "TILE": {
+        "name": "Tile.png",
+        "width": 50,
+        "height": 50
+      },
+      "WALL": {
+        "name": "WallFront.png",
+        "width": 50,
+        "height": 70
+      }
+    },
+    "Enemies": [
+      "Slime",
+      "Slime",
+      "Slime",
+      "Skeleton",
+      "Knight"
+    ]
+  }
+}

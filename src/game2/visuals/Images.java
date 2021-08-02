@@ -1,45 +1,50 @@
 package game2.visuals;
 
-import game2.entities.Entity;
-import game2.entities.Player;
-import game2.entities.enemies.Knight;
-import game2.entities.enemies.Skeleton;
-import game2.entities.enemies.Slime;
+import game2.entities.EntityTemplate;
+import game2.enums.ImageType;
 
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class Images {
 
-    private static final String IMAGE_PATH = "images/", ENEMIES = IMAGE_PATH + "Enemies/",
-            LEVELS = "levels/LevelImage/", PLAYER = IMAGE_PATH + "Player/";
-    public BufferedImage level1, wall1, tile1;
-
-    private Map<Class<? extends Entity>, BufferedImage> images;
-
-    private boolean loaded;
+    private final Map<Object, Map<ImageType, BufferedImage[]>> templateStateImages;
 
     public Images() {
-        this.loaded = false;
-        this.images = new HashMap<>();
+        this.templateStateImages = new HashMap<>();
     }
 
-    public void load() throws IOException {
-        if (loaded) return;
-        images.put(Slime.class, ImageIO.read(ClassLoader.getSystemResource(ENEMIES + "Slime.png")));
-        images.put(Skeleton.class, ImageIO.read(ClassLoader.getSystemResource(ENEMIES + "Skeleton.png")));
-        images.put(Knight.class, ImageIO.read(ClassLoader.getSystemResource(ENEMIES + "Knight.png")));
-        images.put(Player.class, ImageIO.read(ClassLoader.getSystemResource(PLAYER + "PlayerFront.png")));
-        wall1 = ImageIO.read(ClassLoader.getSystemResource(IMAGE_PATH + "Walls/WallFront.png"));
-        tile1 = ImageIO.read(ClassLoader.getSystemResource(IMAGE_PATH + "Tile.png"));
-        level1 = ImageIO.read(ClassLoader.getSystemResource(LEVELS + "Level1.bmp"));
-        this.loaded = true;
+    public void createMap(Object key){
+        templateStateImages.put(key, new HashMap<>());
     }
 
-    public BufferedImage getImage(Class<? extends Entity> c){
-        return images.get(c);
+    public void loadImage(Object key, String path, String name, ImageType state) throws IOException {
+        BufferedImage[] image = new BufferedImage[1];
+        image[0] = ImageIO.read(ClassLoader.getSystemResource(path + name));
+        templateStateImages.get(key).put(state, image);
+    }
+
+    public void loadImage(EntityTemplate template, String path, String name, ImageType state, int count, int width, int height) throws IOException {
+        BufferedImage[] images = new BufferedImage[count];
+        BufferedImage b = ImageIO.read(ClassLoader.getSystemResource(path + name));
+        for (int i = 0; i < count; i++){
+            images[i] = b.getSubimage(0, i * height, width, height);
+        }
+        templateStateImages.get(template).put(state, images);
+    }
+
+    public BufferedImage[] getImages(Object template, ImageType state){
+        return templateStateImages.get(template).get(state);
+    }
+
+    public BufferedImage getImage(Object template, ImageType state){
+        return templateStateImages.get(template).get(state)[0];
+    }
+
+
+    public BufferedImage getImage(String name) throws IOException {
+        return ImageIO.read(ClassLoader.getSystemResource(name));
     }
 }

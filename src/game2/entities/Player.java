@@ -3,9 +3,6 @@ package game2.entities;
 import game2.actions.EmptyAction;
 import game2.actions.EntityAction;
 import game2.essentials.TileMap;
-import game2.tiles.Tile;
-import game2.visuals.Images;
-import game2.visuals.texture.EntityTexture;
 
 import java.util.*;
 
@@ -15,7 +12,7 @@ public class Player extends Entity {
 
     private final Queue<EntityAction> actionQue;
 
-    public Player(int x, int y) {
+    public Player(int x, int y, int hp, int dmg) {
         super(x, y);
         this.actionQue = new LinkedList<>();
     }
@@ -35,11 +32,6 @@ public class Player extends Entity {
         if (this.action == wait) this.action = null;
         initTurn(tileMap);
 
-    }
-
-    @Override
-    protected EntityTexture getTexture(Images images, int tileSize) {
-        return new EntityTexture(gridPos.x * tileSize, gridPos.y * tileSize - 20, 50, 70, images.getImage(Player.class));
     }
 
     public void clearActions() {

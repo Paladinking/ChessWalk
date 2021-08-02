@@ -2,6 +2,7 @@ package game2.tiles;
 
 import game2.entities.Entity;
 import game2.levels.Level;
+import game2.visuals.Images;
 import game2.visuals.texture.Texture;
 
 public abstract class Tile {
@@ -14,10 +15,8 @@ public abstract class Tile {
         return texture;
     }
 
-    protected abstract Texture getTexture(int x, int y, int tileSize, Level level);
-
-    public void createTexture(int x, int y, int tileSize, Level level){
-        texture = getTexture(x, y, tileSize, level);
+    public void setTexture(Texture texture){
+        this.texture = texture;
     }
 
     public abstract void setEntity(Entity entity);
@@ -28,4 +27,10 @@ public abstract class Tile {
     public String toString() {
         return super.toString() + "Entity= " + getEntity();
     }
+
+    public void createTexture(int x, int y, int tileSize, Level level, Images images){
+        this.texture = getTexture(x, y, tileSize, level, images);
+    }
+
+    protected abstract Texture getTexture(int x, int y, int tileSize, Level level, Images images);
 }

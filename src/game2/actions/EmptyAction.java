@@ -20,7 +20,7 @@ public class EmptyAction extends EntityAction {
     }
 
     @Override
-    public void finish() {
+    public void finish(TileMap tileMap) {
 
     }
 

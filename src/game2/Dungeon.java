@@ -3,6 +3,8 @@ package game2;
 import game2.games.Game;
 import game2.games.Walk;
 import game2.ui.GamePanel;
+import helper.json.FancyJSonParser;
+import helper.json.JsonObject;
 
 import javax.swing.*;
 import java.awt.*;

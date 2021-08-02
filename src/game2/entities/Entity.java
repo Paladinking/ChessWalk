@@ -3,7 +3,6 @@ package game2.entities;
 import game2.actions.ActionStatus;
 import game2.actions.EntityAction;
 import game2.essentials.TileMap;
-import game2.visuals.Images;
 import game2.visuals.texture.EntityTexture;
 
 import java.awt.*;
@@ -40,44 +39,36 @@ public abstract class Entity {
         if (this.action == null){
             pickAction(tileMap);
             if (action.init(tileMap).ordinal() >= ActionStatus.PASS_TURN.ordinal()){
-                action.finish();
+                action.finish(tileMap);
                 action = null;
                 listener.passedTurn();
             }
         }
     }
 
-    public void tick(){
+    public void tick(TileMap tileMap){
         // TODO: tick should only be called before this turns action is completed
+        texture.tick();
         if (this.action == null) return;
         ActionStatus status = action.preform();
         if (status.ordinal() >= ActionStatus.PASS_TURN.ordinal()){
-            action.finish();
+            action.finish(tileMap);
             action = null;
             listener.passedTurn();
         }
     }
 
     /**
-     * Creates and returns a new <code>Texture</code> object for this <code>Entity</code>.
-     * @param images The <code>Images</code> object containing the texture image.
-     * @param tileSize The size of a tile in the <code>TileMap</code>.
-     * @return The texture for this <code>Entity</code>.
+     * Sets the texture of this <code>Entity</code>.
+     * @param texture The new texture.
      */
-    protected abstract EntityTexture getTexture(Images images, int tileSize);
-
-    /**
-     * Creates a texture for this <code>Entity</code>.
-     * @param images The <code>Images</code> object containing the texture image.
-     * @param tileSize The size of a tile in the <code>TileMap</code>.
-     */
-    public void createTexture(Images images, int tileSize){
-        this.texture = getTexture(images, tileSize);
+    public void setTexture(EntityTexture texture){
+        this.texture = texture;
     }
 
     /**
      * Returns this <code>Entity</code>:s current texture
-     * @return the <code>Texture</code> object of this <code>Entity</code>.
+     * @return The <code>Texture</code> object of this <code>Entity</code>.
      */
     public EntityTexture getTexture(){
         return texture;
@@ -87,5 +78,13 @@ public abstract class Entity {
         Point oldPos = new Point(gridPos.x, gridPos.y);
         gridPos.setLocation(dest.x, dest.y);
         listener.moved(oldPos);
+    }
+
+    /**
+     * This entity is attacked with <code>dmg</code> damgage.
+     * @param dmg The amount of damage to deal.
+     */
+    public void attack(int dmg) {
+
     }
 }
