@@ -1,22 +1,21 @@
 package game2.essentials;
 
 import game2.entities.Entity;
-import game2.levels.Level;
-import game2.tiles.EmptyTile;
+import game2.entities.Player;
 import game2.tiles.Tile;
-import game2.tiles.WallTile;
-import game2.visuals.Images;
-import game2.visuals.texture.StaticTexture;
-import game2.visuals.texture.Texture;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TileMap {
-    
+
     private final Tile[] tiles;
 
     private final int width, height, tileSize;
-    
+
+    private Point playerPos;
+
     public TileMap(int width, int height, int tileSize){
         this.tiles = new Tile[width * height];
         this.width = width;
@@ -30,25 +29,6 @@ public class TileMap {
 
     public Tile getTile(int x, int y){
         return tiles[x +width * y];
-    }
-
-    public void load(Level level, Images images) {
-        for (int x = 0; x < width; x++){
-            for (int y = 0; y < height; y++){
-                Tile tile;
-                int hex = level.levelImage.getRGB(x, y);
-                if (hex == 0xff000000) {
-                    tile = new WallTile();
-                } else if (hex == 0xffff0000) {
-                    // ENEMY
-                    tile = new EmptyTile();
-                } else {
-                    tile = new EmptyTile();
-                }
-                tile.createTexture(x, y, tileSize, level, images);
-                setTile(x, y, tile);
-            }
-        }
     }
 
     public int getTileSize() {
@@ -72,6 +52,14 @@ public class TileMap {
         getTile(pos.x, pos.y).setEntity(entity);
     }
 
+    public void placePlayer(Player player) {
+        Point oldPlayerPos = player.getPos();
+        player.getTexture().move((playerPos.x - oldPlayerPos.x) * tileSize, (playerPos.y - oldPlayerPos.y) * tileSize);
+        oldPlayerPos.setLocation(playerPos.x, playerPos.y);
+        this.playerPos = oldPlayerPos;
+        place(player);
+    }
+
     public void moveEntity(Point oldPos, Point newPos) {
         Tile old = getTile(oldPos.x, oldPos.y);
         Entity e = old.getEntity();
@@ -81,5 +69,34 @@ public class TileMap {
 
     public Tile getTile(Point pos) {
         return getTile(pos.x, pos.y);
+    }
+
+    /**
+     * Returns <code>true</code> iff two points are next to one another.
+     * @param a The first Point.
+     * @param b The second Point
+     * @return true iff <code>a</code> and <code>b</code> are next to each other.
+     */
+    public static boolean neighbors(Point a, Point b){
+        return Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <=1;
+    }
+
+    public Point getPlayerPos() {
+        return new Point(playerPos.x, playerPos.y);
+    }
+
+    public List<Point> getOpenDirections(Point pos) {
+        List<Point> openPoints = new ArrayList<>();
+        for (int x = -1; x<=1; x++){
+            for (int y =-1; y<=1; y++){
+                if (x == y && y == 0) continue;
+                if(getTile(pos.x + x, pos.y + y).isOpen()) openPoints.add(new Point(x, y));
+            }
+        }
+        return openPoints;
+    }
+
+    public void setStart(int x, int y) {
+        this.playerPos = new Point(x, y);
     }
 }

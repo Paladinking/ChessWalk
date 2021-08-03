@@ -2,11 +2,6 @@ package game2.essentials;
 
 import game2.actions.EntityAction;
 import game2.entities.*;
-import game2.entities.enemies.Enemy;
-import game2.entities.enemies.Knight;
-import game2.entities.enemies.Skeleton;
-import game2.entities.enemies.Slime;
-import game2.levels.Level;
 
 import java.awt.*;
 import java.util.*;
@@ -86,6 +81,11 @@ public class Entities {
         @Override
         public void moved(Point oldPos) {
             listener.entityMoved(oldPos, entity.getPos());
+        }
+
+        @Override
+        public void died() {
+
         }
     }
 }

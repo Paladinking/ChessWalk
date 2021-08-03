@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class Move extends EntityAction {
 
-    protected final int tileSize, speed;
+    protected int tileSize, speed;
 
     protected final Point moved;
     protected Point target;

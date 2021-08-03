@@ -17,7 +17,7 @@ public class GameVisuals {
 
     private final int width, height;
 
-    private final TileMap tileMap;
+    private TileMap tileMap;
 
     private boolean valid;
 
@@ -26,8 +26,7 @@ public class GameVisuals {
 
     private double zoomLevel, prevZoomLevel;
 
-    public GameVisuals(int width, int height, TileMap tileMap) {
-        this.tileMap = tileMap;
+    public GameVisuals(int width, int height) {
         this.width = width;
         this.height = height;
         this.cameraX = DEFAULT_CAMERA_X;
@@ -36,6 +35,13 @@ public class GameVisuals {
         this.prevZoomLevel = DEFAULT_ZOOM;
         Layer middleLayer = new SortedLayer(Comparator.comparing((texture) -> texture.getBounds().y + texture.getBounds().height));
         this.layers = new Layer[]{new Layer(), middleLayer, new Layer()};
+    }
+
+    public synchronized void setTileMap(TileMap tileMap){
+        this.tileMap = tileMap;
+        this.zoomLevel = DEFAULT_ZOOM;
+        Point playerPos = tileMap.getPlayerPos();
+        panCameraTo(playerPos.x * tileMap.getTileSize() - width / 2, playerPos.y * tileMap.getTileSize() - height / 2);
     }
 
     private void addTexture(Texture texture) {
@@ -79,6 +85,12 @@ public class GameVisuals {
 
     private static int getLastTile(int firstTile, int tileSize, double zoomLevel, int screenDimension, int tmDimension) {
         return (int) Math.min(tmDimension - 1, ((screenDimension / (double) tileSize)) / zoomLevel + firstTile + 2);
+    }
+
+    public synchronized void panCameraTo(int x, int y){
+        this.cameraX = 0;
+        this.cameraY = 0;
+        panCamera(x, y);
     }
 
     public synchronized void panCamera(int x, int y) {

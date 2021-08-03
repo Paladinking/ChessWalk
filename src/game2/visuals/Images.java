@@ -1,6 +1,6 @@
 package game2.visuals;
 
-import game2.entities.EntityTemplate;
+import game2.Dungeon;
 import game2.enums.ImageType;
 
 import javax.imageio.ImageIO;
@@ -26,7 +26,7 @@ public class Images {
         templateStateImages.get(key).put(state, image);
     }
 
-    public void loadImage(EntityTemplate template, String path, String name, ImageType state, int count, int width, int height) throws IOException {
+    public void loadImage(Object template, String path, String name, ImageType state, int count, int width, int height) throws IOException {
         BufferedImage[] images = new BufferedImage[count];
         BufferedImage b = ImageIO.read(ClassLoader.getSystemResource(path + name));
         for (int i = 0; i < count; i++){
@@ -40,7 +40,8 @@ public class Images {
     }
 
     public BufferedImage getImage(Object template, ImageType state){
-        return templateStateImages.get(template).get(state)[0];
+        BufferedImage[] images = getImages(template, state);
+        return images[Dungeon.THE_RANDOM.nextInt(images.length)];
     }
 
 

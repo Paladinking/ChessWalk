@@ -16,7 +16,7 @@ public class Attack extends EntityAction {
 
     private int ticks;
 
-    protected Attack(Entity entity, Point targetTile, TextureState attackState, int dmg, int time) {
+    public Attack(Entity entity, Point targetTile, TextureState attackState, int dmg, int time) {
         super(entity);
         this.dmg = dmg;
         this.targetTile = targetTile;

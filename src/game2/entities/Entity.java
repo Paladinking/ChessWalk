@@ -5,7 +5,7 @@ import game2.actions.EntityAction;
 import game2.essentials.TileMap;
 import game2.visuals.texture.EntityTexture;
 
-import java.awt.*;
+import java.awt.Point;
 
 public abstract class Entity {
 

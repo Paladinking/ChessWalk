@@ -27,10 +27,4 @@ public abstract class Tile {
     public String toString() {
         return super.toString() + "Entity= " + getEntity();
     }
-
-    public void createTexture(int x, int y, int tileSize, Level level, Images images){
-        this.texture = getTexture(x, y, tileSize, level, images);
-    }
-
-    protected abstract Texture getTexture(int x, int y, int tileSize, Level level, Images images);
 }

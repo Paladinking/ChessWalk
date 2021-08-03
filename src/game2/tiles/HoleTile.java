@@ -10,7 +10,7 @@ import game2.visuals.texture.Texture;
 
 import java.awt.image.BufferedImage;
 
-public class WallTile extends Tile {
+public class HoleTile extends Tile{
     @Override
     public Entity getEntity() {
         return null;

@@ -1,8 +1,10 @@
 package game2.games;
 
+import game2.actions.Attack;
 import game2.actions.Move;
 import game2.entities.EntitiesListener;
 import game2.entities.EntityTemplate;
+import game2.enums.TextureState;
 import game2.essentials.AStar;
 import game2.essentials.Entities;
 import game2.entities.Entity;
@@ -27,16 +29,17 @@ import java.util.Map;
 public class Walk extends Game implements EntitiesListener {
 
     public static final int TILE_SIZE = 50;
-    private static final int TILEMAP_WIDTH = 100, TILEMAP_HEIGHT = 100;
 
     private final Entities entities;
     private Level currentLevel;
     private final GameVisuals visuals;
     private final Images images;
-    private final TileMap tileMap;
+
     private final Map<String, EntityTemplate> enemyTemplates;
     private List<Level> levels;
 
+    private final int tileSize;
+    private TileMap tileMap;
 
     private Point mousePress = null;
     private boolean dragging;
@@ -45,10 +48,10 @@ public class Walk extends Game implements EntitiesListener {
     public Walk(int width, int height) {
         super();
         this.entities = new Entities(this);
-        this.tileMap = new TileMap(TILEMAP_WIDTH, TILEMAP_HEIGHT, TILE_SIZE);
-        this.visuals = new GameVisuals(width, height, tileMap);
+        this.visuals = new GameVisuals(width, height);
         this.images = new Images();
         this.enemyTemplates = new HashMap<>();
+        this.tileSize = TILE_SIZE;
     }
 
     @Override
@@ -59,22 +62,24 @@ public class Walk extends Game implements EntitiesListener {
     @Override
     public void init() {
         try {
-            loadTemplates();
             loadLevels();
+            loadTemplates();
+
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
         entities.clear();
         currentLevel = levels.get(0);
-        tileMap.load(currentLevel, images);
-        tileMap.place(entities.getPlayer());
+        tileMap = currentLevel.createTiles(tileSize, images);
+        visuals.setTileMap(tileMap);
+        tileMap.placePlayer(entities.getPlayer());
         generateEnemy();
     }
 
     private void loadLevels() throws IOException{
         FancyJSonParser parser = new FancyJSonParser();
-        JsonObject levels = parser.readResource("levels/levels.json");
+        JsonObject levels = parser.readResource("data/levels.json");
         this.levels = Level.fromJson(levels, images);
     }
 
@@ -87,7 +92,7 @@ public class Walk extends Game implements EntitiesListener {
         }
         EntityTemplate p = EntityTemplate.fromJsonObject(parser.readResource("data/player.json").getObject("Player"), images);
         if (p == null) throw new IOException("Could not load player.");
-        Player player = (Player) p.create(49, 49, images, tileMap.getTileSize());
+        Player player = (Player) p.create(-1, -1, images, tileSize);
         entities.setPlayer(player);
     }
 
@@ -112,32 +117,34 @@ public class Walk extends Game implements EntitiesListener {
 
     private void handleMousePress() {
         if (mousePress == null) return;
+        Point location = new Point(mousePress.x, mousePress.y);
+        mousePress = null;
         Player player = entities.getPlayer();
         player.clearActions();
         Point playerPos = player.getPos();
-        if (mousePress.equals(playerPos)){
+        if (location.equals(playerPos)){
             return;
         }
-        Tile tile = tileMap.getTile(mousePress.x, mousePress.y);
+        Tile tile = tileMap.getTile(location.x, location.y);
         boolean open = tile.isOpen();
-        if(Math.abs(playerPos.x - mousePress.x) <= 1 && Math.abs(playerPos.y - mousePress.y)<= 1){
+        if(TileMap.neighbors(playerPos, location)){
             if (open){
-                Move move = new Move(player, 2, tileMap.getTileSize(), new Point(mousePress.x - playerPos.x, mousePress.y - playerPos.y));
+                Move move = new Move(player, 2, tileMap.getTileSize(), new Point(location.x - playerPos.x, location.y - playerPos.y));
                 player.queAction(move, tileMap);
                 return;
             } else if (tile.getEntity() != null){
-                return;
+                Attack attack = new Attack(player, location, TextureState.ATTACK,4,20);
+                player.queAction(attack, tileMap);
             }
         }
         if (!open) return;
-        List<Point> path = AStar.getPath(tileMap, player.getPos(), mousePress);
+        List<Point> path = new AStar(true).getPath(tileMap, player.getPos(), location);
         if (path != null) {
             for (int i = path.size() - 1; i >= 0; i--) {
                 Move move = new Move(player, 2, tileMap.getTileSize(), path.get(i));
                 entities.quePlayerAction(move, tileMap);
             }
         }
-        mousePress = null;
     }
 
     @Override

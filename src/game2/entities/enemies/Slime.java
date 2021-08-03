@@ -1,21 +1,24 @@
 package game2.entities.enemies;
 
-import game2.actions.Move;
+import game2.actions.EmptyAction;
+import game2.actions.EntityAction;
+import game2.actions.NoAction;
+import game2.actions.RandomMove;
 import game2.essentials.TileMap;
-import game2.games.Walk;
-
-import java.awt.*;
 
 public class Slime extends Enemy {
 
-    private static final EnemyData SLIME = new EnemyData(Walk.TILE_SIZE, Walk.TILE_SIZE, 5, 1);
-
     public Slime(int x, int y, int hp, int dmg) {
-        super(x, y);
+        super(x, y, hp, dmg, 2);
     }
 
     @Override
-    protected void pickAction(TileMap tileMap) {
-        this.action = new Move(this, 2, tileMap.getTileSize(), new Point(-1, 0));
+    protected EntityAction getAttack(TileMap tileMap) {
+        return new NoAction(this);
+    }
+
+    @Override
+    protected EntityAction getMove(TileMap tileMap) {
+        return new RandomMove(this, speed, tileMap.getTileSize());
     }
 }

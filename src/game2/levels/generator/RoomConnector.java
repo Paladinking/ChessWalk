@@ -1,14 +1,14 @@
-package game2.essentials;
+package game2.levels.generator;
 
 import java.awt.*;
 import java.util.*;
 import java.util.List;
 
-public class AStar {
+public class RoomConnector {
 
     private final static int MAX_WIDTH = 200;
 
-    private class Node {
+    private static class Node {
         private final Node parent;
 
         protected final int x, y;
@@ -36,32 +36,19 @@ public class AStar {
         }
 
         protected Node[] getNeighbors() {
-            if (corners) {
-                return new Node[]{
-                        new Node(this, x + 1, y),
-                        new Node(this, x - 1, y),
-                        new Node(this, x, y + 1),
-                        new Node(this, x, y - 1),
-                        new Node(this, x + 1, y + 1),
-                        new Node(this, x + 1, y - 1),
-                        new Node(this, x - 1, y + 1),
-                        new Node(this, x - 1, y - 1)
-                };
-            } else {
-                return new Node[]{
-                        new Node(this, x + 1, y),
-                        new Node(this, x - 1, y),
-                        new Node(this, x, y + 1),
-                        new Node(this, x, y - 1)
-                };
-            }
+            return new Node[]{
+                    new Node(this, x + 1, y),
+                    new Node(this, x - 1, y),
+                    new Node(this, x, y + 1),
+                    new Node(this, x, y - 1)
+            };
         }
 
-        protected List<Point> makePath() {
+        protected java.util.List<Point> makePath() {
             List<Point> path = new ArrayList<>();
             Node node = this;
-            while (node.parent != null) {
-                path.add(new Point(node.x - node.parent.x, node.y - node.parent.y));
+            while (node != null) {
+                path.add(new Point(node.x, node.y));
                 node = node.parent;
             }
             return path;
@@ -73,13 +60,7 @@ public class AStar {
         }
     }
 
-    private final boolean corners;
-
-    public AStar(boolean corners) {
-        this.corners = corners;
-    }
-
-    public List<Point> getPath(TileMap tileMap, Point startPos, Point goalPos) {
+    public List<Point> getPath(int[][] tileMap, Point startPos, Point goalPos) {
         Node start = new Node(null, startPos.x, startPos.y), goal = new Node(null, goalPos.x, goalPos.y);
         start.fScore = start.hScore(goal);
         start.gScore = 0;
@@ -93,15 +74,19 @@ public class AStar {
             }
             closedSet.add(node);
             for (Node neighbor : node.getNeighbors()) {
-                if ((!tileMap.getTile(neighbor.x, neighbor.y).isOpen() && !(neighbor.equals(goal))) || closedSet.contains(neighbor)) {
+                if (neighbor.x < 0 || neighbor.y < 0 || neighbor.x >= tileMap.length || neighbor.y >= tileMap[0].length){
                     continue;
                 }
-                neighbor.gScore = node.gScore + 1;
+                if (closedSet.contains(neighbor)) {
+                    continue;
+                }
+                neighbor.gScore = node.gScore;
+                if (tileMap[neighbor.x][neighbor.y] == 0) neighbor.gScore++;
+                else if (tileMap[neighbor.x][neighbor.y] != MapGenerator.PATH) neighbor.gScore += 2;
                 neighbor.fScore = neighbor.gScore + neighbor.hScore(goal);
                 if (!openSet.contains(neighbor)) openSet.add(neighbor);
             }
         }
         return null;
     }
-
 }

@@ -8,15 +8,25 @@ import helper.json.JsonObject;
 
 import javax.swing.*;
 import java.awt.*;
+import java.util.Random;
 
 public class Dungeon {
+
+    public static final Random THE_RANDOM = new Random();
+
+    private static final long seed = 2533289183713569834L;
+
+    private static final boolean useSeed = false;
 
     public static final int WIDTH = 800, HEIGHT = 800;
 
     public static final int FRAME_DELAY = 16;
 
     public static void main(String[] args) {
-        EventQueue.invokeLater(()->{
+        long seed = useSeed ? Dungeon.seed : THE_RANDOM.nextLong();
+        System.out.println("Seed: " + seed);
+        THE_RANDOM.setSeed(seed);
+        EventQueue.invokeLater(()-> {
             JFrame frame = new JFrame();
             frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             frame.setResizable(false);
