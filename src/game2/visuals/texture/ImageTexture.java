@@ -5,7 +5,7 @@ import java.awt.image.BufferedImage;
 
 public class ImageTexture extends AbstractTexture {
 
-    private int zIndex;
+    private final int zIndex;
 
     protected BufferedImage image;
 
