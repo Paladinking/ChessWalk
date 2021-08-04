@@ -2,105 +2,70 @@ package game2.levels;
 
 
 import game2.Dungeon;
+import game2.enums.TextureState;
 import game2.enums.TileType;
 import game2.essentials.Range;
 import game2.essentials.TileMap;
 import game2.levels.generator.MapGenerator;
 import game2.tiles.EmptyTile;
-import game2.tiles.HoleTile;
 import game2.tiles.Tile;
 import game2.tiles.WallTile;
 import game2.visuals.ImageData;
-import game2.visuals.Images;
-import game2.visuals.texture.StaticTexture;
-import game2.visuals.texture.Texture;
-import helper.json.JsonList;
-import helper.json.JsonObject;
+import game2.visuals.texture.ImageTexture;
+import game2.visuals.texture.MultiTexture;
 
-
-import java.awt.image.BufferedImage;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.Map;
 
 public class Level {
 
-    private Range roomSize;
-    private int width, height, rooms;
+    private final Range roomSize;
+    private final int width, height, rooms;
 
-    private ImageData<TileType> wall, empty, hole;
+    private final Map<TileType, Map<TextureState, ImageData>> imageData;
 
-    private String[] enemies;
+    private final String[] enemies;
 
-    private Level(){
-
+    public Level(int width, int height, int rooms, Range roomSize, Map<TileType, Map<TextureState, ImageData>> imageData, String[] enemies) {
+        this.imageData = imageData;
+        this.rooms = rooms;
+        this.roomSize = roomSize;
+        this.width = width;
+        this.height = height;
+        this.enemies = enemies;
     }
 
-    public static List<Level> fromJson(JsonObject l, Images img) throws IOException {
-        List<Level> levels = new ArrayList<>();
-        try {
-            for (String levelName : l) {
-                JsonObject lvl = l.getObject(levelName);
-                Level level = new Level();
-                level.width = lvl.getInt("width");
-                level.height = lvl.getInt("height");
-                level.rooms = lvl.getInt("rooms");
-                level.roomSize = new Range(lvl.getInt("minRoomSize"), lvl.getInt("maxRoomSize"));
-                img.createMap(level);
-                String path = lvl.getString("ImagePath");
-                JsonObject images = lvl.getObject("Images");
-                level.wall = loadImage(img, level, images, path, TileType.WALL);
-                level.empty = loadImage(img, level, images, path, TileType.EMPTY);
-                level.hole = loadImage(img, level, images, path, TileType.HOLE);
-
-                JsonList enemies = lvl.getList("Enemies");
-                //noinspection SuspiciousToArrayCall
-                level.enemies = enemies.toList().toArray(new String[]{});
-                levels.add(level);
-            }
-        } catch (NullPointerException | ClassCastException e){
-            e.printStackTrace();
-        }
-        return levels;
-    }
-
-    private static ImageData<TileType> loadImage(Images img, Level level, JsonObject images, String path, TileType key) throws IOException {
-        JsonObject image = images.getObject(key.name());
-        String name = image.getString("name");
-        int width = image.getInt("width");
-        int height = image.getInt("height");
-        int count = image.getInt("count");
-        img.loadImage(level, path, name, key, count, width, height);
-        return new ImageData<>(width, height, count, 0, key);
-    }
-
-    public TileMap createTiles(int tileSize, Images images) {
+    public TileMap createTiles(int tileSize) {
         TileMap tileMap = new TileMap(width, height, tileSize);
         MapGenerator generator = new MapGenerator(rooms, width, height, roomSize);
         int[][] map = generator.generate();
-        for (int x = 0; x < width; x++){
-            for (int y = 0; y < height; y++){
+        for (int x = 0; x < width; x++) {
+            for (int y = 0; y < height; y++) {
                 Tile tile;
-                ImageData<TileType> imageData;
+                TileType tileType;
                 int z = 0;
-                int t = map[x][y];
-                if (t == MapGenerator.HOLE){
-                    tile = new HoleTile();
-                    imageData = hole;
-                } else if (t == MapGenerator.WALL) {
+                int tileInt = map[x][y];
+                if (tileInt == MapGenerator.HOLE) {
                     tile = new WallTile();
-                    imageData = wall;
+                    tileType = TileType.HOLE;
+                } else if (tileInt == MapGenerator.WALL) {
+                    tile = new WallTile();
+                    tileType = TileType.WALL;
                     z = 1;
                 } else {
                     tile = new EmptyTile();
-                    imageData = empty;
-                    if (t == MapGenerator.PLAYER_START){
+                    tileType = TileType.EMPTY;
+                    if (tileInt == MapGenerator.PLAYER_START) {
                         tileMap.setStart(x, y);
                     }
                 }
-                BufferedImage image = images.getImage(this, imageData.key);
-                int tx = x * tileSize - (imageData.width -tileSize) / 2, ty = y * tileSize - (imageData.height - tileSize);
-                Texture  texture = new StaticTexture(image, z, tx, ty, imageData.width, imageData.height);
+                Map<TextureState, ImageData> imageData = this.imageData.get(tileType);
+                MultiTexture texture = new MultiTexture();
+                for (TextureState key : imageData.keySet()){
+                    ImageData data = imageData.get(key);
+                    int tx = x * tileSize - (data.width - tileSize) / 2, ty = y * tileSize - (data.height - tileSize);
+                    texture.addState(key, new ImageTexture(data.getImage(), z, tx, ty, data.width, data.height));
+                }
+                texture.setState(TextureState.HIDDEN);
                 tile.setTexture(texture);
                 tileMap.setTile(x, y, tile);
             }
@@ -109,7 +74,8 @@ public class Level {
     }
 
 
-    public String getEnemy(){
+    public String getEnemy() {
+        if (enemies.length == 0) return null;
         return enemies[Dungeon.THE_RANDOM.nextInt(enemies.length)];
     }
 

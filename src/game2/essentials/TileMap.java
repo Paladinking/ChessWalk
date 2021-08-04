@@ -2,6 +2,7 @@ package game2.essentials;
 
 import game2.entities.Entity;
 import game2.entities.Player;
+import game2.enums.TextureState;
 import game2.tiles.Tile;
 
 import java.awt.*;
@@ -12,6 +13,8 @@ public class TileMap {
 
     private final Tile[] tiles;
 
+    private final List<Tile> visibleTiles;
+
     private final int width, height, tileSize;
 
     private Point playerPos;
@@ -21,6 +24,7 @@ public class TileMap {
         this.width = width;
         this.height = height;
         this.tileSize = tileSize;
+        this.visibleTiles = new ArrayList<>();
     }
 
     public void setTile(int x, int y, Tile tile){
@@ -58,6 +62,7 @@ public class TileMap {
         oldPlayerPos.setLocation(playerPos.x, playerPos.y);
         this.playerPos = oldPlayerPos;
         place(player);
+        updateLighting();
     }
 
     public void moveEntity(Point oldPos, Point newPos) {
@@ -65,6 +70,19 @@ public class TileMap {
         Entity e = old.getEntity();
         old.setEntity(null);
         getTile(newPos.x, newPos.y).setEntity(e);
+    }
+
+    public void updateLighting(){
+        // TODO : ArrayOutOfBoundsException
+        for (Tile tile : visibleTiles) tile.hide();
+        visibleTiles.clear();
+        for (int x = playerPos.x - 5; x <= playerPos.x + 5; x++){
+            for (int y = playerPos.y -5 ; y<= playerPos.y + 5; y++){
+                Tile tile = getTile(x, y);
+                tile.show();
+                visibleTiles.add(tile);
+            }
+        }
     }
 
     public Tile getTile(Point pos) {

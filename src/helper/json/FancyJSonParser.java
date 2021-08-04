@@ -5,31 +5,26 @@ import java.nio.charset.StandardCharsets;
 
 public class FancyJSonParser {
 
-     public JsonObject readFile(String fileName){
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8));
-            char in;
-            do {
-                in = (char) reader.read();
-            } while (in != '{');
-            return readObject(reader);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public JsonObject readFile(String fileName) throws IOException {
 
-        return null;
+        BufferedReader reader = new BufferedReader(new FileReader(fileName, StandardCharsets.UTF_8));
+        char in;
+        do {
+            in = (char) reader.read();
+        } while (in != '{');
+        return readObject(reader);
     }
 
-    public JsonObject readResource(String path) {
+    public JsonObject readResource(String path) throws IOException {
         return readFile(ClassLoader.getSystemResource(path).getFile());
     }
 
     private String readString(Reader reader) throws IOException {
         char in;
         StringBuilder s = new StringBuilder();
-        while (true){
-            in = (char)  reader.read();
-            switch (in){
+        while (true) {
+            in = (char) reader.read();
+            switch (in) {
                 case '\n':
                 case '\r':
                 case (char) -1:
@@ -67,14 +62,16 @@ public class FancyJSonParser {
     private JsonObject readObject(Reader reader) throws IOException {
         char in;
         JsonObject jsonObject = new JsonObject();
-        loop: while (true){
+        loop:
+        while (true) {
             in = (char) reader.read();
-            switch (in){
+            switch (in) {
                 case '\"':
                     String label = readString(reader);
                     Object object;
                     while (in != ':') in = (char) reader.read();
-                    innerLoop: while (true) {
+                    innerLoop:
+                    while (true) {
                         in = (char) reader.read();
                         switch (in) {
                             case '[':
@@ -111,7 +108,7 @@ public class FancyJSonParser {
                     jsonObject.put(label, object);
                     break;
                 case '}':
-                     break loop;
+                    break loop;
                 case ' ':
                 case '\n':
                 case '\r':
@@ -128,7 +125,8 @@ public class FancyJSonParser {
     private JsonList readList(Reader reader) throws IOException {
         char in;
         JsonList list = new JsonList();
-        loop: while (true){
+        loop:
+        while (true) {
             in = (char) reader.read();
             switch (in) {
                 case '[':
@@ -165,12 +163,12 @@ public class FancyJSonParser {
         return list;
     }
 
-    private Number readNumber(Reader reader, char in) throws IOException{
+    private Number readNumber(Reader reader, char in) throws IOException {
         StringBuilder builder = new StringBuilder().append(in);
         boolean integer = true;
-        while (true){
+        while (true) {
             in = (char) reader.read();
-            switch (in){
+            switch (in) {
                 case ' ':
                 case '\n':
                 case '\r':

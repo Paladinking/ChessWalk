@@ -1,5 +1,5 @@
 package game2.enums;
 
-public enum TextureState implements ImageType{
-    IDLE, ATTACK, MOVE
+public enum TextureState implements ImageType {
+    IDLE, ATTACK, MOVE, SHOWN, HIDDEN, FOW
 }

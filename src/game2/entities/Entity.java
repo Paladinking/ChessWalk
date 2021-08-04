@@ -3,7 +3,7 @@ package game2.entities;
 import game2.actions.ActionStatus;
 import game2.actions.EntityAction;
 import game2.essentials.TileMap;
-import game2.visuals.texture.EntityTexture;
+import game2.visuals.texture.MultiTexture;
 
 import java.awt.Point;
 
@@ -13,7 +13,9 @@ public abstract class Entity {
 
     protected EntityAction action;
 
-    private EntityTexture texture;
+    private MultiTexture texture;
+
+    private boolean hidden = true;
 
     protected final Point gridPos;
 
@@ -39,11 +41,20 @@ public abstract class Entity {
         if (this.action == null){
             pickAction(tileMap);
             if (action.init(tileMap).ordinal() >= ActionStatus.PASS_TURN.ordinal()){
-                action.finish(tileMap);
-                action = null;
-                listener.passedTurn();
+                finishAction(tileMap);
+                return;
             }
         }
+        if (hidden){
+            action.preformInstant();
+            finishAction(tileMap);
+        }
+    }
+
+    private void finishAction(TileMap tileMap){
+        action.finish(tileMap);
+        action = null;
+        listener.passedTurn();
     }
 
     public void tick(TileMap tileMap){
@@ -52,9 +63,7 @@ public abstract class Entity {
         if (this.action == null) return;
         ActionStatus status = action.preform();
         if (status.ordinal() >= ActionStatus.PASS_TURN.ordinal()){
-            action.finish(tileMap);
-            action = null;
-            listener.passedTurn();
+            finishAction(tileMap);
         }
     }
 
@@ -62,7 +71,7 @@ public abstract class Entity {
      * Sets the texture of this <code>Entity</code>.
      * @param texture The new texture.
      */
-    public void setTexture(EntityTexture texture){
+    public void setTexture(MultiTexture texture){
         this.texture = texture;
     }
 
@@ -70,7 +79,7 @@ public abstract class Entity {
      * Returns this <code>Entity</code>:s current texture
      * @return The <code>Texture</code> object of this <code>Entity</code>.
      */
-    public EntityTexture getTexture(){
+    public MultiTexture getTexture(){
         return texture;
     }
 
@@ -86,5 +95,15 @@ public abstract class Entity {
      */
     public void attack(int dmg) {
 
+    }
+
+    public void hide(){
+        this.hidden = true;
+        texture.setVisible(false);
+    }
+
+    public void show(){
+        this.hidden = false;
+        texture.setVisible(true);
     }
 }

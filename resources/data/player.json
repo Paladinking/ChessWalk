@@ -1,31 +1,40 @@
 {
-  "Player": {
-    "AI" : "Player",
-    "Stats": {
-      "HP" : 24,
-      "DMG" : 10,
-      "WIDTH" : 50,
-      "HEIGHT": 70
-    },
-    "ImagePath" : "images/Player/",
-    "Images" : {
-      "IDLE" : {
-        "name" : "PlayerFront.png",
-        "count" : 1
+  "Entities": {
+    "Player": {
+      "AI": "Player",
+      "Stats": {
+        "HP": 24,
+        "DMG": 10,
+        "WIDTH": 50,
+        "HEIGHT": 70
       },
-      "ATTACK" : {
-        "name": "AttackAnimationFront.png",
-        "count" : 5,
-        "width": 50,
-        "height": 70,
-        "swap": 4
+      "ImagePath": "images/Player/",
+      "Images": {
+        "idle": {
+          "name": "PlayerFront.png",
+          "count": 1,
+          "width": 50,
+          "height": 70
+        },
+        "attack": {
+          "name": "AttackAnimationFront.png",
+          "count": 5,
+          "width": 50,
+          "height": 70,
+          "swap": 4
+        },
+        "move": {
+          "name": "AttackAnimationUp.png",
+          "count": 5,
+          "width": 50,
+          "height": 70,
+          "swap": 4
+        }
       },
-      "MOVE" : {
-        "name" : "AttackAnimationUp.png",
-        "count" : 5,
-        "width" : 50,
-        "height": 70,
-        "swap": 4
+      "States": {
+        "MOVE": "move",
+        "ATTACK": "attack",
+        "IDLE": "idle"
       }
     }
   }

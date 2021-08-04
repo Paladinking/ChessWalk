@@ -6,7 +6,7 @@ import java.util.Map;
 
 public class JsonObject implements JsonParsable, Iterable<String>
 {
-    private final Map<String, Object> content;
+    private Map<String, Object> content;
 
     public JsonObject(){
         this.content = new HashMap<>();
@@ -66,6 +66,30 @@ public class JsonObject implements JsonParsable, Iterable<String>
         return (int) content.get(key);
     }
 
+    public void merge(JsonObject other){
+        for (String key : other) {
+            if (!content.containsKey(key)) {
+                content.put(key, other.getCopy(key));
+            }
+            else if (other.get(key) instanceof JsonObject){
+                Object o = get(key);
+                if (o instanceof JsonObject){
+                    JsonObject object = (JsonObject) o;
+                    object.merge(other.getObject(key));
+                }
+            }
+        }
+    }
+
+    private Object getCopy(String key) {
+        Object value = content.get(key);
+        if (value instanceof JsonParsable){
+            return ((JsonParsable) value).copy();
+        }
+        return value;
+
+    }
+
     public double getDouble(String key){
         return (double) content.get(key);
     }
@@ -77,5 +101,18 @@ public class JsonObject implements JsonParsable, Iterable<String>
 
     public boolean containsKey(String key) {
         return content.containsKey(key);
+    }
+
+    @Override
+    public JsonParsable copy() {
+        JsonObject copy = new JsonObject();
+        for (String key : this){
+            copy.put(key, getCopy(key));
+        }
+        return copy;
+    }
+
+    public Object remove(String key) {
+        return content.remove(key);
     }
 }

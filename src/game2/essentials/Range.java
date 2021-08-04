@@ -12,6 +12,7 @@ public class Range {
     }
 
     public int getRandom(Random random){
+        if (min == max) return min;
         return random.nextInt(max - min) + min;
     }
 }

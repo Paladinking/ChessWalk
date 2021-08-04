@@ -1,27 +1,38 @@
 package game2.tiles;
 
 import game2.entities.Entity;
-import game2.levels.Level;
-import game2.visuals.Images;
-import game2.visuals.texture.Texture;
+import game2.enums.TextureState;
+import game2.visuals.texture.MultiTexture;
 
 public abstract class Tile {
 
-    private Texture texture;
+    protected Tile(){
+
+    }
+
+    private MultiTexture texture;
 
     public abstract Entity getEntity();
 
-    public Texture getTexture(){
+    public MultiTexture getTexture() {
         return texture;
     }
 
-    public void setTexture(Texture texture){
+    public void setTexture(MultiTexture texture){
         this.texture = texture;
     }
 
     public abstract void setEntity(Entity entity);
 
     public abstract boolean isOpen();
+
+    public void hide() {
+        getTexture().setState(TextureState.FOW);
+    }
+
+    public void show() {
+        getTexture().setState(TextureState.SHOWN);
+    }
 
     @Override
     public String toString() {

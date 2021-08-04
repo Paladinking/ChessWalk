@@ -4,7 +4,7 @@ import game2.entities.Entity;
 import game2.tiles.Tile;
 import game2.visuals.Layer;
 import game2.visuals.SortedLayer;
-import game2.visuals.texture.Texture;
+import game2.visuals.texture.AbstractTexture;
 
 import java.awt.*;
 import java.util.Comparator;
@@ -44,7 +44,7 @@ public class GameVisuals {
         panCameraTo(playerPos.x * tileMap.getTileSize() - width / 2, playerPos.y * tileMap.getTileSize() - height / 2);
     }
 
-    private void addTexture(Texture texture) {
+    private void addTexture(AbstractTexture texture) {
         layers[texture.getZ()].addTexture(texture);
     }
 

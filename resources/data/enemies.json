@@ -1,50 +1,59 @@
 {
-  "Slime": {
-    "AI": "Slime",
-    "Stats": {
-      "HP": 10,
-      "DMG": 2,
-      "WIDTH" : 50,
-      "HEIGHT": 50
-    },
-    "ImagePath": "images/Enemies/",
-    "Images": {
-      "IDLE": {
-        "name": "Slime.png",
-        "count": 1
+  "Entities": {
+    "Slime": {
+      "parents": [
+        "defaultEnemy"
+      ],
+      "AI": "Slime",
+      "Stats": {
+        "HP": 10,
+        "DMG": 2
+      },
+      "Images": {
+        "idle": {
+          "name": "Slime.png",
+          "count": 1,
+          "width": 50,
+          "height": 50
+        }
       }
-    }
-  },
-  "Knight": {
-    "AI": "Knight",
-    "Stats": {
-      "HP": 14,
-      "DMG": 4,
-      "WIDTH" : 50,
-      "HEIGHT": 70
     },
-    "ImagePath": "images/Enemies/",
-    "Images": {
-
-      "IDLE": {
-        "name": "Knight.png",
-        "count": 1
+    "Knight": {
+      "parents": [
+        "defaultEnemy"
+      ],
+      "AI": "Knight",
+      "Stats": {
+        "HP": 14,
+        "DMG": 4,
+        "HEIGHT": 70
+      },
+      "Images": {
+        "idle": {
+          "name": "Knight.png",
+          "count": 1,
+          "width": 50,
+          "height": 70
+        }
       }
-    }
-  },
-  "Skeleton": {
-    "AI": "Skeleton",
-    "Stats": {
-      "HP": 10,
-      "DMG": 6,
-      "WIDTH" : 50,
-      "HEIGHT": 70
     },
-    "ImagePath": "images/Enemies/",
-    "Images": {
-      "IDLE": {
-        "name": "Skeleton.png",
-        "count": 1
+    "Skeleton": {
+      "parents": [
+        "defaultEnemy"
+      ],
+      "AI": "Skeleton",
+      "Stats": {
+        "HP": 10,
+        "DMG": 6,
+        "HEIGHT": 70
+      },
+      "Images": {
+        "idle": {
+          "name": "Skeleton.png",
+          "count": 1,
+          "width": 50,
+          "height": 70
+        }
       }
     }
   }

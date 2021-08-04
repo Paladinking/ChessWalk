@@ -1,0 +1,9 @@
+{
+  "StartLevel" : "level1",
+  "DataFiles": [
+    "defaults.json",
+    "enemies.json",
+    "levels.json",
+    "player.json"
+  ]
+}

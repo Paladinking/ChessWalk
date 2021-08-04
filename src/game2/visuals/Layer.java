@@ -1,28 +1,28 @@
 package game2.visuals;
 
-import game2.visuals.texture.Texture;
+import game2.visuals.texture.AbstractTexture;
 
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
 
 public class Layer {
-    protected final List<Texture> textures;
+    protected final List<AbstractTexture> textures;
 
     public Layer() {
         textures = new ArrayList<>();
     }
 
-    public void addTexture(Texture texture){
+    public void addTexture(AbstractTexture texture){
         textures.add(texture);
     }
 
-    public void removeTexture(Texture texture){
+    public void removeTexture(AbstractTexture texture){
         textures.remove(texture);
     }
 
     public void draw(Graphics2D g){
-        for (Texture t: textures){
+        for (AbstractTexture t: textures){
             t.draw(g);
         }
     }

@@ -1,14 +1,7 @@
 package game2.tiles;
 
 import game2.entities.Entity;
-import game2.enums.TileType;
-import game2.levels.Level;
-import game2.visuals.ImageData;
-import game2.visuals.Images;
-import game2.visuals.texture.StaticTexture;
-import game2.visuals.texture.Texture;
-
-import java.awt.image.BufferedImage;
+import game2.enums.TextureState;
 
 public class WallTile extends Tile {
     @Override
@@ -25,4 +18,6 @@ public class WallTile extends Tile {
     public boolean isOpen() {
         return false;
     }
+
+
 }

@@ -1,0 +1,85 @@
+{
+  "defaultLevel": {
+    "width": 25,
+    "height": 25,
+    "rooms": 2,
+    "minRoomSize": 4,
+    "maxRoomSize": 5,
+    "ImagePath": "images/Stages/",
+    "Images": {
+      "empty": {
+        "name": "Tile3.png",
+        "count": 1,
+        "width": 50,
+        "height": 50
+      },
+      "wall": {
+        "name": "Wall.png",
+        "count": 1,
+        "width": 50,
+        "height": 70
+      },
+      "hole": {
+        "name": "Wood.png",
+        "count": 1,
+        "width": 50,
+        "height": 50
+      },
+      "hidden": {
+        "name": "Hidden.png",
+        "count": 1,
+        "width": 50,
+        "height": 50
+      },
+      "emptyFow" : {
+        "name": "Tile1.png",
+        "count": 1,
+        "width": 50,
+        "height": 50
+      },
+      "wallFow" : {
+        "name": "WallFow.png",
+        "count": 1,
+        "width": 50,
+        "height": 70
+      },
+      "holeFow": {
+        "name" : "Wood.png",
+        "count": 1,
+        "width": 50,
+        "height": 50
+      }
+    },
+    "Tiles": {
+      "EMPTY":{
+        "SHOWN": "empty",
+        "FOW": "emptyFow",
+        "HIDDEN": "hidden"
+      },
+      "WALL":{
+        "SHOWN": "wall",
+        "FOW": "wallFow",
+        "HIDDEN": "hidden"
+      },
+      "HOLE": {
+        "SHOWN": "hole",
+        "FOW": "holeFow",
+        "HIDDEN": "hidden"
+      }
+    },
+    "Enemies": []
+  },
+  "defaultEnemy" : {
+    "AI" : "Slime",
+    "Stats": {
+      "HP": 1,
+      "DMG": 1,
+      "WIDTH": 50,
+      "HEIGHT": 50
+    },
+    "ImagePath": "images/Enemies/",
+    "States": {
+      "IDLE": "idle"
+    }
+  }
+}

@@ -2,8 +2,8 @@ package game2.games;
 
 import game2.actions.Attack;
 import game2.actions.Move;
+import game2.data.DataLoader;
 import game2.entities.EntitiesListener;
-import game2.entities.EntityTemplate;
 import game2.enums.TextureState;
 import game2.essentials.AStar;
 import game2.essentials.Entities;
@@ -13,18 +13,13 @@ import game2.levels.Level;
 import game2.essentials.TileMap;
 import game2.essentials.GameVisuals;
 import game2.tiles.Tile;
-import game2.visuals.Images;
-import helper.json.FancyJSonParser;
-import helper.json.JsonObject;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseWheelEvent;
 import java.io.IOException;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 public class Walk extends Game implements EntitiesListener {
 
@@ -33,10 +28,7 @@ public class Walk extends Game implements EntitiesListener {
     private final Entities entities;
     private Level currentLevel;
     private final GameVisuals visuals;
-    private final Images images;
-
-    private final Map<String, EntityTemplate> enemyTemplates;
-    private List<Level> levels;
+    private final DataLoader dataLoader;
 
     private final int tileSize;
     private TileMap tileMap;
@@ -49,8 +41,7 @@ public class Walk extends Game implements EntitiesListener {
         super();
         this.entities = new Entities(this);
         this.visuals = new GameVisuals(width, height);
-        this.images = new Images();
-        this.enemyTemplates = new HashMap<>();
+        this.dataLoader = new DataLoader();
         this.tileSize = TILE_SIZE;
     }
 
@@ -62,43 +53,26 @@ public class Walk extends Game implements EntitiesListener {
     @Override
     public void init() {
         try {
-            loadLevels();
-            loadTemplates();
-
+            dataLoader.readFirstData();
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
         entities.clear();
-        currentLevel = levels.get(0);
-        tileMap = currentLevel.createTiles(tileSize, images);
+        Player player = (Player) dataLoader.getEntityTemplate("Player").create(-1, -1, tileSize);
+        entities.setPlayer(player);
+        currentLevel = dataLoader.getLevel();
+        tileMap = currentLevel.createTiles(tileSize);
         visuals.setTileMap(tileMap);
         tileMap.placePlayer(entities.getPlayer());
         generateEnemy();
     }
 
-    private void loadLevels() throws IOException{
-        FancyJSonParser parser = new FancyJSonParser();
-        JsonObject levels = parser.readResource("data/levels.json");
-        this.levels = Level.fromJson(levels, images);
-    }
-
-    public void loadTemplates() throws IOException {
-        FancyJSonParser parser = new FancyJSonParser();
-        JsonObject enemies = parser.readResource("data/enemies.json");
-        for (String name : enemies){
-            EntityTemplate template = EntityTemplate.fromJsonObject(enemies.getObject(name), images);
-            enemyTemplates.put(name, template);
-        }
-        EntityTemplate p = EntityTemplate.fromJsonObject(parser.readResource("data/player.json").getObject("Player"), images);
-        if (p == null) throw new IOException("Could not load player.");
-        Player player = (Player) p.create(-1, -1, images, tileSize);
-        entities.setPlayer(player);
-    }
-
     public void generateEnemy() {
         String enemyName = currentLevel.getEnemy();
-        Entity e = enemyTemplates.get(enemyName).create(45, 44, images, tileMap.getTileSize());
+        if (enemyName == null) return;
+        Point pos = tileMap.getPlayerPos();
+        Entity e = dataLoader.getEntityTemplate("Slime").create(pos.x + 2, pos.y, tileMap.getTileSize());
         entities.addEntity(e);
         tileMap.place(e);
     }

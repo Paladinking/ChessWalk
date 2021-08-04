@@ -50,6 +50,7 @@ public class Entities {
                 playerTurn = false;
                 toPass = entities.size();
                 for (Entity e: entities) e.initTurn(tileMap);
+                tileMap.updateLighting();
             } else {
                 playerTurn = true;
                 toPass = 1;

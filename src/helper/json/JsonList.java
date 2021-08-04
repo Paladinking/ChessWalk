@@ -39,6 +39,16 @@ public class JsonList implements JsonParsable, Iterable<Object> {
     }
 
     @Override
+    public JsonParsable copy() {
+        JsonList copy = new JsonList();
+        for (Object object : this){
+            if (object instanceof JsonParsable) copy.add(((JsonParsable) object).copy());
+            else copy.add(object);
+        }
+        return copy;
+    }
+
+    @Override
     public String toString(){
         return this.toJsonString();
     }
@@ -50,5 +60,33 @@ public class JsonList implements JsonParsable, Iterable<Object> {
 
     public List<Object> toList(){
         return content;
+    }
+
+    public int size() {
+        return content.size();
+    }
+
+    public JsonObject getObject(int i){
+        return (JsonObject) content.get(i);
+    }
+
+    public Object get(int i){
+        return content.get(i);
+    }
+
+    public int getInt(int i){
+        return (int) content.get(i);
+    }
+
+    public double getDouble(int i){
+        return (double) content.get(i);
+    }
+
+    public JsonList getList(int i){
+        return (JsonList) content.get(i);
+    }
+
+    public String getString(int i) {
+        return (String) content.get(i);
     }
 }
