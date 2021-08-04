@@ -4,6 +4,7 @@ import game2.entities.Entity;
 import game2.entities.Player;
 import game2.enums.TextureState;
 import game2.tiles.Tile;
+import game2.tiles.WallTile;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -15,6 +16,8 @@ public class TileMap {
 
     private final List<Tile> visibleTiles;
 
+    private final ShadowCaster shadowCaster;
+
     private final int width, height, tileSize;
 
     private Point playerPos;
@@ -25,6 +28,7 @@ public class TileMap {
         this.height = height;
         this.tileSize = tileSize;
         this.visibleTiles = new ArrayList<>();
+        this.shadowCaster = new ShadowCaster(this);
     }
 
     public void setTile(int x, int y, Tile tile){
@@ -62,7 +66,7 @@ public class TileMap {
         oldPlayerPos.setLocation(playerPos.x, playerPos.y);
         this.playerPos = oldPlayerPos;
         place(player);
-        updateLighting();
+        updateLighting(player);
     }
 
     public void moveEntity(Point oldPos, Point newPos) {
@@ -72,17 +76,18 @@ public class TileMap {
         getTile(newPos.x, newPos.y).setEntity(e);
     }
 
-    public void updateLighting(){
-        // TODO : ArrayOutOfBoundsException
+    public void updateLighting(Player player){
         for (Tile tile : visibleTiles) tile.hide();
         visibleTiles.clear();
-        for (int x = playerPos.x - 5; x <= playerPos.x + 5; x++){
-            for (int y = playerPos.y -5 ; y<= playerPos.y + 5; y++){
-                Tile tile = getTile(x, y);
-                tile.show();
-                visibleTiles.add(tile);
-            }
+        Point playerPos = getPlayerPos();
+        shadowCaster.castShadow( playerPos.x, playerPos.y, player.getVisionDistance());
+        for (Tile tile : visibleTiles){
+            tile.show();
         }
+    }
+
+    public void showVisibleTiles(int visionLength) {
+
     }
 
     public Tile getTile(Point pos) {
@@ -116,5 +121,13 @@ public class TileMap {
 
     public void setStart(int x, int y) {
         this.playerPos = new Point(x, y);
+    }
+
+    public boolean isWall(int x, int y) {
+        return getTile(x, y) instanceof WallTile;
+    }
+
+    public void show(int x, int y) {
+        visibleTiles.add(getTile(x, y));
     }
 }

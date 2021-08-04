@@ -7,18 +7,18 @@ import java.awt.image.BufferedImage;
 import java.util.EnumMap;
 import java.util.Map;
 
-public class MultiTexture extends AbstractTexture {
+public class  MultiTexture <T extends AbstractTexture> extends AbstractTexture {
 
     private final Rectangle bounds;
 
-    private AbstractTexture currentTexture;
+    private T currentTexture;
 
-    protected final Map<TextureState, AbstractTexture> textures;
+    protected final Map<TextureState, T> textures;
 
-    public MultiTexture(){
+    public MultiTexture(T placeHolder){
         this.textures = new EnumMap<>(TextureState.class);
         this.bounds = new Rectangle(0, 0, 0, 0);
-        this.currentTexture = new ImageTexture(null, 0,0,0,0,0);
+        this.currentTexture = placeHolder;
     }
 
     public void move(int dx, int dy) {
@@ -31,7 +31,7 @@ public class MultiTexture extends AbstractTexture {
         return bounds;
     }
 
-    public void addState(TextureState textureState, AbstractTexture texture){
+    public void addState(TextureState textureState, T texture){
         textures.put(textureState, texture);
     }
 

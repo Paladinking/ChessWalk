@@ -115,4 +115,8 @@ public class JsonObject implements JsonParsable, Iterable<String>
     public Object remove(String key) {
         return content.remove(key);
     }
+
+    public void clear() {
+        content.clear();
+    }
 }

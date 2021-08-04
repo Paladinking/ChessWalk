@@ -18,7 +18,8 @@ public class AnimationTexture extends ImageTexture {
     @Override
     public void tick() {
         ticks++;
-        if (ticks >= swapDelay){
+        if (ticks == swapDelay){
+            ticks = 0;
             index++;
             if (index == animation.length) index = 0;
             image = animation[index];

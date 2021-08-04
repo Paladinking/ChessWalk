@@ -1,6 +1,7 @@
-package game2.essentials;
+package game2.visuals;
 
 import game2.entities.Entity;
+import game2.essentials.TileMap;
 import game2.tiles.Tile;
 import game2.visuals.Layer;
 import game2.visuals.SortedLayer;

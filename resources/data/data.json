@@ -1,5 +1,8 @@
 {
   "StartLevel" : "level1",
+  "VisionDistance": 8,
+  "TileSize" : 50,
+  "PlayerName": "Player",
   "DataFiles": [
     "defaults.json",
     "enemies.json",

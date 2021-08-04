@@ -8,7 +8,7 @@ import java.awt.*;
 
 public class Attack extends EntityAction {
 
-    private final int dmg, time;
+    private final int dmg, duration;
 
     private final Point targetTile;
 
@@ -16,12 +16,12 @@ public class Attack extends EntityAction {
 
     private int ticks;
 
-    public Attack(Entity entity, Point targetTile, TextureState attackState, int dmg, int time) {
+    public Attack(Entity entity, Point targetTile, TextureState attackState, int dmg, int duration) {
         super(entity);
         this.dmg = dmg;
         this.targetTile = targetTile;
         this.attackState = attackState;
-        this.time = time;
+        this.duration = duration;
         this.ticks = 0;
     }
 
@@ -35,7 +35,7 @@ public class Attack extends EntityAction {
     @Override
     public ActionStatus preform() {
         ticks++;
-        if (ticks == time) return ActionStatus.FINISHED;
+        if (ticks == duration) return ActionStatus.FINISHED;
         return ActionStatus.WAITING;
     }
 

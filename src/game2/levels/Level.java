@@ -59,7 +59,7 @@ public class Level {
                     }
                 }
                 Map<TextureState, ImageData> imageData = this.imageData.get(tileType);
-                MultiTexture texture = new MultiTexture();
+                MultiTexture<ImageTexture> texture = new MultiTexture<>(new ImageTexture(null,0,0,0,0,0));
                 for (TextureState key : imageData.keySet()){
                     ImageData data = imageData.get(key);
                     int tx = x * tileSize - (data.width - tileSize) / 2, ty = y * tileSize - (data.height - tileSize);

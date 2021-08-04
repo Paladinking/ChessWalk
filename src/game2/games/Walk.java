@@ -11,7 +11,7 @@ import game2.entities.Entity;
 import game2.entities.Player;
 import game2.levels.Level;
 import game2.essentials.TileMap;
-import game2.essentials.GameVisuals;
+import game2.visuals.GameVisuals;
 import game2.tiles.Tile;
 
 import java.awt.*;
@@ -30,7 +30,7 @@ public class Walk extends Game implements EntitiesListener {
     private final GameVisuals visuals;
     private final DataLoader dataLoader;
 
-    private final int tileSize;
+    private int tileSize;
     private TileMap tileMap;
 
     private Point mousePress = null;
@@ -42,7 +42,6 @@ public class Walk extends Game implements EntitiesListener {
         this.entities = new Entities(this);
         this.visuals = new GameVisuals(width, height);
         this.dataLoader = new DataLoader();
-        this.tileSize = TILE_SIZE;
     }
 
     @Override
@@ -53,14 +52,14 @@ public class Walk extends Game implements EntitiesListener {
     @Override
     public void init() {
         try {
-            dataLoader.readFirstData();
+            dataLoader.readAllData();
         } catch (IOException e) {
             e.printStackTrace();
             System.exit(-1);
         }
+        int tileSize = dataLoader.getTileSize();
         entities.clear();
-        Player player = (Player) dataLoader.getEntityTemplate("Player").create(-1, -1, tileSize);
-        entities.setPlayer(player);
+        entities.setPlayer(dataLoader.getPlayer());
         currentLevel = dataLoader.getLevel();
         tileMap = currentLevel.createTiles(tileSize);
         visuals.setTileMap(tileMap);
@@ -106,13 +105,13 @@ public class Walk extends Game implements EntitiesListener {
                 Move move = new Move(player, 2, tileMap.getTileSize(), new Point(location.x - playerPos.x, location.y - playerPos.y));
                 player.queAction(move, tileMap);
                 return;
-            } else if (tile.getEntity() != null){
+            } else if (tile.getEntity() != null) {
                 Attack attack = new Attack(player, location, TextureState.ATTACK,4,20);
                 player.queAction(attack, tileMap);
             }
         }
         if (!open) return;
-        List<Point> path = new AStar(true).getPath(tileMap, player.getPos(), location);
+        List<Point> path = AStar.getPath(tileMap, player.getPos(), location);
         if (path != null) {
             for (int i = path.size() - 1; i >= 0; i--) {
                 Move move = new Move(player, 2, tileMap.getTileSize(), path.get(i));

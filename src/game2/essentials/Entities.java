@@ -49,8 +49,8 @@ public class Entities {
             if (playerTurn){
                 playerTurn = false;
                 toPass = entities.size();
+                tileMap.updateLighting(player);
                 for (Entity e: entities) e.initTurn(tileMap);
-                tileMap.updateLighting();
             } else {
                 playerTurn = true;
                 toPass = 1;

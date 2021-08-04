@@ -11,7 +11,7 @@ public abstract class Enemy extends Entity {
     protected int dmg, hp, speed;
 
     protected Enemy(int x, int y, int hp, int dmg, int speed) {
-        super(x, y);
+        super(x, y, dmg, hp);
         this.hp = hp;
         this.dmg = dmg;
         this.speed = speed;

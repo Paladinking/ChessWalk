@@ -1,7 +1,5 @@
 package game2.visuals;
 
-import game2.Dungeon;
-
 import java.awt.image.BufferedImage;
 import java.util.Random;
 

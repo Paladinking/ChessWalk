@@ -21,7 +21,7 @@
           "count": 5,
           "width": 50,
           "height": 70,
-          "swap": 4
+          "swap": 10
         },
         "move": {
           "name": "AttackAnimationUp.png",

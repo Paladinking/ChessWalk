@@ -1,5 +1,6 @@
 package game2.data;
 
+import game2.entities.Player;
 import game2.enums.TextureState;
 import game2.enums.TileType;
 import game2.essentials.Range;
@@ -22,7 +23,9 @@ public class DataLoader {
 
     private final FancyJSonParser parser;
 
-    private String firstLevel;
+    private int tileSize, visionDistance;
+
+    private String firstLevel, playerName;
 
     private final Map<String, Level> levels;
     private final Map<String, EntityTemplate> entityTemplates;
@@ -36,10 +39,16 @@ public class DataLoader {
         this.images = new HashMap<>();
     }
 
-    public void readFirstData() throws IOException {
+    public void readAllData() throws IOException {
         JsonObject data = parser.readResource(DATA_PATH + "data.json");
         firstLevel = data.getString("StartLevel");
+        tileSize = data.getInt("TileSize");
+        visionDistance = data.getInt("VisionDistance");
+        playerName = data.getString("PlayerName");
         readDataFiles(data.getList("DataFiles"));
+        images.clear();
+        data.clear();
+        System.gc();
     }
 
     public Level getLevel() {
@@ -188,4 +197,13 @@ public class DataLoader {
         return new ImageData(width, height, images);
     }
 
+    public int getTileSize() {
+        return tileSize;
+    }
+
+    public Player getPlayer() {
+        Player player = (Player) entityTemplates.get(playerName).create(-1, -1, tileSize);
+        player.setVisionDistance(visionDistance);
+        return player;
+    }
 }

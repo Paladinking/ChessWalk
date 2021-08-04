@@ -8,19 +8,17 @@ public class AStar {
 
     private final static int MAX_WIDTH = 200;
 
-    private class Node {
-        private final Node parent;
+    public static class Node {
+        protected final Node parent;
 
         protected final int x, y;
 
-        private double fScore, gScore;
+        protected double fScore, gScore;
 
         private Node(Node parent, int x, int y) {
             this.parent = parent;
             this.x = x;
             this.y = y;
-            this.fScore = 0;
-            this.gScore = Integer.MAX_VALUE;
         }
 
         @Override
@@ -30,31 +28,25 @@ public class AStar {
             return this.x == node.x && this.y == node.y;
         }
 
-        private double hScore(Node goal) {
+
+        public double hScore(Node goal) {
             int dx = this.x - goal.x, dy = this.y - goal.y;
             return Math.sqrt(dx * dx + dy * dy);
         }
 
-        protected Node[] getNeighbors() {
-            if (corners) {
-                return new Node[]{
-                        new Node(this, x + 1, y),
-                        new Node(this, x - 1, y),
-                        new Node(this, x, y + 1),
-                        new Node(this, x, y - 1),
-                        new Node(this, x + 1, y + 1),
-                        new Node(this, x + 1, y - 1),
-                        new Node(this, x - 1, y + 1),
-                        new Node(this, x - 1, y - 1)
-                };
-            } else {
-                return new Node[]{
-                        new Node(this, x + 1, y),
-                        new Node(this, x - 1, y),
-                        new Node(this, x, y + 1),
-                        new Node(this, x, y - 1)
-                };
-            }
+        public double gScore() {
+            return parent.gScore + 1;
+        }
+
+        public List<Node> getNeighbors() {
+            return Arrays.asList(new Node(this, x + 1, y),
+                    new Node(this, x - 1, y),
+                    new Node(this, x, y + 1),
+                    new Node(this, x, y - 1),
+                    new Node(this, x + 1, y + 1),
+                    new Node(this, x + 1, y - 1),
+                    new Node(this, x - 1, y + 1),
+                    new Node(this, x - 1, y - 1));
         }
 
         protected List<Point> makePath() {
@@ -73,13 +65,12 @@ public class AStar {
         }
     }
 
-    private final boolean corners;
 
-    public AStar(boolean corners) {
-        this.corners = corners;
+    private AStar() {
+
     }
 
-    public List<Point> getPath(TileMap tileMap, Point startPos, Point goalPos) {
+    public static List<Point> getPath(TileMap tileMap, Point startPos, Point goalPos) {
         Node start = new Node(null, startPos.x, startPos.y), goal = new Node(null, goalPos.x, goalPos.y);
         start.fScore = start.hScore(goal);
         start.gScore = 0;
@@ -96,7 +87,7 @@ public class AStar {
                 if ((!tileMap.getTile(neighbor.x, neighbor.y).isOpen() && !(neighbor.equals(goal))) || closedSet.contains(neighbor)) {
                     continue;
                 }
-                neighbor.gScore = node.gScore + 1;
+                neighbor.gScore = neighbor.gScore();
                 neighbor.fScore = neighbor.gScore + neighbor.hScore(goal);
                 if (!openSet.contains(neighbor)) openSet.add(neighbor);
             }

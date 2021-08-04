@@ -3,23 +3,28 @@ package game2.entities;
 import game2.actions.ActionStatus;
 import game2.actions.EntityAction;
 import game2.essentials.TileMap;
+import game2.visuals.texture.AnimationTexture;
 import game2.visuals.texture.MultiTexture;
 
 import java.awt.Point;
 
 public abstract class Entity {
 
+    protected int dmg, hp;
+
     protected EntityListener listener;
 
     protected EntityAction action;
 
-    private MultiTexture texture;
+    private MultiTexture<AnimationTexture> texture;
 
     private boolean hidden = true;
 
     protected final Point gridPos;
 
-    protected Entity(int x, int y) {
+    protected Entity(int x, int y, int dmg, int hp) {
+        this.dmg = dmg;
+        this.hp = hp;
         this.gridPos = new Point(x, y);
     }
 
@@ -71,7 +76,7 @@ public abstract class Entity {
      * Sets the texture of this <code>Entity</code>.
      * @param texture The new texture.
      */
-    public void setTexture(MultiTexture texture){
+    public void setTexture(MultiTexture<AnimationTexture> texture){
         this.texture = texture;
     }
 
@@ -79,7 +84,7 @@ public abstract class Entity {
      * Returns this <code>Entity</code>:s current texture
      * @return The <code>Texture</code> object of this <code>Entity</code>.
      */
-    public MultiTexture getTexture(){
+    public MultiTexture<AnimationTexture> getTexture(){
         return texture;
     }
 
@@ -90,11 +95,12 @@ public abstract class Entity {
     }
 
     /**
-     * This entity is attacked with <code>dmg</code> damgage.
+     * This entity is attacked with <code>dmg</code> damage.
      * @param dmg The amount of damage to deal.
      */
     public void attack(int dmg) {
-
+        this.hp -= dmg;
+        if (hp<= 0) listener.died();
     }
 
     public void hide(){

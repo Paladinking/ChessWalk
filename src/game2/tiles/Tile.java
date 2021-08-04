@@ -2,6 +2,7 @@ package game2.tiles;
 
 import game2.entities.Entity;
 import game2.enums.TextureState;
+import game2.visuals.texture.ImageTexture;
 import game2.visuals.texture.MultiTexture;
 
 public abstract class Tile {
@@ -10,15 +11,15 @@ public abstract class Tile {
 
     }
 
-    private MultiTexture texture;
+    private MultiTexture<ImageTexture> texture;
 
     public abstract Entity getEntity();
 
-    public MultiTexture getTexture() {
+    public MultiTexture<ImageTexture> getTexture() {
         return texture;
     }
 
-    public void setTexture(MultiTexture texture){
+    public void setTexture(MultiTexture<ImageTexture> texture){
         this.texture = texture;
     }
 
