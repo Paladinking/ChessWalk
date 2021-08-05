@@ -1,11 +1,13 @@
 package game2.data;
 
+import game2.entities.Entity;
 import game2.enums.TextureState;
 import game2.enums.TileType;
+import game2.essentials.Entities;
 import game2.essentials.Range;
 import game2.essentials.TileMap;
 import game2.levels.Level;
-import game2.levels.generator.MapGenerator;
+import game2.data.generator.MapGenerator;
 import game2.tiles.EmptyTile;
 import game2.tiles.Tile;
 import game2.tiles.WallTile;
@@ -14,6 +16,8 @@ import game2.visuals.texture.ImageTexture;
 import game2.visuals.texture.MultiTexture;
 
 import java.util.Map;
+
+import static game2.Dungeon.THE_RANDOM;
 
 public class LevelTemplate {
     private final int width, height, rooms, enemyCount;
@@ -34,9 +38,9 @@ public class LevelTemplate {
         this.images = images;
     }
 
-    public Level generate(int tileSize) {
+    public Level generate(int tileSize, Map<String, EntityTemplate> enemies, Entities entities) {
         TileMap tileMap = new TileMap(width, height);
-        MapGenerator generator = new MapGenerator(rooms, width, height, roomSize);
+        MapGenerator generator = new MapGenerator(rooms, width, height, roomSize, this.enemies.length > 0 ? enemyCount : 0);
         int[][] map = generator.generate();
         for (int x = 0; x < width; x++) {
             for (int y = 0; y < height; y++) {
@@ -56,6 +60,10 @@ public class LevelTemplate {
                     tileType = TileType.EMPTY;
                     if (tileInt == MapGenerator.PLAYER_START) {
                         tileMap.setStart(x, y);
+                    } else if (tileInt == MapGenerator.ENEMY){
+                        Entity e = enemies.get(this.enemies[THE_RANDOM.nextInt(this.enemies.length)]).generate(x, y, tileSize);
+                        tile.setEntity(e);
+                        entities.addEntity(e);
                     }
                 }
                 Map<TextureState, ImageData> imageData = this.images.get(tileType);
@@ -70,6 +78,6 @@ public class LevelTemplate {
                 tileMap.setTile(x, y, tile);
             }
         }
-        return new Level(tileMap, enemies);
+        return new Level(tileMap, this.enemies);
     }
 }

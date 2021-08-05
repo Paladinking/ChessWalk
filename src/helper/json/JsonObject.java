@@ -119,4 +119,8 @@ public class JsonObject implements JsonParsable, Iterable<String>
     public void clear() {
         content.clear();
     }
+
+    public boolean getBoolean(String key) {
+        return (boolean) get(key);
+    }
 }

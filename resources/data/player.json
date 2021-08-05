@@ -3,7 +3,7 @@
     "Player": {
       "AI": "Player",
       "Stats": {
-        "HP": 24,
+        "HP": 30,
         "DMG": 10,
         "WIDTH": 50,
         "HEIGHT": 70

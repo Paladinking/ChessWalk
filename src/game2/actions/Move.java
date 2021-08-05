@@ -13,27 +13,27 @@ public class Move extends EntityAction {
     protected int speed, tileSize;
 
     protected final Point moved;
-    protected Point target;
+    protected Point target, dest;
 
-    public Move(Entity entity, int speed, Point direction) {
+    public Move(Entity entity, int speed, Point destination) {
         super(entity);
         this.speed = speed;
         this.moved = new Point(0, 0);
-        this.target = direction;
+        this.dest = destination;
     }
 
     @Override
     public ActionStatus init(Level level) {
-        Point dest = new Point(entity.getPos().x + target.x, entity.getPos().y + target.y);
         if (level.getTile(dest.x, dest.y).isOpen()) {
-            init(dest);
+            init();
             return ActionStatus.WORKING;
         } else {
-            return ActionStatus.FINISHED;
+            return ActionStatus.INTERRUPTED;
         }
     }
 
-    protected void init(Point dest){
+    protected void init(){
+        target = new Point(dest.x - entity.getPos().x, dest.y - entity.getPos().y);
         MultiTexture<AnimationTexture> texture = entity.getTexture();
         texture.setState(TextureState.MOVE);
         tileSize = texture.getTileSize();
@@ -46,11 +46,11 @@ public class Move extends EntityAction {
         int dx = speed * target.x, dy = speed * target.y;
         moved.x += dx;
         moved.y += dy;
-        entity.getTexture().move(speed * target.x, speed * target.y);
+        entity.moveTexture(speed * target.x, speed * target.y);
         if (moved.x == tileSize * target.x && moved.y == tileSize * target.y){
             target = null;
             moved.setLocation(0, 0);
-            return ActionStatus.PASS_TURN;
+            return ActionStatus.FINISHED;
         }
         return ActionStatus.WORKING;
     }

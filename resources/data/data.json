@@ -3,6 +3,7 @@
   "VisionDistance": 8,
   "TileSize" : 50,
   "PlayerName": "Player",
+  "TurnDuration": 25,
   "DataFiles": [
     "defaults.json",
     "enemies.json",

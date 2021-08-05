@@ -95,6 +95,12 @@ public class FancyJSonParser {
                             case '9':
                                 object = readNumber(reader, in);
                                 break innerLoop;
+                            case 't':
+                                object = readBoolean(reader, true);
+                                break innerLoop;
+                            case 'f':
+                                object = readBoolean(reader, false);
+                                break innerLoop;
                             case ' ':
                             case '\n':
                             case '\r':
@@ -150,6 +156,13 @@ public class FancyJSonParser {
                 case '8':
                 case '9':
                     list.add(readNumber(reader, in));
+                    break;
+                case 't':
+                    list.add(readBoolean(reader, true));
+                    break;
+                case 'f':
+                    list.add(readBoolean(reader, false));
+                    break;
                 case ' ':
                 case '\n':
                 case '\r':
@@ -162,6 +175,26 @@ public class FancyJSonParser {
         }
         return list;
     }
+
+    private Boolean readBoolean(Reader reader, boolean value) throws IOException {
+        char[] chars = value ? new char[]{'r', 'u', 'e'} : new char[]{'a', 'l', 's', 'e'};
+        for (char c : chars) {
+            char in = (char) reader.read();
+            if (in != c) throw new IOException("Bad boolean");
+        }
+        char in = (char) reader.read();
+        switch (in) {
+            case ' ':
+            case '\n':
+            case '\t':
+            case '\r':
+            case ',':
+                return value;
+            default:
+                throw new IOException("Bad boolean");
+        }
+    }
+
 
     private Number readNumber(Reader reader, char in) throws IOException {
         StringBuilder builder = new StringBuilder().append(in);
@@ -191,6 +224,7 @@ public class FancyJSonParser {
                 case '9':
                     builder.append(in);
                     break;
+                default:
                 case (char) -1:
                     throw new IOException();
             }

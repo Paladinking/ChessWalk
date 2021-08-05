@@ -17,6 +17,6 @@ public class Slime extends Enemy {
 
     @Override
     protected EntityAction getMove(Level level) {
-        return new RandomMove(this, speed);
+        return new RandomMove(this, MOVEMENT_SPEED);
     }
 }

@@ -1,7 +1,5 @@
 package game2.visuals.texture;
 
-import game2.enums.TextureState;
-
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
@@ -15,9 +13,9 @@ public abstract class AbstractTexture implements Texture {
         this.tileSize = tileSize;
     }
 
-    public void setVisible(boolean visible){
+    /*public void setVisible(boolean visible){
         this.visible = visible;
-    }
+    }*/
 
     protected abstract BufferedImage getImage();
 
@@ -27,15 +25,15 @@ public abstract class AbstractTexture implements Texture {
         g.drawImage(getImage(), b.x, b.y, b.width, b.height, null);
     }
 
-    public abstract int getZ();
-
-    public abstract void tick();
-
     public void moveTiles(int dx, int dy){
         move(dx * tileSize, dy * tileSize);
     }
 
     public int getTileSize(){
         return tileSize;
+    }
+
+    public void setVisible(boolean visible){
+        this.visible = visible;
     }
 }

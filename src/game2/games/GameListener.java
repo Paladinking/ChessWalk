@@ -8,5 +8,7 @@ public interface GameListener {
      */
     void tickHappened();
 
+    void resize(int w, int h);
+
 
 }

@@ -32,32 +32,32 @@
         "width": 50,
         "height": 50
       },
-      "emptyFow" : {
+      "emptyFow": {
         "name": "Tile4.png",
         "count": 1,
         "width": 50,
         "height": 50
       },
-      "wallFow" : {
+      "wallFow": {
         "name": "Wall2.png",
         "count": 1,
         "width": 50,
         "height": 70
       },
       "holeFow": {
-        "name" : "Wood.png",
+        "name": "Wood.png",
         "count": 1,
         "width": 50,
         "height": 50
       }
     },
     "Tiles": {
-      "EMPTY":{
+      "EMPTY": {
         "SHOWN": "empty",
         "FOW": "emptyFow",
         "HIDDEN": "hidden"
       },
-      "WALL":{
+      "WALL": {
         "SHOWN": "wall",
         "FOW": "wallFow",
         "HIDDEN": "hidden"
@@ -70,8 +70,8 @@
     },
     "Enemies": []
   },
-  "defaultEnemy" : {
-    "AI" : "Slime",
+  "defaultEnemy": {
+    "AI": "Slime",
     "Stats": {
       "HP": 1,
       "DMG": 1,
@@ -86,14 +86,23 @@
       "Blood": "blood"
     }
   },
-  "entityImages" : {
-    "ImagePath" : "images/",
+  "entityImages": {
+    "ImagePath": "images/",
     "Images": {
       "blood": {
         "name": "blood.png",
         "count": 1,
         "width": 50,
         "height": 50
+      }
+    },
+    "SoundPath": "sound/",
+    "Sounds": {
+      "Walk": {
+        "name": "step2.wav"
+      },
+      "Hurt": {
+        "name": "hurt1.wav"
       }
     }
   }

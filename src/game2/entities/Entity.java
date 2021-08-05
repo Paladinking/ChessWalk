@@ -3,15 +3,17 @@ package game2.entities;
 import game2.actions.ActionStatus;
 import game2.actions.EntityAction;
 import game2.levels.Level;
+import game2.sound.Sound;
 import game2.visuals.ImageData;
-import game2.visuals.texture.AnimationTexture;
-import game2.visuals.texture.MultiTexture;
+import game2.visuals.texture.*;
 
 import java.awt.Point;
 
 public abstract class Entity {
 
-    protected int dmg, hp;
+    public static int MOVEMENT_SPEED, ATTACK_DURATION;
+
+    protected int dmg, hp, maxHp;
 
     private ImageData blood;
 
@@ -19,16 +21,24 @@ public abstract class Entity {
 
     protected EntityAction action;
 
-    private MultiTexture<AnimationTexture> texture;
+    private EntityTexture texture;
 
-    private boolean hidden = true;
+    protected boolean hidden = true;
+
+    private Sound walk, hurt;
 
     protected final Point gridPos;
 
     protected Entity(int x, int y, int dmg, int hp) {
         this.dmg = dmg;
         this.hp = hp;
+        this.maxHp = hp;
         this.gridPos = new Point(x, y);
+    }
+
+    public void setSounds(Sound walk, Sound hurt){
+        this.walk = walk;
+        this.hurt = hurt;
     }
 
     public void setBlood(ImageData blood){
@@ -62,7 +72,11 @@ public abstract class Entity {
     public void initTurn(Level level){
         if (this.action == null){
             pickAction(level);
-            if (action.init(level).ordinal() >= ActionStatus.PASS_TURN.ordinal()){
+            ActionStatus status = action.init(level);
+            if (status == ActionStatus.INTERRUPTED){
+                interrupted();
+                return;
+            } else if (status.ordinal() >= ActionStatus.PASS_TURN.ordinal()){
                 finishAction(level);
                 return;
             }
@@ -78,6 +92,8 @@ public abstract class Entity {
         passTurn();
     }
 
+    protected abstract void interrupted();
+
     public void tick(Level tileMap){
         // TODO: tick should only be called before this turns action is completed
         texture.tick();
@@ -92,7 +108,7 @@ public abstract class Entity {
      * Sets the texture of this <code>Entity</code>.
      * @param texture The new texture.
      */
-    public void setTexture(MultiTexture<AnimationTexture> texture){
+    public void setTexture(EntityTexture texture){
         this.texture = texture;
     }
 
@@ -108,6 +124,7 @@ public abstract class Entity {
         Point oldPos = new Point(gridPos.x, gridPos.y);
         gridPos.setLocation(dest.x, dest.y);
         listener.moved(oldPos);
+        if(!hidden) walk.play();
     }
 
     /**
@@ -115,12 +132,14 @@ public abstract class Entity {
      * @param dmg The amount of damage to deal.
      */
     public void attack(int dmg) {
-        listener.createTexture(blood);
         this.hp -= dmg;
+        int tileSize = texture.getTileSize();
+        listener.createTexture(new ImageTexture(blood.getImage(), 2, gridPos.x * tileSize, gridPos.y * tileSize, blood.width, blood.height, tileSize), 20);
         if (hp <= 0) {
             if (action != null) passTurn();
             listener.died();
         }
+        if (!hidden) hurt.play();
     }
 
     public void hide(){
@@ -131,5 +150,23 @@ public abstract class Entity {
     public void show(){
         this.hidden = false;
         texture.setVisible(true);
+    }
+
+    @Override
+    public String toString() {
+        return this.getClass().getSimpleName() + "{" +
+               "dmg=" + dmg +
+               ", hp=" + hp +
+               ", hidden=" + hidden +
+               ", gridPos=" + gridPos +
+               '}';
+    }
+
+    public float getHpFraction(){
+        return hp / (float) maxHp;
+    }
+
+    public void moveTexture(int dx, int dy){
+        this.texture.move(dx, dy);
     }
 }

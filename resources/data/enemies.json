@@ -6,7 +6,7 @@
       ],
       "AI": "Slime",
       "Stats": {
-        "HP": 10,
+        "HP": 14,
         "DMG": 2
       },
       "Images": {
@@ -22,6 +22,14 @@
           "width": 50,
           "height": 50
         }
+      },
+      "Sounds": {
+        "Walk": {
+          "name": "Slime.wav"
+        },
+        "Hurt": {
+          "name": "slimeDmg.wav"
+        }
       }
     },
     "Knight": {
@@ -30,7 +38,7 @@
       ],
       "AI": "Knight",
       "Stats": {
-        "HP": 14,
+        "HP": 30,
         "DMG": 4,
         "HEIGHT": 70
       },
@@ -49,7 +57,7 @@
       ],
       "AI": "Skeleton",
       "Stats": {
-        "HP": 10,
+        "HP": 21,
         "DMG": 6,
         "HEIGHT": 70
       },

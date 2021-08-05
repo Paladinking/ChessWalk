@@ -1,6 +1,6 @@
 package game2.entities;
 
-import game2.visuals.ImageData;
+import game2.visuals.texture.Texture;
 
 import java.awt.Point;
 
@@ -12,5 +12,7 @@ public interface EntityListener {
 
     void died();
 
-    void createTexture(ImageData blood);
+    void createTexture(Texture texture, int lifeTime);
+
+    void removeTexture(Texture texture);
 }

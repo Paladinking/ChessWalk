@@ -1,13 +1,10 @@
-package game2.levels.generator;
+package game2.data.generator;
 
 import game2.enums.Direction;
 import game2.essentials.Range;
 
 import java.awt.*;
 import java.util.*;
-import java.util.List;
-
-import static game2.Dungeon.THE_RANDOM;
 
 public class Room  {
     protected final int x, y, width, height;
@@ -46,6 +43,10 @@ public class Room  {
         } else {
             return new Point(x + width, new Range(y + 1, y +height -1).getRandom(random));
         }
+    }
+
+    Point getRandomTile(Random random){
+        return new Point(new Range(x + 1, x + width -1).getRandom(random), new Range(y + 1, y + height - 1).getRandom(random));
     }
 
     public void addToMap(int[][] map) {

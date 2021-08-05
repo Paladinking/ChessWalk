@@ -1,4 +1,4 @@
-package game2.levels.generator;
+package game2.data.generator;
 
 import java.awt.*;
 import java.util.*;

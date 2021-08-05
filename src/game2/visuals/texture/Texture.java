@@ -9,4 +9,9 @@ public interface Texture {
     void move(int dx, int dy);
 
     Rectangle getBounds();
+
+    int getZ();
+
+    void tick();
+
 }

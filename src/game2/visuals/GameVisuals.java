@@ -4,7 +4,7 @@ import game2.entities.Entity;
 import game2.essentials.TileMap;
 import game2.levels.Level;
 import game2.tiles.Tile;
-import game2.visuals.texture.AbstractTexture;
+import game2.visuals.texture.Texture;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -44,7 +44,7 @@ public class GameVisuals {
         this.tempTextures = new ArrayList<>();
     }
 
-    public synchronized void init(Level level, int tileSize){
+    public synchronized void init(Level level, int tileSize) {
         this.tileMap = level.getTilesMap();
         this.zoomLevel = DEFAULT_ZOOM;
         Point playerPos = level.getPlayerPos();
@@ -52,12 +52,12 @@ public class GameVisuals {
         panCameraTo(playerPos.x * tileSize - width / 2, playerPos.y * tileSize - height / 2);
     }
 
-    private void addTexture(AbstractTexture texture) {
+    private void addTexture(Texture texture) {
         layers[texture.getZ()].addTexture(texture);
     }
 
-    public void tick(){
-        for (int i = 0; i< tempTextures.size(); i++){
+    public void tick() {
+        for (int i = 0; i < tempTextures.size(); i++) {
             LivingTexture texture = tempTextures.get(i);
             texture.lifeTime--;
             if (texture.lifeTime == 0) {
@@ -68,7 +68,7 @@ public class GameVisuals {
         }
     }
 
-    public synchronized void addTexture(AbstractTexture texture, int lifeTime){
+    public synchronized void addTexture(Texture texture, int lifeTime) {
         tempTextures.add(new LivingTexture(texture, lifeTime));
         invalidate();
     }
@@ -87,9 +87,10 @@ public class GameVisuals {
                 Entity e = tile.getEntity();
                 addTexture(tile.getTexture());
                 if (e != null) addTexture(e.getTexture());
+
             }
         }
-        for (LivingTexture t : tempTextures){
+        for (LivingTexture t : tempTextures) {
             addTexture(t.texture);
         }
         this.valid = true;
@@ -98,6 +99,7 @@ public class GameVisuals {
     public synchronized void draw(Graphics2D g) {
         g.translate(-cameraX, -cameraY);
         g.scale(zoomLevel, zoomLevel);
+        invalidate(); // TODO Invalidate should be called on texture move, not here
         if (!valid) {
             validate();
         }
@@ -114,7 +116,7 @@ public class GameVisuals {
         return (int) Math.min(tmDimension - 1, ((screenDimension / (double) tileSize)) / zoomLevel + firstTile + 2);
     }
 
-    public synchronized void panCameraTo(int x, int y){
+    public synchronized void panCameraTo(int x, int y) {
         this.cameraX = 0;
         this.cameraY = 0;
         panCamera(x, y);
@@ -158,11 +160,21 @@ public class GameVisuals {
         return new Point(x, y);
     }
 
-    private static class LivingTexture{
-        private final AbstractTexture texture;
+    public synchronized void removeTexture(Texture texture) {
+        for (LivingTexture t : tempTextures) {
+            if (t.texture == texture) {
+                tempTextures.remove(t);
+                break;
+            }
+        }
+    }
+
+    private static class LivingTexture {
+        private final Texture texture;
 
         private int lifeTime;
-        private LivingTexture(AbstractTexture texture, int lifeTime){
+
+        private LivingTexture(Texture texture, int lifeTime) {
             this.texture = texture;
             this.lifeTime = lifeTime;
         }

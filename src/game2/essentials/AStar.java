@@ -53,7 +53,7 @@ public class AStar {
             List<Point> path = new ArrayList<>();
             Node node = this;
             while (node.parent != null) {
-                path.add(new Point(node.x - node.parent.x, node.y - node.parent.y));
+                path.add(new Point(node.x, node.y));
                 node = node.parent;
             }
             return path;

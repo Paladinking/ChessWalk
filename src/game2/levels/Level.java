@@ -67,8 +67,8 @@ public class Level {
         return player.getPos();
     }
 
-    public List<Point> getOpenDirections(Point pos) {
-        return tileMap.getOpenDirections(pos);
+    public List<Point> getOpenTiles(Point pos) {
+        return tileMap.getOpenTiles(pos);
     }
 
     public String getEnemy() {

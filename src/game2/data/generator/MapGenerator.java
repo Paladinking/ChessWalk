@@ -1,4 +1,4 @@
-package game2.levels.generator;
+package game2.data.generator;
 
 import game2.essentials.Range;
 
@@ -13,21 +13,18 @@ import static game2.Dungeon.THE_RANDOM;
 public class MapGenerator {
 
 
-    private final int rooms;
+    private final int rooms, enemyCount;
 
     private final Range roomSize, mapX, mapY;
 
-    public final static int PLAYER_START = 4;
-    public final static int WALL = 2;
-    public final static int PATH = 3;
-    public final static int OPEN = 1;
-    public static final int HOLE = 0;
+    public final static int HOLE = 0, OPEN = 1, WALL = 2, PATH = 3, PLAYER_START = 4, ENEMY = 5;
 
-    public MapGenerator(int rooms, int width, int height, Range roomSize) {
+    public MapGenerator(int rooms, int width, int height, Range roomSize, int enemyCount) {
         this.rooms = rooms;
         this.mapX = new Range(0, width);
         this.mapY = new Range(0, height);
         this.roomSize = roomSize;
+        this.enemyCount = enemyCount;
     }
 
     public int[][] generate() {
@@ -80,6 +77,17 @@ public class MapGenerator {
         }
         Point start = r1.getMiddle();
         map[start.x][start.y] = PLAYER_START;
+
+        mapParts.remove(r1);
+        for (int i = 0; i < enemyCount; i++){
+            Room r = mapParts.get(THE_RANDOM.nextInt(mapParts.size()));
+            Point enemyPos = r.getRandomTile(THE_RANDOM);
+            if (map[enemyPos.x][enemyPos.y] == OPEN || map[enemyPos.x][enemyPos.y] == PATH){
+                map[enemyPos.x][enemyPos.y] = ENEMY;
+            } else {
+                i--;
+            }
+        }
         return map;
     }
 

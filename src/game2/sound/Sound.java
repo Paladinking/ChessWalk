@@ -1,28 +1,31 @@
-package Game.assets;
+package game2.sound;
 
 import javax.sound.sampled.*;
-import javax.sound.sampled.spi.AudioFileReader;
 import java.io.BufferedInputStream;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
-public abstract class SoundManager {
-    public static final int MOVE = 0, ATTACK = 1, HURT = 2,DIE = 3;
+public class Sound {
 
+    private final static ExecutorService executorService = Executors.newCachedThreadPool();
 
-    public static void playSound(String path){
-        if(path.equals("")) return;
-        playSfx(ClassLoader.getSystemResourceAsStream("sound/" + path));
+    private final byte[] bytes;
+
+    public Sound(byte[] soundData){
+        this.bytes = soundData;
     }
-    public static void playSound(String[] strings) {
-        playSound(strings[(int)(Math.random()*strings.length)]);
+
+    public void play() {
+        playSfx(new ByteArrayInputStream(bytes));
     }
 
-    //LunaticEdit
-    public static void playSfx(final InputStream fileStream) {
-        ActivityManager.getInstance().submit(() -> {
+    private void playSfx(InputStream soundData) {
+        executorService.submit(()->{
             try {
-                BufferedInputStream bufferedStream = new BufferedInputStream(fileStream);
+                BufferedInputStream bufferedStream = new BufferedInputStream(soundData);
                 AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(bufferedStream);
                 final int BUFFER_SIZE = 128000;
                 SourceDataLine sourceLine;
@@ -59,10 +62,11 @@ public abstract class SoundManager {
                 e.printStackTrace();
             } catch (Exception e) {
                 e.printStackTrace();
-                System.exit(1);
+                System.out.println("BAD...");
+                //System.exit(1);
             }
+
         });
     }
-
 
 }

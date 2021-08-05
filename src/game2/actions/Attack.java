@@ -1,5 +1,6 @@
 package game2.actions;
 
+import game2.Dungeon;
 import game2.entities.Entity;
 import game2.enums.TextureState;
 import game2.levels.Level;
@@ -41,7 +42,10 @@ public class Attack extends EntityAction {
     @Override
     public void finish(Level level) {
         Entity target = level.getTile(targetTile).getEntity();
-        if (target != null) target.attack(dmg);
+        if (target != null) {
+            float dmgFactor = Dungeon.THE_RANDOM.nextFloat() + 0.5f;
+            target.attack((int) (dmg * dmgFactor));
+        }
         entity.getTexture().setState(TextureState.IDLE);
     }
 

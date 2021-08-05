@@ -1,0 +1,10 @@
+{
+  "width": 800,
+  "height": 800,
+  "frameDelay": 16,
+  "useSeed": true,
+  "seed": 123456,
+  "Name": "Dungeon",
+  "Icon": "images/Icon.png",
+  "DataLocation": "data/"
+}

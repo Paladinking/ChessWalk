@@ -4,6 +4,9 @@ import game2.actions.EntityAction;
 import game2.entities.*;
 import game2.levels.Level;
 import game2.visuals.ImageData;
+import game2.visuals.texture.HpBar;
+import game2.visuals.texture.ImageTexture;
+import game2.visuals.texture.Texture;
 
 import java.awt.*;
 import java.util.*;
@@ -103,8 +106,13 @@ public class Entities {
         }
 
         @Override
-        public void createTexture(ImageData blood) {
-            listener.createTexture(blood, entity.getPos());
+        public void createTexture(Texture texture, int lifeTime) {
+            listener.createTexture(texture, lifeTime);
+        }
+
+        @Override
+        public void removeTexture(Texture texture) {
+            listener.removeTexture(texture);
         }
     }
 }

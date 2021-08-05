@@ -1,10 +1,7 @@
 package game2.games;
 
-import game2.actions.Attack;
-import game2.actions.Move;
 import game2.data.DataLoader;
 import game2.entities.EntitiesListener;
-import game2.enums.TextureState;
 import game2.essentials.AStar;
 import game2.essentials.Entities;
 import game2.entities.Entity;
@@ -15,6 +12,7 @@ import game2.visuals.GameVisuals;
 import game2.tiles.Tile;
 import game2.visuals.ImageData;
 import game2.visuals.texture.ImageTexture;
+import game2.visuals.texture.Texture;
 
 import java.awt.*;
 import java.awt.event.KeyEvent;
@@ -35,11 +33,11 @@ public class Walk extends Game implements EntitiesListener {
     private final Point draggingSource = new Point(0, 0);
     private int tileSize;
 
-    public Walk(int width, int height) {
+    public Walk(int width, int height, DataLoader dataLoader) {
         super();
         this.entities = new Entities(this);
         this.visuals = new GameVisuals(width, height);
-        this.dataLoader = new DataLoader();
+        this.dataLoader = dataLoader;
     }
 
     @Override
@@ -56,20 +54,19 @@ public class Walk extends Game implements EntitiesListener {
             System.exit(-1);
         }
         entities.clear();
-        currentLevel = dataLoader.getLevel();
+        currentLevel = dataLoader.getLevel(entities);
         entities.setPlayer(dataLoader.getPlayer(), currentLevel);
         tileSize = dataLoader.getTileSize();
         currentLevel.placePlayer(entities.getPlayer());
         visuals.init(currentLevel, tileSize);
 
-        generateEnemy();
     }
 
     public void generateEnemy() {
         String enemyName = currentLevel.getEnemy();
         if (enemyName == null) return;
         Point pos = currentLevel.getPlayerPos();
-        Entity e = dataLoader.getEntityTemplate("Slime").create(pos.x + 2, pos.y, tileSize);
+        Entity e = dataLoader.getEntityTemplate("Slime").generate(pos.x + 2, pos.y, tileSize);
         entities.addEntity(e);
         currentLevel.place(e);
     }
@@ -80,13 +77,18 @@ public class Walk extends Game implements EntitiesListener {
     }
 
     @Override
-    public void createTexture(ImageData data, Point pos) {
-        visuals.addTexture(new ImageTexture(data.getImage(), 2, pos.x * tileSize, pos.y * tileSize, data.width, data.height, tileSize), 20);
+    public void createTexture(Texture texture, int lifeTime) {
+         visuals.addTexture(texture, lifeTime);
     }
 
     @Override
     public void entityDied(Point pos) {
         currentLevel.getTile(pos).setEntity(null);
+    }
+
+    @Override
+    public void removeTexture(Texture texture) {
+        visuals.removeTexture(texture);
     }
 
     @Override
@@ -111,21 +113,17 @@ public class Walk extends Game implements EntitiesListener {
         boolean open = tile.isOpen();
         if (TileMap.neighbors(playerPos, location)) {
             if (open) {
-                Move move = new Move(player, 2, new Point(location.x - playerPos.x, location.y - playerPos.y));
-                player.queAction(move, currentLevel);
+                player.queMovement(location, currentLevel);
                 return;
             } else if (tile.getEntity() != null) {
-                Attack attack = new Attack(player, location, TextureState.ATTACK, 4, 20);
-                player.queAction(attack, currentLevel);
-                player.queAttack(location);
+                player.queAttack(location, currentLevel);
             }
         }
         if (!open) return;
         List<Point> path = AStar.getPath(currentLevel.getTilesMap(), player.getPos(), location);
         if (path != null) {
             for (int i = path.size() - 1; i >= 0; i--) {
-                Move move = new Move(player, 2, path.get(i));
-                entities.quePlayerAction(move, currentLevel);
+                player.queMovement(path.get(i), currentLevel);
             }
         }
     }

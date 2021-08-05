@@ -95,12 +95,12 @@ public class TileMap {
         return Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <=1;
     }
 
-    public List<Point> getOpenDirections(Point pos) {
+    public List<Point> getOpenTiles(Point pos) {
         List<Point> openPoints = new ArrayList<>();
-        for (int x = -1; x<=1; x++){
-            for (int y =-1; y<=1; y++){
-                if (x == y && y == 0) continue;
-                if(getTile(pos.x + x, pos.y + y).isOpen()) openPoints.add(new Point(x, y));
+        for (int x = pos.x -1; x<= pos.x + 1; x++){
+            for (int y = pos.y -1; y<=pos.y + 1; y++){
+                if (x == pos.x && y == pos.y) continue;
+                if(getTile(x, y).isOpen()) openPoints.add(new Point(x, y));
             }
         }
         return openPoints;
