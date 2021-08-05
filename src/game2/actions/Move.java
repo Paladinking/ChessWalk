@@ -1,36 +1,44 @@
 package game2.actions;
 
 import game2.entities.Entity;
-import game2.essentials.TileMap;
 import game2.enums.TextureState;
+import game2.levels.Level;
+import game2.visuals.texture.AnimationTexture;
+import game2.visuals.texture.MultiTexture;
 
 import java.awt.*;
 
 public class Move extends EntityAction {
 
-    protected int tileSize, speed;
+    protected int speed, tileSize;
 
     protected final Point moved;
     protected Point target;
 
-    public Move(Entity entity, int speed, int tileSize, Point direction) {
+    public Move(Entity entity, int speed, Point direction) {
         super(entity);
-        this.tileSize = tileSize;
         this.speed = speed;
         this.moved = new Point(0, 0);
         this.target = direction;
     }
 
     @Override
-    public ActionStatus init(TileMap tileMap) {
+    public ActionStatus init(Level level) {
         Point dest = new Point(entity.getPos().x + target.x, entity.getPos().y + target.y);
-        if (tileMap.getTile(dest.x, dest.y).isOpen()) {
-            entity.getTexture().setState(TextureState.MOVE);
-            entity.moveTo(dest);
+        if (level.getTile(dest.x, dest.y).isOpen()) {
+            init(dest);
             return ActionStatus.WORKING;
         } else {
             return ActionStatus.FINISHED;
         }
+    }
+
+    protected void init(Point dest){
+        MultiTexture<AnimationTexture> texture = entity.getTexture();
+        texture.setState(TextureState.MOVE);
+        tileSize = texture.getTileSize();
+        while (tileSize % speed != 0) speed--;
+        entity.moveTo(dest);
     }
 
     @Override
@@ -48,7 +56,7 @@ public class Move extends EntityAction {
     }
 
     @Override
-    public void finish(TileMap tileMap) {
+    public void finish(Level level) {
         entity.getTexture().setState(TextureState.IDLE);
     }
 

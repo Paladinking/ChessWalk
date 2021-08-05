@@ -1,10 +1,8 @@
 package game2.entities;
 
-import game2.actions.Attack;
 import game2.actions.EmptyAction;
 import game2.actions.EntityAction;
-import game2.enums.TextureState;
-import game2.essentials.TileMap;
+import game2.levels.Level;
 
 import java.awt.*;
 import java.util.*;
@@ -29,7 +27,7 @@ public class Player extends Entity {
     }
 
     @Override
-    protected void pickAction(TileMap tileMap) {
+    protected void pickAction(Level level) {
         if (actionQue.isEmpty()){
             this.action = wait;
         }
@@ -38,10 +36,10 @@ public class Player extends Entity {
         }
     }
 
-    public void queAction(EntityAction action, TileMap tileMap) {
+    public void queAction(EntityAction action, Level level) {
         actionQue.add(action);
         if (this.action == wait) this.action = null;
-        initTurn(tileMap);
+        initTurn(level);
 
     }
 

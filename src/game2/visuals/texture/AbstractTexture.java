@@ -7,9 +7,12 @@ import java.awt.image.BufferedImage;
 
 public abstract class AbstractTexture implements Texture {
 
+    private final int tileSize;
+
     protected boolean visible;
-    protected AbstractTexture(){
+    protected AbstractTexture(int tileSize){
         this.visible = true;
+        this.tileSize = tileSize;
     }
 
     public void setVisible(boolean visible){
@@ -27,4 +30,12 @@ public abstract class AbstractTexture implements Texture {
     public abstract int getZ();
 
     public abstract void tick();
+
+    public void moveTiles(int dx, int dy){
+        move(dx * tileSize, dy * tileSize);
+    }
+
+    public int getTileSize(){
+        return tileSize;
+    }
 }

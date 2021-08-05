@@ -1,20 +1,20 @@
 package game2.actions;
 
 import game2.entities.Entity;
-import game2.essentials.TileMap;
 import game2.enums.TextureState;
+import game2.levels.Level;
 
 import java.awt.*;
 
 public class Attack extends EntityAction {
 
-    private final int dmg, duration;
+    protected final int dmg, duration;
 
-    private final Point targetTile;
+    protected final Point targetTile;
 
     private final TextureState attackState;
 
-    private int ticks;
+    protected int ticks;
 
     public Attack(Entity entity, Point targetTile, TextureState attackState, int dmg, int duration) {
         super(entity);
@@ -26,8 +26,7 @@ public class Attack extends EntityAction {
     }
 
     @Override
-    public ActionStatus init(TileMap tileMap) {
-        if (tileMap.getTile(targetTile.x, targetTile.y).getEntity() == null) return ActionStatus.FINISHED;
+    public ActionStatus init(Level level) {
         entity.getTexture().setState(attackState);
         return ActionStatus.WORKING;
     }
@@ -40,8 +39,8 @@ public class Attack extends EntityAction {
     }
 
     @Override
-    public void finish(TileMap tileMap) {
-        Entity target = tileMap.getTile(targetTile).getEntity();
+    public void finish(Level level) {
+        Entity target = level.getTile(targetTile).getEntity();
         if (target != null) target.attack(dmg);
         entity.getTexture().setState(TextureState.IDLE);
     }

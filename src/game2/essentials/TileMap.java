@@ -2,7 +2,6 @@ package game2.essentials;
 
 import game2.entities.Entity;
 import game2.entities.Player;
-import game2.enums.TextureState;
 import game2.tiles.Tile;
 import game2.tiles.WallTile;
 
@@ -18,15 +17,14 @@ public class TileMap {
 
     private final ShadowCaster shadowCaster;
 
-    private final int width, height, tileSize;
+    private final int width, height;
 
-    private Point playerPos;
+    private Point startPos;
 
-    public TileMap(int width, int height, int tileSize){
+    public TileMap(int width, int height){
         this.tiles = new Tile[width * height];
         this.width = width;
         this.height = height;
-        this.tileSize = tileSize;
         this.visibleTiles = new ArrayList<>();
         this.shadowCaster = new ShadowCaster(this);
     }
@@ -37,10 +35,6 @@ public class TileMap {
 
     public Tile getTile(int x, int y){
         return tiles[x +width * y];
-    }
-
-    public int getTileSize() {
-        return tileSize;
     }
 
     public int getWidth() {
@@ -62,9 +56,10 @@ public class TileMap {
 
     public void placePlayer(Player player) {
         Point oldPlayerPos = player.getPos();
-        player.getTexture().move((playerPos.x - oldPlayerPos.x) * tileSize, (playerPos.y - oldPlayerPos.y) * tileSize);
-        oldPlayerPos.setLocation(playerPos.x, playerPos.y);
-        this.playerPos = oldPlayerPos;
+        player.getTexture().moveTiles((startPos.x - oldPlayerPos.x), (startPos.y - oldPlayerPos.y));
+        oldPlayerPos.setLocation(startPos.x, startPos.y);
+        // Just to make sure it's only used once.
+        startPos = null;
         place(player);
         updateLighting(player);
     }
@@ -79,15 +74,11 @@ public class TileMap {
     public void updateLighting(Player player){
         for (Tile tile : visibleTiles) tile.hide();
         visibleTiles.clear();
-        Point playerPos = getPlayerPos();
-        shadowCaster.castShadow( playerPos.x, playerPos.y, player.getVisionDistance());
+        Point playerPos = player.getPos();
+        shadowCaster.castShadow(playerPos.x, playerPos.y, player.getVisionDistance());
         for (Tile tile : visibleTiles){
             tile.show();
         }
-    }
-
-    public void showVisibleTiles(int visionLength) {
-
     }
 
     public Tile getTile(Point pos) {
@@ -104,10 +95,6 @@ public class TileMap {
         return Math.abs(a.x - b.x) <= 1 && Math.abs(a.y - b.y) <=1;
     }
 
-    public Point getPlayerPos() {
-        return new Point(playerPos.x, playerPos.y);
-    }
-
     public List<Point> getOpenDirections(Point pos) {
         List<Point> openPoints = new ArrayList<>();
         for (int x = -1; x<=1; x++){
@@ -120,7 +107,7 @@ public class TileMap {
     }
 
     public void setStart(int x, int y) {
-        this.playerPos = new Point(x, y);
+        this.startPos = new Point(x, y);
     }
 
     public boolean isWall(int x, int y) {

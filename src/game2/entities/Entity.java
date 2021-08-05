@@ -2,7 +2,8 @@ package game2.entities;
 
 import game2.actions.ActionStatus;
 import game2.actions.EntityAction;
-import game2.essentials.TileMap;
+import game2.levels.Level;
+import game2.visuals.ImageData;
 import game2.visuals.texture.AnimationTexture;
 import game2.visuals.texture.MultiTexture;
 
@@ -11,6 +12,8 @@ import java.awt.Point;
 public abstract class Entity {
 
     protected int dmg, hp;
+
+    private ImageData blood;
 
     protected EntityListener listener;
 
@@ -28,8 +31,22 @@ public abstract class Entity {
         this.gridPos = new Point(x, y);
     }
 
+    public void setBlood(ImageData blood){
+        this.blood = blood;
+    }
+
     public Point getPos(){
         return gridPos;
+    }
+
+    protected void passTurn() {
+        // TODO make Sure no prints happen
+        if (this.action == null){
+            System.out.println("This should not happen: " + this);
+            return;
+        }
+        this.action = null;
+        listener.passedTurn();
     }
 
     public void setListener(EntityListener listener){
@@ -38,31 +55,30 @@ public abstract class Entity {
 
     /**
      * Sets <code>action</code> to a non null value.
-     * @param tileMap The <code>TileMap</code> containing this entity.
+     * @param level The <code>TileMap</code> containing this entity.
      */
-    protected abstract void pickAction(TileMap tileMap);
+    protected abstract void pickAction(Level level);
 
-    public void initTurn(TileMap tileMap){
+    public void initTurn(Level level){
         if (this.action == null){
-            pickAction(tileMap);
-            if (action.init(tileMap).ordinal() >= ActionStatus.PASS_TURN.ordinal()){
-                finishAction(tileMap);
+            pickAction(level);
+            if (action.init(level).ordinal() >= ActionStatus.PASS_TURN.ordinal()){
+                finishAction(level);
                 return;
             }
         }
         if (hidden){
             action.preformInstant();
-            finishAction(tileMap);
+            finishAction(level);
         }
     }
 
-    private void finishAction(TileMap tileMap){
-        action.finish(tileMap);
-        action = null;
-        listener.passedTurn();
+    private void finishAction(Level level){
+        action.finish(level);
+        passTurn();
     }
 
-    public void tick(TileMap tileMap){
+    public void tick(Level tileMap){
         // TODO: tick should only be called before this turns action is completed
         texture.tick();
         if (this.action == null) return;
@@ -99,8 +115,12 @@ public abstract class Entity {
      * @param dmg The amount of damage to deal.
      */
     public void attack(int dmg) {
+        listener.createTexture(blood);
         this.hp -= dmg;
-        if (hp<= 0) listener.died();
+        if (hp <= 0) {
+            if (action != null) passTurn();
+            listener.died();
+        }
     }
 
     public void hide(){

@@ -8,6 +8,9 @@
         "WIDTH": 50,
         "HEIGHT": 70
       },
+      "parents": [
+        "entityImages"
+      ],
       "ImagePath": "images/Player/",
       "Images": {
         "idle": {
@@ -35,6 +38,9 @@
         "MOVE": "move",
         "ATTACK": "attack",
         "IDLE": "idle"
+      },
+      "Misc": {
+        "Blood": "blood"
       }
     }
   }

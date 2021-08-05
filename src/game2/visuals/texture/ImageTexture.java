@@ -11,7 +11,8 @@ public class ImageTexture extends AbstractTexture {
 
     protected final Rectangle bounds;
 
-    public ImageTexture(BufferedImage image, int z, int x, int y, int w, int h){
+    public ImageTexture(BufferedImage image, int z, int x, int y, int w, int h, int tileSize) {
+        super(tileSize);
         this.image = image;
         this.zIndex = z;
         this.bounds = new Rectangle(x, y, w, h);

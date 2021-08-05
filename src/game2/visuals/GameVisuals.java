@@ -2,13 +2,14 @@ package game2.visuals;
 
 import game2.entities.Entity;
 import game2.essentials.TileMap;
+import game2.levels.Level;
 import game2.tiles.Tile;
-import game2.visuals.Layer;
-import game2.visuals.SortedLayer;
 import game2.visuals.texture.AbstractTexture;
 
 import java.awt.*;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.List;
 
 public class GameVisuals {
 
@@ -20,12 +21,16 @@ public class GameVisuals {
 
     private TileMap tileMap;
 
+    private int tileSize;
+
     private boolean valid;
 
     private static final double MIN_ZOOM = 0.5, MAX_ZOOM = 2.0, DEFAULT_ZOOM = 1.0, ZOOM_FACTOR = 1.1;
     private static final int DEFAULT_CAMERA_X = 2000, DEFAULT_CAMERA_Y = 2000;
 
     private double zoomLevel, prevZoomLevel;
+
+    private final List<LivingTexture> tempTextures;
 
     public GameVisuals(int width, int height) {
         this.width = width;
@@ -36,17 +41,36 @@ public class GameVisuals {
         this.prevZoomLevel = DEFAULT_ZOOM;
         Layer middleLayer = new SortedLayer(Comparator.comparing((texture) -> texture.getBounds().y + texture.getBounds().height));
         this.layers = new Layer[]{new Layer(), middleLayer, new Layer()};
+        this.tempTextures = new ArrayList<>();
     }
 
-    public synchronized void setTileMap(TileMap tileMap){
-        this.tileMap = tileMap;
+    public synchronized void init(Level level, int tileSize){
+        this.tileMap = level.getTilesMap();
         this.zoomLevel = DEFAULT_ZOOM;
-        Point playerPos = tileMap.getPlayerPos();
-        panCameraTo(playerPos.x * tileMap.getTileSize() - width / 2, playerPos.y * tileMap.getTileSize() - height / 2);
+        Point playerPos = level.getPlayerPos();
+        this.tileSize = tileSize;
+        panCameraTo(playerPos.x * tileSize - width / 2, playerPos.y * tileSize - height / 2);
     }
 
     private void addTexture(AbstractTexture texture) {
         layers[texture.getZ()].addTexture(texture);
+    }
+
+    public void tick(){
+        for (int i = 0; i< tempTextures.size(); i++){
+            LivingTexture texture = tempTextures.get(i);
+            texture.lifeTime--;
+            if (texture.lifeTime == 0) {
+                tempTextures.remove(i);
+                i--;
+                invalidate();
+            }
+        }
+    }
+
+    public synchronized void addTexture(AbstractTexture texture, int lifeTime){
+        tempTextures.add(new LivingTexture(texture, lifeTime));
+        invalidate();
     }
 
     private void invalidate() {
@@ -55,7 +79,6 @@ public class GameVisuals {
     }
 
     private void validate() {
-        int tileSize = tileMap.getTileSize();
         int firstX = getFirstTile(cameraX, tileSize, zoomLevel), firstY = getFirstTile(cameraY, tileSize, zoomLevel);
         int lastX = getLastTile(firstX, tileSize, zoomLevel, width, tileMap.getWidth()), lastY = getLastTile(firstY, tileSize, zoomLevel, height, tileMap.getHeight());
         for (int y = firstY; y <= lastY; y++) {
@@ -65,6 +88,9 @@ public class GameVisuals {
                 addTexture(tile.getTexture());
                 if (e != null) addTexture(e.getTexture());
             }
+        }
+        for (LivingTexture t : tempTextures){
+            addTexture(t.texture);
         }
         this.valid = true;
     }
@@ -121,16 +147,24 @@ public class GameVisuals {
     }
 
     private void fixCamera() {
-        int tileSize = tileMap.getTileSize();
         cameraX = (int) Math.max(0, Math.min(cameraX, zoomLevel * tileSize * tileMap.getWidth() - width - 1));
         cameraY = (int) Math.max(0, Math.min(cameraY, zoomLevel * tileSize * tileMap.getHeight() - height - 1));
         invalidate();
     }
 
     public Point getTile(int x, int y) {
-        int tileSize = tileMap.getTileSize();
         x = (int) ((x + cameraX) / (tileSize * zoomLevel));
         y = (int) ((y + cameraY) / (tileSize * zoomLevel));
         return new Point(x, y);
+    }
+
+    private static class LivingTexture{
+        private final AbstractTexture texture;
+
+        private int lifeTime;
+        private LivingTexture(AbstractTexture texture, int lifeTime){
+            this.texture = texture;
+            this.lifeTime = lifeTime;
+        }
     }
 }

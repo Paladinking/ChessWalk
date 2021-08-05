@@ -1,7 +1,7 @@
 package game2.actions;
 
 import game2.entities.Entity;
-import game2.essentials.TileMap;
+import game2.levels.Level;
 
 public class EmptyAction extends EntityAction {
 
@@ -10,7 +10,7 @@ public class EmptyAction extends EntityAction {
     }
 
     @Override
-    public ActionStatus init(TileMap tileMap) {
+    public ActionStatus init(Level level) {
         return ActionStatus.WAITING;
     }
 
@@ -20,7 +20,7 @@ public class EmptyAction extends EntityAction {
     }
 
     @Override
-    public void finish(TileMap tileMap) {
+    public void finish(Level level) {
 
     }
 

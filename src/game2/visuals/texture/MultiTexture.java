@@ -15,7 +15,8 @@ public class  MultiTexture <T extends AbstractTexture> extends AbstractTexture {
 
     protected final Map<TextureState, T> textures;
 
-    public MultiTexture(T placeHolder){
+    public MultiTexture(T placeHolder, int tileSize){
+        super(tileSize);
         this.textures = new EnumMap<>(TextureState.class);
         this.bounds = new Rectangle(0, 0, 0, 0);
         this.currentTexture = placeHolder;

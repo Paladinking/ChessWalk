@@ -14,6 +14,7 @@
       "rooms": 30,
       "minRoomSize": 5,
       "maxRoomSize": 12,
+      "enemyCount": 20,
       "Images": {
         "EMPTY": {
           "name": "Tile3.png",

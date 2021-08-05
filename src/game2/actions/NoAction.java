@@ -1,7 +1,7 @@
 package game2.actions;
 
 import game2.entities.Entity;
-import game2.essentials.TileMap;
+import game2.levels.Level;
 
 public class NoAction extends EmptyAction{
     public NoAction(Entity entity) {
@@ -9,7 +9,7 @@ public class NoAction extends EmptyAction{
     }
 
     @Override
-    public ActionStatus init(TileMap tileMap){
+    public ActionStatus init(Level level){
         return ActionStatus.FINISHED;
     }
 }

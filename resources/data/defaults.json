@@ -5,6 +5,7 @@
     "rooms": 2,
     "minRoomSize": 4,
     "maxRoomSize": 5,
+    "enemyCount": 0,
     "ImagePath": "images/Stages/",
     "Images": {
       "empty": {
@@ -32,13 +33,13 @@
         "height": 50
       },
       "emptyFow" : {
-        "name": "Tile1.png",
+        "name": "Tile4.png",
         "count": 1,
         "width": 50,
         "height": 50
       },
       "wallFow" : {
-        "name": "WallFow.png",
+        "name": "Wall2.png",
         "count": 1,
         "width": 50,
         "height": 70
@@ -80,6 +81,20 @@
     "ImagePath": "images/Enemies/",
     "States": {
       "IDLE": "idle"
+    },
+    "Misc": {
+      "Blood": "blood"
+    }
+  },
+  "entityImages" : {
+    "ImagePath" : "images/",
+    "Images": {
+      "blood": {
+        "name": "blood.png",
+        "count": 1,
+        "width": 50,
+        "height": 50
+      }
     }
   }
 }

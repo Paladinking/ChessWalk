@@ -1,10 +1,8 @@
 package game2.entities.enemies;
 
-import game2.actions.ActionStatus;
-import game2.actions.EmptyAction;
 import game2.actions.EntityAction;
 import game2.actions.NoAction;
-import game2.essentials.TileMap;
+import game2.levels.Level;
 
 public class Skeleton extends Enemy {
 
@@ -13,12 +11,12 @@ public class Skeleton extends Enemy {
     }
 
     @Override
-    protected EntityAction getAttack(TileMap tileMap) {
+    protected EntityAction getAttack(Level level) {
         return new NoAction(this);
     }
 
     @Override
-    protected EntityAction getMove(TileMap tileMap) {
+    protected EntityAction getMove(Level level) {
         return new NoAction(this);
     }
 }

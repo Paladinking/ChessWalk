@@ -2,6 +2,8 @@ package game2.essentials;
 
 import game2.actions.EntityAction;
 import game2.entities.*;
+import game2.levels.Level;
+import game2.visuals.ImageData;
 
 import java.awt.*;
 import java.util.*;
@@ -30,16 +32,22 @@ public class Entities {
         entity.setListener(new EntityAdapter(entity));
     }
 
-    public void setPlayer(Player player){
+    public void setPlayer(Player player, Level level){
         this.player = player;
-        player.setListener(new EntityAdapter(player));
+        player.setListener(new EntityAdapter(player){
+            @Override
+            public void moved(Point oldPos){
+                super.moved(oldPos);
+                level.updateLighting();
+            }
+        });
     }
 
-    public void quePlayerAction(EntityAction action, TileMap tileMap){
+    public void quePlayerAction(EntityAction action, Level tileMap){
         player.queAction(action, tileMap);
     }
 
-    public void tickAll(TileMap tileMap) {
+    public void tickAll(Level tileMap) {
         if (playerTurn){
             player.tick(tileMap);
         } else {
@@ -49,8 +57,12 @@ public class Entities {
             if (playerTurn){
                 playerTurn = false;
                 toPass = entities.size();
-                tileMap.updateLighting(player);
                 for (Entity e: entities) e.initTurn(tileMap);
+                if (toPass == 0){
+                    playerTurn = true;
+                    toPass = 1;
+                    player.initTurn(tileMap);
+                }
             } else {
                 playerTurn = true;
                 toPass = 1;
@@ -86,7 +98,13 @@ public class Entities {
 
         @Override
         public void died() {
+            entities.remove(entity);
+            listener.entityDied(entity.getPos());
+        }
 
+        @Override
+        public void createTexture(ImageData blood) {
+            listener.createTexture(blood, entity.getPos());
         }
     }
 }

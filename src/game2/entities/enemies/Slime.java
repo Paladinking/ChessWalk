@@ -1,10 +1,8 @@
 package game2.entities.enemies;
 
-import game2.actions.EmptyAction;
-import game2.actions.EntityAction;
-import game2.actions.NoAction;
-import game2.actions.RandomMove;
-import game2.essentials.TileMap;
+import game2.actions.*;
+import game2.enums.TextureState;
+import game2.levels.Level;
 
 public class Slime extends Enemy {
 
@@ -13,12 +11,12 @@ public class Slime extends Enemy {
     }
 
     @Override
-    protected EntityAction getAttack(TileMap tileMap) {
-        return new NoAction(this);
+    protected EntityAction getAttack(Level level) {
+        return new SlimeAttack(this, level.getPlayerPos(), TextureState.ATTACK, dmg, 16);
     }
 
     @Override
-    protected EntityAction getMove(TileMap tileMap) {
-        return new RandomMove(this, speed, tileMap.getTileSize());
+    protected EntityAction getMove(Level level) {
+        return new RandomMove(this, speed);
     }
 }

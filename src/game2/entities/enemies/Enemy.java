@@ -3,6 +3,7 @@ package game2.entities.enemies;
 import game2.actions.EntityAction;
 import game2.entities.Entity;
 import game2.essentials.TileMap;
+import game2.levels.Level;
 
 import java.awt.*;
 
@@ -17,17 +18,17 @@ public abstract class Enemy extends Entity {
         this.speed = speed;
     }
 
-    protected abstract EntityAction getAttack(TileMap tileMap);
+    protected abstract EntityAction getAttack(Level level);
 
-    protected abstract EntityAction getMove(TileMap tileMap);
+    protected abstract EntityAction getMove(Level level);
 
     @Override
-    protected void pickAction(TileMap tileMap) {
-        Point playerPos = tileMap.getPlayerPos();
+    protected void pickAction(Level level) {
+        Point playerPos = level.getPlayerPos();
         if (TileMap.neighbors(gridPos, playerPos)){
-            this.action = getAttack(tileMap);
+            this.action = getAttack(level);
         } else {
-            this.action = getMove(tileMap);
+            this.action = getMove(level);
         }
     }
 

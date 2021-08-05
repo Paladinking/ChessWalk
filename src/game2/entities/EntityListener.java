@@ -1,5 +1,7 @@
 package game2.entities;
 
+import game2.visuals.ImageData;
+
 import java.awt.Point;
 
 public interface EntityListener {
@@ -9,4 +11,6 @@ public interface EntityListener {
     void moved(Point oldPos);
 
     void died();
+
+    void createTexture(ImageData blood);
 }

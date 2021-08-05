@@ -27,7 +27,7 @@ public class DataLoader {
 
     private String firstLevel, playerName;
 
-    private final Map<String, Level> levels;
+    private final Map<String, LevelTemplate> levels;
     private final Map<String, EntityTemplate> entityTemplates;
     private final Map<JsonObject, Map<String, ImageData>> images;
 
@@ -52,7 +52,7 @@ public class DataLoader {
     }
 
     public Level getLevel() {
-        return levels.get(firstLevel);
+        return levels.get(firstLevel).generate(tileSize);
     }
 
     public EntityTemplate getEntityTemplate(String name) {
@@ -101,10 +101,11 @@ public class DataLoader {
         if (images.containsKey(object)) localImages.putAll(images.get(object));
     }
 
-    private Level readLevel(JsonObject object) {
+    private LevelTemplate readLevel(JsonObject object) {
         int width = object.getInt("width");
         int height = object.getInt("height");
         int rooms = object.getInt("rooms");
+        int enemyCount = object.getInt("enemyCount");
         Range roomSize = new Range(object.getInt("minRoomSize"), object.getInt("maxRoomSize"));
         Map<String, ImageData> images = new HashMap<>();
         addImages(object, images);
@@ -121,7 +122,7 @@ public class DataLoader {
         }
         //noinspection SuspiciousToArrayCall
         String[] enemies = object.getList("Enemies").toList().toArray(new String[]{});
-        return new Level(width, height, rooms, roomSize, imageData, enemies);
+        return new LevelTemplate(width, height, rooms, enemyCount, roomSize, enemies, imageData);
     }
 
     private void readImages(JsonObject object, String imagePath, Map<String, ImageData> destination) throws IOException {
@@ -157,7 +158,8 @@ public class DataLoader {
             ImageData data = images.get(states.getString(key));
             textureStates.put(textureState, data);
         }
-        return new EntityTemplate(ai, hp, dmg, width, height, textureStates);
+        ImageData blood = images.get(object.getObject("Misc").getString("Blood"));
+        return new EntityTemplate(ai, hp, dmg, width, height, textureStates, blood);
     }
 
     private void addParents(JsonObject object) {
