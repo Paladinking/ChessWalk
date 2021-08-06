@@ -1,5 +1,7 @@
 package game2.essentials;
 
+import game2.levels.Level;
+
 import java.awt.*;
 import java.util.*;
 import java.util.List;
@@ -70,7 +72,7 @@ public class AStar {
 
     }
 
-    public static List<Point> getPath(TileMap tileMap, Point startPos, Point goalPos) {
+    public static List<Point> getPath(Level level, Point startPos, Point goalPos) {
         Node start = new Node(null, startPos.x, startPos.y), goal = new Node(null, goalPos.x, goalPos.y);
         start.fScore = start.hScore(goal);
         start.gScore = 0;
@@ -84,7 +86,7 @@ public class AStar {
             }
             closedSet.add(node);
             for (Node neighbor : node.getNeighbors()) {
-                if ((!tileMap.getTile(neighbor.x, neighbor.y).isOpen() && !(neighbor.equals(goal))) || closedSet.contains(neighbor)) {
+                if ((!level.getTile(neighbor.x, neighbor.y).isOpen() && !(neighbor.equals(goal))) || closedSet.contains(neighbor)) {
                     continue;
                 }
                 neighbor.gScore = neighbor.gScore();

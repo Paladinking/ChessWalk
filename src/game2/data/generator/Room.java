@@ -33,7 +33,7 @@ public class Room  {
     }
 
     Point getRandomEdge(Random random){
-        Direction dir = Direction.values()[random.nextInt(4)];
+        Direction dir = Direction.random(random);
         if (dir == Direction.UP){
             return new Point(new Range(x + 1, x + width - 1).getRandom(random), y);
         } else if (dir == Direction.DOWN){
@@ -45,6 +45,33 @@ public class Room  {
         }
     }
 
+    public void openWall(int[][] map, Direction direction){
+        switch (direction){
+            case RIGHT -> {
+                for (int y1 = y + 1; y1 < y + height; y1++){
+                    map[x][y1] = MapGenerator.OPEN;
+                }
+            }
+            case LEFT -> {
+                for (int y1 = y + 1; y1 < y + height; y1++){
+                    map[x + width][y1] = MapGenerator.OPEN;
+                }
+            }
+            case UP -> {
+                for (int x1 = x + 1; x1 < x + width; x1++){
+                    map[x1][y] = MapGenerator.OPEN;
+                }
+            }
+            case DOWN -> {
+                for (int x1 = x + 1; x1 < x + width; x1++){
+                    map[x1][y + height] = MapGenerator.OPEN;
+                }
+            }
+        }
+    }
+
+
+
     Point getRandomTile(Random random){
         return new Point(new Range(x + 1, x + width -1).getRandom(random), new Range(y + 1, y + height - 1).getRandom(random));
     }
@@ -52,6 +79,16 @@ public class Room  {
     public void addToMap(int[][] map) {
         for (int x1 = x; x1 <= x + width; x1++) {
             for (int y1 = y; y1 <= y + height; y1++) {
+                if (x1 == x || x1 == x + width || y1 == y || y1 == y + height) map[x1][y1] = MapGenerator.WALL;
+                else map[x1][y1] = MapGenerator.OPEN;
+            }
+        }
+    }
+
+    public void addSafeToMap(int[][] map) {
+        for (int x1 = x; x1 <= x + width; x1++) {
+            for (int y1 = y; y1 <= y + height; y1++) {
+                if (x1 < 0 || x1 >= map.length || y1 < 0 || y1 >= map[0].length) continue;
                 if ( x1 == x || x1 == x + width || y1 == y || y1 == y + height) map[x1][y1] = MapGenerator.WALL;
                 else map[x1][y1] = MapGenerator.OPEN;
             }

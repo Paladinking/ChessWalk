@@ -2,7 +2,7 @@
   "width": 800,
   "height": 800,
   "frameDelay": 16,
-  "useSeed": true,
+  "useSeed": false,
   "seed": 123456,
   "Name": "Dungeon",
   "Icon": "images/Icon.png",

@@ -81,7 +81,7 @@ public class RoomConnector {
                     continue;
                 }
                 neighbor.gScore = node.gScore;
-                if (tileMap[neighbor.x][neighbor.y] == 0) neighbor.gScore++;
+                if (tileMap[neighbor.x][neighbor.y] <= 1 ) neighbor.gScore++;
                 else if (tileMap[neighbor.x][neighbor.y] != MapGenerator.PATH) neighbor.gScore += 2;
                 neighbor.fScore = neighbor.gScore + neighbor.hScore(goal);
                 if (!openSet.contains(neighbor)) openSet.add(neighbor);

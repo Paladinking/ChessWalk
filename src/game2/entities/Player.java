@@ -104,4 +104,8 @@ public class Player extends Entity {
             hpBar.setHpFraction(getHpFraction());
         }
     }
+
+    public boolean isWaiting() {
+        return action == wait;
+    }
 }

@@ -24,7 +24,7 @@ public class Knight extends Enemy {
 
     @Override
     protected EntityAction getMove(Level level) {
-        List<Point> points = AStar.getPath(level.getTilesMap(), gridPos, level.getPlayerPos());
+        List<Point> points = AStar.getPath(level, gridPos, level.getPlayerPos());
         if (points == null || points.size() > 5) return new NoAction(this);
         Point target = points.get(points.size() - 1);
         return new Move(this, MOVEMENT_SPEED, target);

@@ -98,12 +98,20 @@
     },
     "SoundPath": "sound/",
     "Sounds": {
-      "Walk": {
+      "move": {
         "name": "step2.wav"
       },
-      "Hurt": {
+      "hurt": {
         "name": "hurt1.wav"
+      },
+      "attack": {
+        "name": "swosh.wav"
       }
+    },
+    "SoundEffects": {
+      "MOVE": "move",
+      "HURT": "hurt",
+      "ATTACK": "attack"
     }
   }
 }

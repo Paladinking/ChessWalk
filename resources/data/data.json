@@ -2,6 +2,7 @@
   "StartLevel" : "level1",
   "VisionDistance": 8,
   "TileSize" : 50,
+  "ChunkSize": 25,
   "PlayerName": "Player",
   "TurnDuration": 25,
   "DataFiles": [

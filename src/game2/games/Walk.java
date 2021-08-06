@@ -10,8 +10,6 @@ import game2.essentials.TileMap;
 import game2.levels.Level;
 import game2.visuals.GameVisuals;
 import game2.tiles.Tile;
-import game2.visuals.ImageData;
-import game2.visuals.texture.ImageTexture;
 import game2.visuals.texture.Texture;
 
 import java.awt.*;
@@ -120,7 +118,7 @@ public class Walk extends Game implements EntitiesListener {
             }
         }
         if (!open) return;
-        List<Point> path = AStar.getPath(currentLevel.getTilesMap(), player.getPos(), location);
+        List<Point> path = AStar.getPath(currentLevel, player.getPos(), location);
         if (path != null) {
             for (int i = path.size() - 1; i >= 0; i--) {
                 player.queMovement(path.get(i), currentLevel);

@@ -19,7 +19,7 @@ public class GameVisuals {
 
     private final int width, height;
 
-    private TileMap tileMap;
+    private Level level;
 
     private int tileSize;
 
@@ -45,7 +45,7 @@ public class GameVisuals {
     }
 
     public synchronized void init(Level level, int tileSize) {
-        this.tileMap = level.getTilesMap();
+        this.level = level;
         this.zoomLevel = DEFAULT_ZOOM;
         Point playerPos = level.getPlayerPos();
         this.tileSize = tileSize;
@@ -56,7 +56,7 @@ public class GameVisuals {
         layers[texture.getZ()].addTexture(texture);
     }
 
-    public void tick() {
+    public synchronized void tick() {
         for (int i = 0; i < tempTextures.size(); i++) {
             LivingTexture texture = tempTextures.get(i);
             texture.lifeTime--;
@@ -80,10 +80,10 @@ public class GameVisuals {
 
     private void validate() {
         int firstX = getFirstTile(cameraX, tileSize, zoomLevel), firstY = getFirstTile(cameraY, tileSize, zoomLevel);
-        int lastX = getLastTile(firstX, tileSize, zoomLevel, width, tileMap.getWidth()), lastY = getLastTile(firstY, tileSize, zoomLevel, height, tileMap.getHeight());
+        int lastX = getLastTile(firstX, tileSize, zoomLevel, width, level.getWidth()), lastY = getLastTile(firstY, tileSize, zoomLevel, height, level.getHeight());
         for (int y = firstY; y <= lastY; y++) {
             for (int x = firstX; x <= lastX; x++) {
-                Tile tile = tileMap.getTile(x, y);
+                Tile tile = level.getTile(x, y);
                 Entity e = tile.getEntity();
                 addTexture(tile.getTexture());
                 if (e != null) addTexture(e.getTexture());
@@ -149,8 +149,8 @@ public class GameVisuals {
     }
 
     private void fixCamera() {
-        cameraX = (int) Math.max(0, Math.min(cameraX, zoomLevel * tileSize * tileMap.getWidth() - width - 1));
-        cameraY = (int) Math.max(0, Math.min(cameraY, zoomLevel * tileSize * tileMap.getHeight() - height - 1));
+        cameraX = (int) Math.max(0, Math.min(cameraX, zoomLevel * tileSize * level.getWidth() - width - 1));
+        cameraY = (int) Math.max(0, Math.min(cameraY, zoomLevel * tileSize * level.getHeight() - height - 1));
         invalidate();
     }
 

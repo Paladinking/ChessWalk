@@ -2,6 +2,7 @@ package game2.actions;
 
 import game2.Dungeon;
 import game2.entities.Entity;
+import game2.enums.EntitySound;
 import game2.enums.TextureState;
 import game2.levels.Level;
 
@@ -29,6 +30,7 @@ public class Attack extends EntityAction {
     @Override
     public ActionStatus init(Level level) {
         entity.getTexture().setState(attackState);
+        entity.playSound(EntitySound.ATTACK);
         return ActionStatus.WORKING;
     }
 

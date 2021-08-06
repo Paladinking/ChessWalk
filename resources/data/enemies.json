@@ -24,10 +24,10 @@
         }
       },
       "Sounds": {
-        "Walk": {
+        "move": {
           "name": "Slime.wav"
         },
-        "Hurt": {
+        "hurt": {
           "name": "slimeDmg.wav"
         }
       }

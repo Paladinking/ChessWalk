@@ -1,6 +1,6 @@
 package game2;
 
-import Game.assets.SoundManager;
+
 import game2.data.DataLoader;
 import game2.games.Game;
 import game2.games.Walk;
@@ -9,13 +9,10 @@ import helper.json.FancyJSonParser;
 import helper.json.JsonObject;
 
 import javax.imageio.ImageIO;
-import javax.sound.sampled.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.image.BufferedImage;
-import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.util.Random;
 
 public class Dungeon {

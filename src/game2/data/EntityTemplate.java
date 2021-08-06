@@ -5,6 +5,7 @@ import game2.entities.Player;
 import game2.entities.enemies.Knight;
 import game2.entities.enemies.Skeleton;
 import game2.entities.enemies.Slime;
+import game2.enums.EntitySound;
 import game2.sound.Sound;
 import game2.visuals.ImageData;
 import game2.visuals.texture.AnimationTexture;
@@ -18,14 +19,13 @@ public class EntityTemplate {
     private final String ai;
     private final int hp, dmg;
 
-    private final Sound walk, hurt;
-
     private final int width, height;
 
     private final Map<TextureState, ImageData> textureStates;
     private final ImageData blood;
+    private final Map<EntitySound, Sound> sounds;
 
-    public EntityTemplate(String ai, int hp, int dmg, int width, int height, Map<TextureState, ImageData> textureStates, ImageData blood, Sound walk, Sound hurt) {
+    public EntityTemplate(String ai, int hp, int dmg, int width, int height, Map<TextureState, ImageData> textureStates, ImageData blood, Map<EntitySound, Sound> sounds) {
         this.ai = ai;
         this.hp = hp;
         this.dmg = dmg;
@@ -33,8 +33,7 @@ public class EntityTemplate {
         this.height = height;
         this.textureStates = textureStates;
         this.blood = blood;
-        this.walk = walk;
-        this.hurt = hurt;
+        this.sounds = sounds;
     }
 
     /**
@@ -61,7 +60,7 @@ public class EntityTemplate {
         texture.setState(TextureState.IDLE);
         e.setTexture(texture);
         e.setBlood(blood);
-        e.setSounds(walk, hurt);
+        e.setSounds(sounds);
         return e;
     }
 

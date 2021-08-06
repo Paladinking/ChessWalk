@@ -13,27 +13,26 @@ public class TileMap {
 
     private final Tile[] tiles;
 
-    private final List<Tile> visibleTiles;
-
-    private final ShadowCaster shadowCaster;
-
     private final int width, height;
 
     private Point startPos;
 
-    public TileMap(int width, int height){
+    private final Point offset;
+
+    public TileMap(int width, int height, Point offset){
         this.tiles = new Tile[width * height];
         this.width = width;
         this.height = height;
-        this.visibleTiles = new ArrayList<>();
-        this.shadowCaster = new ShadowCaster(this);
+        this.offset = offset;
     }
 
     public void setTile(int x, int y, Tile tile){
         tiles[x + width * y] = tile;
     }
 
-    public Tile getTile(int x, int y){
+    public Tile getTile(int x, int y) {
+        x -= offset.x;
+        y -= offset.y;
         return tiles[x +width * y];
     }
 
@@ -61,7 +60,6 @@ public class TileMap {
         // Just to make sure it's only used once.
         startPos = null;
         place(player);
-        updateLighting(player);
     }
 
     public void moveEntity(Point oldPos, Point newPos) {
@@ -69,16 +67,6 @@ public class TileMap {
         Entity e = old.getEntity();
         old.setEntity(null);
         getTile(newPos.x, newPos.y).setEntity(e);
-    }
-
-    public void updateLighting(Player player){
-        for (Tile tile : visibleTiles) tile.hide();
-        visibleTiles.clear();
-        Point playerPos = player.getPos();
-        shadowCaster.castShadow(playerPos.x, playerPos.y, player.getVisionDistance());
-        for (Tile tile : visibleTiles){
-            tile.show();
-        }
     }
 
     public Tile getTile(Point pos) {
@@ -114,7 +102,7 @@ public class TileMap {
         return getTile(x, y) instanceof WallTile;
     }
 
-    public void show(int x, int y) {
-        visibleTiles.add(getTile(x, y));
+    public Point getOffset() {
+        return offset;
     }
 }

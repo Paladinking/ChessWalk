@@ -2,6 +2,7 @@ package game2.data;
 
 import game2.entities.Entity;
 import game2.entities.Player;
+import game2.enums.EntitySound;
 import game2.enums.TextureState;
 import game2.enums.TileType;
 import game2.essentials.Entities;
@@ -195,7 +196,15 @@ public class DataLoader {
 
         Map<String, Sound> sounds = new HashMap<>();
         addSounds(object, sounds);
-        return new EntityTemplate(ai, hp, dmg, width, height, textureStates, blood, sounds.get("Walk"), sounds.get("Hurt"));
+        Map<EntitySound, Sound> entitySounds = new EnumMap<>(EntitySound.class);
+        JsonObject soundEffects = object.getObject("SoundEffects");
+        for (String key : soundEffects){
+            EntitySound entitySound = EntitySound.valueOf(key);
+            Sound sound = sounds.get(soundEffects.getString(key));
+            entitySounds.put(entitySound, sound);
+
+        }
+        return new EntityTemplate(ai, hp, dmg, width, height, textureStates, blood, entitySounds);
     }
 
 

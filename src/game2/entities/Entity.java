@@ -2,12 +2,15 @@ package game2.entities;
 
 import game2.actions.ActionStatus;
 import game2.actions.EntityAction;
+import game2.enums.EntitySound;
 import game2.levels.Level;
 import game2.sound.Sound;
 import game2.visuals.ImageData;
 import game2.visuals.texture.*;
 
 import java.awt.Point;
+import java.util.EnumMap;
+import java.util.Map;
 
 public abstract class Entity {
 
@@ -25,7 +28,7 @@ public abstract class Entity {
 
     protected boolean hidden = true;
 
-    private Sound walk, hurt;
+    private final Map<EntitySound, Sound> sounds;
 
     protected final Point gridPos;
 
@@ -34,11 +37,7 @@ public abstract class Entity {
         this.hp = hp;
         this.maxHp = hp;
         this.gridPos = new Point(x, y);
-    }
-
-    public void setSounds(Sound walk, Sound hurt){
-        this.walk = walk;
-        this.hurt = hurt;
+        this.sounds = new EnumMap<>(EntitySound.class);
     }
 
     public void setBlood(ImageData blood){
@@ -124,7 +123,11 @@ public abstract class Entity {
         Point oldPos = new Point(gridPos.x, gridPos.y);
         gridPos.setLocation(dest.x, dest.y);
         listener.moved(oldPos);
-        if(!hidden) walk.play();
+        playSound(EntitySound.MOVE);
+    }
+
+    public void playSound(EntitySound sound){
+        if (!hidden) sounds.get(sound).play();
     }
 
     /**
@@ -139,7 +142,7 @@ public abstract class Entity {
             if (action != null) passTurn();
             listener.died();
         }
-        if (!hidden) hurt.play();
+        playSound(EntitySound.HURT);
     }
 
     public void hide(){
@@ -168,5 +171,10 @@ public abstract class Entity {
 
     public void moveTexture(int dx, int dy){
         this.texture.move(dx, dy);
+    }
+
+    public void setSounds(Map<EntitySound, Sound> sounds) {
+        this.sounds.clear();
+        this.sounds.putAll(sounds);
     }
 }

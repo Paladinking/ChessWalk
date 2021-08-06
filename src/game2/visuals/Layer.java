@@ -14,15 +14,15 @@ public class Layer {
         textures = new ArrayList<>();
     }
 
-    public void addTexture(Texture texture){
+    public synchronized void addTexture(Texture texture){
         textures.add(texture);
     }
 
-    public void removeTexture(AbstractTexture texture){
+    public synchronized void removeTexture(AbstractTexture texture){
         textures.remove(texture);
     }
 
-    public void draw(Graphics2D g){
+    public synchronized void draw(Graphics2D g){
         for (Texture t: textures){
             t.draw(g);
         }

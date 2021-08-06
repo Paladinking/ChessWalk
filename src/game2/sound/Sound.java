@@ -19,6 +19,7 @@ public class Sound {
     }
 
     public void play() {
+        if (bytes.length == 0) return;
         playSfx(new ByteArrayInputStream(bytes));
     }
 
@@ -63,7 +64,6 @@ public class Sound {
             } catch (Exception e) {
                 e.printStackTrace();
                 System.out.println("BAD...");
-                //System.exit(1);
             }
 
         });

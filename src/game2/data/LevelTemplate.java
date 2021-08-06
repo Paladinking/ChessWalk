@@ -1,6 +1,8 @@
 package game2.data;
 
+import game2.data.generator.Chunk;
 import game2.entities.Entity;
+import game2.enums.Direction;
 import game2.enums.TextureState;
 import game2.enums.TileType;
 import game2.essentials.Entities;
@@ -15,9 +17,11 @@ import game2.visuals.ImageData;
 import game2.visuals.texture.ImageTexture;
 import game2.visuals.texture.MultiTexture;
 
+import java.awt.*;
 import java.util.Map;
 
 import static game2.Dungeon.THE_RANDOM;
+import static game2.data.generator.Chunk.CHUNK_DIMENSION;
 
 public class LevelTemplate {
     private final int width, height, rooms, enemyCount;
@@ -39,15 +43,28 @@ public class LevelTemplate {
     }
 
     public Level generate(int tileSize, Map<String, EntityTemplate> enemies, Entities entities) {
-        TileMap tileMap = new TileMap(width, height);
-        MapGenerator generator = new MapGenerator(rooms, width, height, roomSize, this.enemies.length > 0 ? enemyCount : 0);
-        int[][] map = generator.generate();
-        for (int x = 0; x < width; x++) {
-            for (int y = 0; y < height; y++) {
+        CHUNK_DIMENSION = 49;
+        Chunk a = new Chunk(null, Direction.LEFT);
+        Chunk b = new Chunk(a, a.next.opposite().randomOther(THE_RANDOM));
+        int[][]  intMapA = a.generate();
+        int[][]  intMapB = b.generate();
+        TileMap tileMapA = new TileMap(intMapA.length, intMapA[0].length, new Point(0, 0));
+        TileMap tileMapB = new TileMap(intMapB.length, intMapB[0].length, a.next.add(0, 0, CHUNK_DIMENSION));
+        fillTileMap(intMapA, tileMapA,tileSize, entities, enemies);
+        fillTileMap(intMapB, tileMapB,tileSize, entities, enemies);
+        a.setTileMap(tileMapA);
+        b.setTileMap(tileMapB);
+        return new Level(a, b, this.enemies);
+    }
+
+    private void fillTileMap(int[][] intMap, TileMap tileMap, int tileSize, Entities entities, Map<String, EntityTemplate> enemies) {
+        Point offset = tileMap.getOffset();
+        for (int x = 0; x < intMap.length; x++) {
+            for (int y = 0; y < intMap[x].length; y++) {
                 Tile tile;
                 TileType tileType;
                 int z = 0;
-                int tileInt = map[x][y];
+                int tileInt = intMap[x][y];
                 if (tileInt == MapGenerator.HOLE) {
                     tile = new WallTile();
                     tileType = TileType.HOLE;
@@ -70,7 +87,8 @@ public class LevelTemplate {
                 MultiTexture<ImageTexture> texture = new MultiTexture<>(new ImageTexture(null,0,0,0,0,0, tileSize), tileSize);
                 for (TextureState key : imageData.keySet()){
                     ImageData data = imageData.get(key);
-                    int tx = x * tileSize - (data.width - tileSize) / 2, ty = y * tileSize - (data.height - tileSize);
+                    int tx = tileSize * offset.x + x * tileSize - (data.width - tileSize) / 2;
+                    int ty = tileSize * offset.y + y * tileSize - (data.height - tileSize);
                     texture.addState(key, new ImageTexture(data.getImage(), z, tx, ty, data.width, data.height, tileSize));
                 }
                 texture.setState(TextureState.HIDDEN);
@@ -78,6 +96,5 @@ public class LevelTemplate {
                 tileMap.setTile(x, y, tile);
             }
         }
-        return new Level(tileMap, this.enemies);
     }
 }

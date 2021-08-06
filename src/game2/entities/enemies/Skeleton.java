@@ -27,7 +27,7 @@ public class Skeleton extends Enemy {
         if (hidden){
             return new NoAction(this);
         }
-        List<Point> path = AStar.getPath(level.getTilesMap(), gridPos, level.getPlayerPos());
+        List<Point> path = AStar.getPath(level, gridPos, level.getPlayerPos());
         if (path != null) return new Move(this,MOVEMENT_SPEED, path.get(path.size() - 1));
         return new NoAction(this);
     }

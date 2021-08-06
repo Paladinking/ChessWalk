@@ -1,62 +1,101 @@
 package game2.levels;
 
 import game2.Dungeon;
+import game2.data.generator.Chunk;
 import game2.entities.Entity;
 import game2.entities.Player;
+import game2.essentials.ShadowCaster;
 import game2.essentials.TileMap;
 import game2.tiles.Tile;
 
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import static game2.data.generator.Chunk.CHUNK_DIMENSION;
 
 public class Level {
 
-    private final TileMap tileMap;
+    private static final int MAX_WIDTH = 500;
 
+    //private final TileMap tileMap;
+
+    private final Map<Integer, Chunk> chunks;
     private final String[] enemies;
 
-    private Player player;
+    private int width, height;
 
-    public Level(TileMap tileMap, String[] enemies) {
-        this.tileMap = tileMap;
+    private final List<Tile> visibleTiles;
+
+    private Player player;
+    private final ShadowCaster shadowCaster;
+
+    private TileMap test;
+
+    public Level(Chunk chunkA, Chunk chunkB, String[] enemies) {
+        this.chunks = new HashMap<>();
+        test = chunkA.getTileMap();
+        chunks.put(0, chunkA);
+        this.width = CHUNK_DIMENSION * 2;
+        this.height = CHUNK_DIMENSION;
+        Point next = chunkA.next.add(0, 0, 1);
+        chunks.put(next.x + MAX_WIDTH * next.y, chunkB);
         this.enemies = enemies;
+        this.visibleTiles = new ArrayList<>();
+        this.shadowCaster = new ShadowCaster(this);
     }
 
     public void setTile(int x, int y, Tile tile) {
-        tileMap.setTile(x, y, tile);
+        getTileMap(x, y).setTile(x, y, tile);
+    }
+
+    private TileMap getTileMap(int x, int y) {
+        return chunks.get(x / CHUNK_DIMENSION + MAX_WIDTH * (y / CHUNK_DIMENSION)).getTileMap();
     }
 
     public Tile getTile(int x, int y) {
-        return tileMap.getTile(x, y);
+        return getTileMap(x, y).getTile(x, y);
     }
 
     public int getWidth() {
-        return tileMap.getWidth();
+        return width;
     }
 
     public int getHeight() {
-        return tileMap.getHeight();
+        return height;
     }
 
     public void place(Entity entity) {
-        tileMap.place(entity);
+        getTileMap(entity.getPos().x, entity.getPos().y).place(entity);
     }
 
     public void placePlayer(Player player) {
         this.player = player;
-        tileMap.placePlayer(player);
+        getTileMap(0, 0).placePlayer(player);
+        updateLighting();
     }
 
     public void moveEntity(Point oldPos, Point newPos) {
-        tileMap.moveEntity(oldPos, newPos);
+        Tile old = getTile(oldPos.x, oldPos.y);
+        Entity e = old.getEntity();
+        old.setEntity(null);
+        getTile(newPos.x, newPos.y).setEntity(e);
     }
 
     public void updateLighting() {
-        tileMap.updateLighting(player);
+        for (Tile tile : visibleTiles) tile.hide();
+        visibleTiles.clear();
+        Point playerPos = player.getPos();
+        shadowCaster.castShadow(playerPos.x, playerPos.y, player.getVisionDistance());
+        for (Tile tile : visibleTiles){
+            tile.show();
+        }
     }
 
     public Tile getTile(Point pos) {
-        return tileMap.getTile(pos);
+        return getTileMap(pos.x, pos.y).getTile(pos);
     }
 
     public static boolean neighbors(Point a, Point b) {
@@ -68,7 +107,7 @@ public class Level {
     }
 
     public List<Point> getOpenTiles(Point pos) {
-        return tileMap.getOpenTiles(pos);
+        return getTileMap(pos.x, pos.y).getOpenTiles(pos);
     }
 
     public String getEnemy() {
@@ -76,7 +115,15 @@ public class Level {
         return enemies[Dungeon.THE_RANDOM.nextInt(enemies.length)];
     }
 
-    public TileMap getTilesMap() {
-        return tileMap;
+    public void show(int x, int y) {
+        TileMap tileMap = getTileMap(x, y);
+        if (tileMap != test){
+            System.out.println("!!!");
+        }
+        visibleTiles.add(getTile(x, y));
+    }
+
+    public boolean isWall(int x, int y) {
+        return getTileMap(x, y).isWall(x, y);
     }
 }

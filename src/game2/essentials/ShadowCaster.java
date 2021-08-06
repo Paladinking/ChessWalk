@@ -1,5 +1,7 @@
 package game2.essentials;
 
+import game2.levels.Level;
+
 /**
  * Copied from https://github.com/watabou/pixel-dungeon/blob/ca458a28f053612973d5d6059dae5f6f2ca4fcb7/src/com/watabou/pixeldungeon/mechanics/ShadowCaster.java
  *
@@ -10,7 +12,7 @@ public class ShadowCaster {
 
     private int[] limits;
 
-    private final TileMap tileMap;
+    private final Level level;
 
     private final static int[][] rounding;
     static {
@@ -25,15 +27,15 @@ public class ShadowCaster {
 
     private final Obstacles obs;
 
-    public ShadowCaster(TileMap tileMap) {
+    public ShadowCaster(Level level) {
         this.obs = new Obstacles();
-        this.tileMap = tileMap;
+        this.level = level;
     }
 
     public void castShadow(int x, int y, int distance) {
         limits = rounding[distance];
-        tileMap.show(x, y);
-        int width = tileMap.getWidth(), height = tileMap.getHeight();
+        level.show(x, y);
+        int width = level.getWidth(), height = level.getHeight();
 
         scanSector(x, y, +1, +1, 0, 0, width, height, distance);
         scanSector(x, y, -1, +1, 0, 0, width, height, distance);
@@ -59,7 +61,7 @@ public class ShadowCaster {
                 int x = cx + q * m1 + p * m3;
                 int y = cy + p * m2 + q * m4;
 
-                if (y >= 0 && y < width && x >= 0 && x < height) {
+                if (y >= 0 && y < height && x >= 0 && x < width) {
 
                     float a0 = (float)q / p;
                     float a1 = a0 - dq2;
@@ -67,9 +69,9 @@ public class ShadowCaster {
 
 
                     if (obs.isFree(a0) || obs.isFree(a1) || obs.isFree(a2)) {
-                        tileMap.show(x, y);
+                        level.show(x, y);
                     }
-                    if (tileMap.isWall(x, y)) {
+                    if (level.isWall(x, y)) {
                         obs.add( a1, a2 );
                     }
 
