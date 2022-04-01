@@ -66,7 +66,6 @@ public class Image {
     }
 
     public static void loadImages() {
-
         imageQue = new HashMap<>();
         try {
             BOARD = ImageIO.read((Board.class.getResource(path + "Board1.png")));
